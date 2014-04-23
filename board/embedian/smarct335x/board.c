@@ -43,6 +43,9 @@ DECLARE_GLOBAL_DATA_PTR;
 /* GPIO that controls LCD backlight PWM */
 #define GPIO_LCD_PWM_EN         7
 
+/* GPIO3_4  that controls Buzzer on SBC-SMART-MEN */
+#define GPIO_BUZZER_EN         103
+
 static struct ctrl_dev *cdev = (struct ctrl_dev *)CTRL_DEVICE_BASE;
 
 /*
@@ -537,6 +540,17 @@ void sdram_init(void)
                 gpio_direction_output(GPIO_LCD_BKLT_EN, 1);
                 gpio_request(GPIO_LCD_PWM_EN, "lcd_pwm_en");
                 gpio_direction_output(GPIO_LCD_PWM_EN, 1);
+                /*
+                 * SBC-SMART-MEN rev. 00A0 uses GPIO3_7 to control Buzzer.
+                 */
+                gpio_request(GPIO_BUZZER_EN, "buzzer_en");
+                char i=385;
+                for(;i>0;i--){
+                gpio_direction_output(GPIO_BUZZER_EN, 1);
+                udelay (320);
+                gpio_direction_output(GPIO_BUZZER_EN, 0);
+                udelay (320);
+              }
                 config_ddr(400, &ioregs_smarct335x,
                            &ddr3_smarct335x_data,
                            &ddr3_smarct335x_cmd_ctrl_data,
