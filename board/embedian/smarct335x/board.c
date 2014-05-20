@@ -541,6 +541,7 @@ void sdram_init(void)
                            &ddr3_smarct335x_data,
                            &ddr3_smarct335x_cmd_ctrl_data,
                            &ddr3_smarct335x_emif_reg_data, 0);
+		puts("Set DDR3 to 800MHz.\n");
 	}
 	else if (board_is_evm_15_or_later(&header))
 		config_ddr(303, MT41J512M8RH125_IOCTRL_VALUE, &ddr3_evm_data,
@@ -700,7 +701,7 @@ int board_eth_init(bd_t *bis)
                 cpsw_slaves[0].phy_if = cpsw_slaves[1].phy_if =
                                 PHY_INTERFACE_MODE_MII;
         } else if (board_is_smarc_t335x(&header) || board_is_smarc_t335x_1g(&header)) {
-               writel(RMII_MODE_ENABLE, &cdev->miisel);
+               writel((RMII_MODE_ENABLE | RMII_CHIPCKL_ENABLE), &cdev->miisel);
                cpsw_slaves[0].phy_if = cpsw_slaves[1].phy_if =
                                PHY_INTERFACE_MODE_RMII;
         } else {
