@@ -2,7 +2,7 @@
  * (C) Copyright 2007
  * Sascha Hauer, Pengutronix
  *
- * (C) Copyright 2009 Freescale Semiconductor, Inc.
+ * (C) Copyright 2009-2014 Freescale Semiconductor, Inc.
  *
  * SPDX-License-Identifier:	GPL-2.0+
  */
@@ -15,6 +15,11 @@
 #include <asm/arch/sys_proto.h>
 #include <asm/arch/crm_regs.h>
 #include <ipu_pixfmt.h>
+#include <mxsfb.h>
+
+#ifdef CONFIG_VIDEO_GIS
+#include <gis.h>
+#endif
 
 #ifdef CONFIG_FSL_ESDHC
 #include <fsl_esdhc.h>
@@ -114,6 +119,8 @@ const char *get_imx_type(u32 imxtype)
 		return "6SOLO";	/* Solo version of the mx6 */
 	case MXC_CPU_MX6SL:
 		return "6SL";	/* Solo-Lite version of the mx6 */
+	case MXC_CPU_MX6SX:
+		return "6SX";	/* SoloX version of the mx6 */
 	case MXC_CPU_MX51:
 		return "51";
 	case MXC_CPU_MX53:
@@ -126,6 +133,10 @@ const char *get_imx_type(u32 imxtype)
 int print_cpuinfo(void)
 {
 	u32 cpurev;
+#if defined(CONFIG_DBG_MONITOR)
+	struct dbg_monitor_regs *dbg =
+		(struct dbg_monitor_regs *)DEBUG_MONITOR_BASE_ADDR;
+#endif
 
 	cpurev = get_cpu_rev();
 
@@ -134,6 +145,19 @@ int print_cpuinfo(void)
 		(cpurev & 0x000F0) >> 4,
 		(cpurev & 0x0000F) >> 0,
 		mxc_get_clock(MXC_ARM_CLK) / 1000000);
+
+#if defined(CONFIG_MX6)
+	check_cpu_temperature();
+#endif
+
+#if defined(CONFIG_DBG_MONITOR)
+	if (readl(&dbg->snvs_addr))
+		printf("DBG snvs regs addr 0x%x, data 0x%x, info 0x%x\n",
+		       readl(&dbg->snvs_addr),
+		       readl(&dbg->snvs_data),
+		       readl(&dbg->snvs_info));
+#endif
+
 	printf("Reset cause: %s\n", get_reset_cause());
 	return 0;
 }
@@ -173,10 +197,20 @@ u32 get_ahb_clk(void)
 	return get_periph_clk() / (ahb_podf + 1);
 }
 
-#if defined(CONFIG_VIDEO_IPUV3)
 void arch_preboot_os(void)
 {
+#if defined(CONFIG_LDO_BYPASS_CHECK)
+	ldo_mode_set(check_ldo_bypass());
+#endif
+#if defined(CONFIG_VIDEO_IPUV3)
 	/* disable video before launching O/S */
 	ipuv3_fb_shutdown();
-}
 #endif
+#ifdef CONFIG_VIDEO_GIS
+	/* Entry for GIS */
+	mxc_disable_gis();
+#endif
+#ifdef CONFIG_VIDEO_MXS
+	lcdif_power_down();
+#endif
+}

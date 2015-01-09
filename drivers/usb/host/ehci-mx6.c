@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2009 Daniel Mack <daniel@caiaq.de>
- * Copyright (C) 2010 Freescale Semiconductor, Inc.
+ * Copyright (C) 2010-2014 Freescale Semiconductor, Inc.
  *
  * SPDX-License-Identifier:	GPL-2.0+
  */
@@ -11,7 +11,7 @@
 #include <linux/compiler.h>
 #include <usb/ehci-fsl.h>
 #include <asm/io.h>
-#include <asm/arch/imx-regs.h>
+#include <asm/arch/crm_regs.h>
 #include <asm/arch/clock.h>
 #include <asm/imx-common/iomux-v3.h>
 
@@ -45,7 +45,7 @@
 #define ANADIG_USB2_PLL_480_CTRL_POWER		0x00001000
 #define ANADIG_USB2_PLL_480_CTRL_EN_USB_CLKS	0x00000040
 
-
+#define UCTRL_PM		(1 << 9)	/* OTG Power Mask */
 #define UCTRL_OVER_CUR_POL	(1 << 8) /* OTG Polarity of Overcurrent */
 #define UCTRL_OVER_CUR_DIS	(1 << 7) /* Disable OTG Overcurrent Detection */
 
@@ -72,22 +72,22 @@ static void usb_internal_phy_clock_gate(int index, int on)
 
 static void usb_power_config(int index)
 {
-	struct anatop_regs __iomem *anatop =
-		(struct anatop_regs __iomem *)ANATOP_BASE_ADDR;
+	struct mxc_ccm_reg __iomem *ccm_regs =
+		(struct mxc_ccm_reg __iomem *)CCM_BASE_ADDR;
 	void __iomem *chrg_detect;
 	void __iomem *pll_480_ctrl_clr;
 	void __iomem *pll_480_ctrl_set;
 
 	switch (index) {
 	case 0:
-		chrg_detect = &anatop->usb1_chrg_detect;
-		pll_480_ctrl_clr = &anatop->usb1_pll_480_ctrl_clr;
-		pll_480_ctrl_set = &anatop->usb1_pll_480_ctrl_set;
+		chrg_detect = &ccm_regs->usb1_chrg_detect;
+		pll_480_ctrl_clr = &ccm_regs->analog_usb1_pll_480_ctrl_clr;
+		pll_480_ctrl_set = &ccm_regs->analog_usb1_pll_480_ctrl_set;
 		break;
 	case 1:
-		chrg_detect = &anatop->usb2_chrg_detect;
-		pll_480_ctrl_clr = &anatop->usb2_pll_480_ctrl_clr;
-		pll_480_ctrl_set = &anatop->usb2_pll_480_ctrl_set;
+		chrg_detect = &ccm_regs->usb2_chrg_detect;
+		pll_480_ctrl_clr = &ccm_regs->analog_usb2_pll_480_ctrl_clr;
+		pll_480_ctrl_set = &ccm_regs->analog_usb2_pll_480_ctrl_set;
 		break;
 	default:
 		return;
@@ -174,7 +174,7 @@ struct usbnc_regs {
 
 static void usb_oc_config(int index)
 {
-	struct usbnc_regs *usbnc = (struct usbnc_regs *)(USBOH3_USB_BASE_ADDR +
+	struct usbnc_regs *usbnc = (struct usbnc_regs *)(USB_BASE_ADDR +
 			USB_OTHERREGS_OFFSET);
 	void __iomem *ctrl = (void __iomem *)(&usbnc->ctrl[index]);
 	u32 val;
@@ -189,7 +189,7 @@ static void usb_oc_config(int index)
 	__raw_writel(val, ctrl);
 
 	val = __raw_readl(ctrl);
-	val |= UCTRL_OVER_CUR_DIS;
+	val |= (UCTRL_OVER_CUR_DIS | UCTRL_PM);
 	__raw_writel(val, ctrl);
 }
 
@@ -206,8 +206,7 @@ int __weak board_ehci_power(int port, int on)
 int ehci_hcd_init(int index, enum usb_init_type init,
 		struct ehci_hccr **hccr, struct ehci_hcor **hcor)
 {
-	enum usb_init_type type;
-	struct usb_ehci *ehci = (struct usb_ehci *)(USBOH3_USB_BASE_ADDR +
+	struct usb_ehci *ehci = (struct usb_ehci *)(USB_BASE_ADDR +
 		(0x200 * index));
 
 	if (index > 3)
@@ -221,17 +220,14 @@ int ehci_hcd_init(int index, enum usb_init_type init,
 	usb_power_config(index);
 	usb_oc_config(index);
 	usb_internal_phy_clock_gate(index, 1);
-	type = usb_phy_enable(index, ehci) ? USB_INIT_DEVICE : USB_INIT_HOST;
+	usb_phy_enable(index, ehci);
 
 	*hccr = (struct ehci_hccr *)((uint32_t)&ehci->caplength);
 	*hcor = (struct ehci_hcor *)((uint32_t)*hccr +
 			HC_LENGTH(ehci_readl(&(*hccr)->cr_capbase)));
 
-	if ((type == init) || (type == USB_INIT_DEVICE))
-		board_ehci_power(index, (type == USB_INIT_DEVICE) ? 0 : 1);
-	if (type != init)
-		return -ENODEV;
-	if (type == USB_INIT_DEVICE)
+	board_ehci_power(index, (init == USB_INIT_DEVICE) ? 0 : 1);
+	if (init == USB_INIT_DEVICE)
 		return 0;
 	setbits_le32(&ehci->usbmode, CM_HOST);
 	__raw_writel(CONFIG_MXC_USB_PORTSC, &ehci->portsc);

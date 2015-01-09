@@ -11,7 +11,7 @@
 #include <asm/imx-common/regs-common.h>
 #include "../arch-imx/cpu.h"
 
-#define is_soc_rev(rev)	((get_cpu_rev() & 0xFF) - rev)
+#define is_soc_rev(rev)		((int)((get_cpu_rev() & 0xFF) - rev))
 u32 get_cpu_rev(void);
 
 /* returns MXC_CPU_ value */
@@ -22,6 +22,21 @@ u32 get_cpu_rev(void);
 
 const char *get_imx_type(u32 imxtype);
 unsigned imx_ddr_size(void);
+void set_wdog_reset(struct wdog_regs *wdog);
+
+#ifdef CONFIG_LDO_BYPASS_CHECK
+int check_ldo_bypass(void);
+int check_1_2G(void);
+int set_anatop_bypass(int wdog_reset_pin);
+void ldo_mode_set(int ldo_bypass);
+void prep_anatop_bypass(void);
+void finish_anatop_bypass(void);
+#endif
+
+#ifdef CONFIG_MX6SX
+int arch_auxiliary_core_up(u32 core_id, u32 boot_private_data);
+int arch_auxiliary_core_check_up(u32 core_id);
+#endif
 
 /*
  * Initializes on-chip ethernet controllers.

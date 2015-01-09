@@ -1,5 +1,5 @@
 /*
- * Copyright 2007, 2010-2011 Freescale Semiconductor, Inc
+ * Copyright 2007, 2010-2014 Freescale Semiconductor, Inc.
  * Andy Fleming
  *
  * Based vaguely on the pxa mmc code:
@@ -22,6 +22,11 @@
 #include <asm/io.h>
 
 DECLARE_GLOBAL_DATA_PTR;
+
+#define SDHCI_IRQ_EN_BITS		(IRQSTATEN_CC | IRQSTATEN_TC | \
+				IRQSTATEN_CINT | \
+				IRQSTATEN_CTOE | IRQSTATEN_CCE | IRQSTATEN_CEBE | \
+				IRQSTATEN_CIE | IRQSTATEN_DTOE | IRQSTATEN_DCE | IRQSTATEN_DEBE)
 
 struct fsl_esdhc {
 	uint    dsaddr;		/* SDMA system address register */
@@ -47,20 +52,30 @@ struct fsl_esdhc {
 	uint    fevt;		/* Force event register */
 	uint    admaes;		/* ADMA error status register */
 	uint    adsaddr;	/* ADMA system address register */
-	char    reserved2[160];	/* reserved */
+	char    reserved2[4];
+	uint    dllctrl;
+	uint    dllstat;
+	uint    clktunectrlstatus;
+	char    reserved3[84];
+	uint    vendorspec;
+	uint    mmcboot;
+	uint    vendorspec2;
+	char	reserved4[48];
 	uint    hostver;	/* Host controller version register */
-	char    reserved3[4];	/* reserved */
-	uint    dmaerraddr;	/* DMA error address register */
-	char    reserved4[4];	/* reserved */
-	uint    dmaerrattr;	/* DMA error attribute register */
+#ifndef ARCH_MXC
 	char    reserved5[4];	/* reserved */
+	uint    dmaerraddr;	/* DMA error address register */
+	char    reserved6[4];	/* reserved */
+	uint    dmaerrattr;	/* DMA error attribute register */
+	char    reserved7[4];	/* reserved */
 	uint    hostcapblt2;	/* Host controller capabilities register 2 */
-	char    reserved6[8];	/* reserved */
+	char    reserved8[8];	/* reserved */
 	uint    tcr;		/* Tuning control register */
-	char    reserved7[28];	/* reserved */
+	char    reserved9[28];	/* reserved */
 	uint    sddirctl;	/* SD direction control register */
-	char    reserved8[712];	/* reserved */
+	char    reserved10[712];/* reserved */
 	uint    scr;		/* eSDHC control register */
+#endif
 };
 
 /* Return the XFERTYP flags for a given command and data packet */
@@ -174,7 +189,7 @@ static int esdhc_setup_data(struct mmc *mmc, struct mmc_data *data)
 	int timeout;
 	struct fsl_esdhc_cfg *cfg = mmc->priv;
 	struct fsl_esdhc *regs = (struct fsl_esdhc *)cfg->esdhc_base;
-#ifndef CONFIG_SYS_FSL_ESDHC_USE_PIO
+
 	uint wml_value;
 
 	wml_value = data->blocksize/4;
@@ -184,12 +199,15 @@ static int esdhc_setup_data(struct mmc *mmc, struct mmc_data *data)
 			wml_value = WML_RD_WML_MAX_VAL;
 
 		esdhc_clrsetbits32(&regs->wml, WML_RD_WML_MASK, wml_value);
+#ifndef CONFIG_SYS_FSL_ESDHC_USE_PIO
 		esdhc_write32(&regs->dsaddr, (u32)data->dest);
+#endif
 	} else {
+#ifndef CONFIG_SYS_FSL_ESDHC_USE_PIO
 		flush_dcache_range((ulong)data->src,
 				   (ulong)data->src+data->blocks
 					 *data->blocksize);
-
+#endif
 		if (wml_value > WML_WR_WML_MAX)
 			wml_value = WML_WR_WML_MAX_VAL;
 		if ((esdhc_read32(&regs->prsstat) & PRSSTAT_WPSPL) == 0) {
@@ -199,19 +217,10 @@ static int esdhc_setup_data(struct mmc *mmc, struct mmc_data *data)
 
 		esdhc_clrsetbits32(&regs->wml, WML_WR_WML_MASK,
 					wml_value << 16);
+#ifndef CONFIG_SYS_FSL_ESDHC_USE_PIO
 		esdhc_write32(&regs->dsaddr, (u32)data->src);
+#endif
 	}
-#else	/* CONFIG_SYS_FSL_ESDHC_USE_PIO */
-	if (!(data->flags & MMC_DATA_READ)) {
-		if ((esdhc_read32(&regs->prsstat) & PRSSTAT_WPSPL) == 0) {
-			printf("\nThe SD card is locked. "
-				"Can not write to a locked card.\n\n");
-			return TIMEOUT;
-		}
-		esdhc_write32(&regs->dsaddr, (u32)data->src);
-	} else
-		esdhc_write32(&regs->dsaddr, (u32)data->dest);
-#endif	/* CONFIG_SYS_FSL_ESDHC_USE_PIO */
 
 	esdhc_write32(&regs->blkattr, data->blocks << 16 | data->blocksize);
 
@@ -388,9 +397,10 @@ esdhc_send_cmd(struct mmc *mmc, struct mmc_cmd *cmd, struct mmc_data *data)
 				goto out;
 			}
 		} while ((irqstat & DATA_COMPLETE) != DATA_COMPLETE);
-#endif
+
 		if (data->flags & MMC_DATA_READ)
 			check_and_invalidate_dcache_range(cmd, data);
+#endif
 	}
 
 out:
@@ -484,6 +494,17 @@ static int esdhc_init(struct mmc *mmc)
 	while ((esdhc_read32(&regs->sysctl) & SYSCTL_RSTA) && --timeout)
 		udelay(1000);
 
+#if defined(CONFIG_FSL_USDHC)
+	/* RSTA doesn't reset MMC_BOOT register, so manually reset it */
+	esdhc_write32(&regs->mmcboot, 0x0);
+	/* Reset MIX_CTRL and CLK_TUNE_CTRL_STATUS regs to 0 */
+	esdhc_write32(&regs->mixctrl, 0x0);
+	esdhc_write32(&regs->clktunectrlstatus, 0x0);
+
+	/* Put VEND_SPEC to default value */
+	esdhc_write32(&regs->vendorspec, VENDORSPEC_INIT);
+#endif
+
 #ifndef ARCH_MXC
 	/* Enable cache snooping */
 	esdhc_write32(&regs->scr, 0x00000040);
@@ -494,8 +515,15 @@ static int esdhc_init(struct mmc *mmc)
 	/* Set the initial clock speed */
 	mmc_set_clock(mmc, 400000);
 
+#ifdef CONFIG_SYS_FSL_ESDHC_USE_PIO
+	/* Enable the BRR and BWR bits in IRQSTAT */
+	esdhc_clrbits32(&regs->irqstaten, IRQSTATEN_DINT);
+	esdhc_setbits32(&regs->irqstaten, IRQSTATEN_BRR | IRQSTATEN_BWR);
+#else
 	/* Disable the BRR and BWR bits in IRQSTAT */
 	esdhc_clrbits32(&regs->irqstaten, IRQSTATEN_BRR | IRQSTATEN_BWR);
+	esdhc_setbits32(&regs->irqstaten, IRQSTATEN_DINT);
+#endif
 
 	/* Put the PROCTL reg back to the default */
 	esdhc_write32(&regs->proctl, PROCTL_INIT);
@@ -560,6 +588,7 @@ int fsl_esdhc_initialize(bd_t *bis, struct fsl_esdhc_cfg *cfg)
 	esdhc_setbits32(&regs->sysctl, SYSCTL_PEREN | SYSCTL_HCKEN
 				| SYSCTL_IPGEN | SYSCTL_CKEN);
 
+	writel(SDHCI_IRQ_EN_BITS, &regs->irqstaten);
 	memset(&cfg->cfg, 0, sizeof(cfg->cfg));
 
 	voltage_caps = 0;

@@ -58,5 +58,19 @@ int enable_sata_clock(void);
 int enable_pcie_clock(void);
 int enable_i2c_clk(unsigned char enable, unsigned i2c_num);
 void enable_ipu_clock(void);
-int enable_fec_anatop_clock(enum enet_freq freq);
+#ifdef CONFIG_FEC_MXC
+int enable_fec_anatop_clock(int fec_id, enum enet_freq freq);
+#endif
+#ifdef CONFIG_SECURE_BOOT
+void hab_caam_clock_enable(void);
+void hab_caam_clock_disable(void);
+#endif
+#if (defined(CONFIG_MX6SX))
+void enable_qspi_clk(int qspi_num);
+void enable_enet_clock(void);
+void enable_lcdif_clock(uint32_t base_addr);
+void mxs_set_lcdclk(uint32_t base_addr, uint32_t freq);
+void enable_lvds(uint32_t lcdif_base);
+void mxs_set_vadcclk(void);
+#endif
 #endif /* __ASM_ARCH_CLOCK_H */

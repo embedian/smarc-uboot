@@ -2,13 +2,17 @@
  * (C) Copyright 2009
  * Stefano Babic, DENX Software Engineering, sbabic@denx.de.
  *
+ * Copyright (C) 2014 Freescale Semiconductor, Inc.
+ *
  * SPDX-License-Identifier:	GPL-2.0+
  */
 
 #ifndef _IMXIMAGE_H_
 #define _IMXIMAGE_H_
 
-#define MAX_HW_CFG_SIZE_V2 121 /* Max number of registers imx can set for v2 */
+#include <config.h>
+#define MAX_HW_CFG_SIZE_V2 220 /* Max number of registers imx can set for v2 */
+#define MAX_PLUGIN_CODE_SIZE (16*1024)
 #define MAX_HW_CFG_SIZE_V1 60  /* Max number of registers imx can set for v1 */
 #define APP_CODE_BARKER	0xB1
 #define DCD_BARKER	0xB17219E9
@@ -29,6 +33,7 @@
 #define FLASH_OFFSET_ONENAND	0x100
 #define FLASH_OFFSET_NOR	0x1000
 #define FLASH_OFFSET_SATA	FLASH_OFFSET_STANDARD
+#define FLASH_OFFSET_QSPI   0x1000
 
 /* Initial Load Region Size */
 #define FLASH_LOADSIZE_UNDEFINED	0xFFFFFFFF
@@ -39,6 +44,7 @@
 #define FLASH_LOADSIZE_ONENAND		0x400
 #define FLASH_LOADSIZE_NOR		0x0 /* entire image */
 #define FLASH_LOADSIZE_SATA		FLASH_LOADSIZE_STANDARD
+#define FLASH_LOADSIZE_QSPI		0x0 /* entire image */
 
 #define IVT_HEADER_TAG 0xD1
 #define IVT_VERSION 0x40
@@ -54,6 +60,7 @@ enum imximage_cmd {
 	CMD_BOOT_OFFSET,
 	CMD_DATA,
 	CMD_CSF,
+	CMD_PLUGIN,
 };
 
 enum imximage_fld_types {
@@ -149,7 +156,12 @@ typedef struct {
 typedef struct {
 	flash_header_v2_t fhdr;
 	boot_data_t boot_data;
-	dcd_v2_t dcd_table;
+	union {
+		dcd_v2_t dcd_table;
+#ifdef CONFIG_USE_PLUGIN
+		char plugin_code[MAX_PLUGIN_CODE_SIZE];
+#endif
+	} data;
 } imx_header_v2_t;
 
 /* The header must be aligned to 4k on MX53 for NAND boot */

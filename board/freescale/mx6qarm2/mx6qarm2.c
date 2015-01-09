@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Freescale Semiconductor, Inc.
+ * Copyright (C) 2010-2014 Freescale Semiconductor, Inc.
  *
  * SPDX-License-Identifier:	GPL-2.0+
  */
@@ -32,7 +32,12 @@ DECLARE_GLOBAL_DATA_PTR;
 
 int dram_init(void)
 {
-	gd->ram_size = get_ram_size((void *)PHYS_SDRAM, PHYS_SDRAM_SIZE);
+#if defined(CONFIG_MX6DL) && !defined(CONFIG_MX6DL_LPDDR2) && \
+	defined(CONFIG_DDR_32BIT)
+	gd->ram_size = ((ulong)CONFIG_DDR_MB * 1024 * 1024)/2;
+#else
+	gd->ram_size = ((ulong)CONFIG_DDR_MB * 1024 * 1024);
+#endif
 
 	return 0;
 }
@@ -104,6 +109,35 @@ struct fsl_esdhc_cfg usdhc_cfg[2] = {
 	{USDHC4_BASE_ADDR},
 };
 
+int mmc_get_env_devno(void)
+{
+	u32 soc_sbmr = readl(SRC_BASE_ADDR + 0x4);
+	u32 dev_no;
+	u32 bootsel;
+
+	bootsel = (soc_sbmr & 0x000000FF) >> 6 ;
+
+	/* If not boot from sd/mmc, use default value */
+	if (bootsel != 1)
+		return CONFIG_SYS_MMC_ENV_DEV;
+
+	/* BOOT_CFG2[3] and BOOT_CFG2[4] */
+	dev_no = (soc_sbmr & 0x00001800) >> 11;
+
+	/* need ubstract 1 to map to the mmc device id
+	 * see the comments in board_mmc_init function
+	 */
+
+	dev_no -= 2;
+
+	return dev_no;
+}
+
+int mmc_map_to_kernel_blk(int dev_no)
+{
+	return dev_no + 2;
+}
+
 int board_mmc_getcd(struct mmc *mmc)
 {
 	struct fsl_esdhc_cfg *cfg = (struct fsl_esdhc_cfg *)mmc->priv;
@@ -148,6 +182,39 @@ int board_mmc_init(bd_t *bis)
 
 	return status;
 }
+
+int check_mmc_autodetect(void)
+{
+	char *autodetect_str = getenv("mmcautodetect");
+
+	if ((autodetect_str != NULL) &&
+		(strcmp(autodetect_str, "yes") == 0)) {
+		return 1;
+	}
+
+	return 0;
+}
+
+void board_late_mmc_env_init(void)
+{
+	char cmd[32];
+	char mmcblk[32];
+	u32 dev_no = mmc_get_env_devno();
+
+	if (!check_mmc_autodetect())
+		return;
+
+	setenv_ulong("mmcdev", dev_no);
+
+	/* Set mmcblk env */
+	sprintf(mmcblk, "/dev/mmcblk%dp2 rootwait rw",
+		mmc_map_to_kernel_blk(dev_no));
+	setenv("mmcroot", mmcblk);
+
+	sprintf(cmd, "mmc dev %d", dev_no);
+	run_command(cmd, 0);
+}
+
 #endif
 
 #define MII_MMD_ACCESS_CTRL_REG		0xd
@@ -222,9 +289,54 @@ int board_init(void)
 	return 0;
 }
 
-int checkboard(void)
+int board_late_init(void)
 {
-	puts("Board: MX6Q-Armadillo2\n");
+#ifdef CONFIG_ENV_IS_IN_MMC
+	board_late_mmc_env_init();
+#endif
 
 	return 0;
 }
+
+int checkboard(void)
+{
+#ifdef CONFIG_MX6DL
+	puts("Board: MX6DL-Armadillo2\n");
+#else
+	puts("Board: MX6Q-Armadillo2\n");
+#endif
+
+	return 0;
+}
+
+#ifdef CONFIG_LDO_BYPASS_CHECK
+/* no external pmic, always ldo_enable */
+void ldo_mode_set(int ldo_bypass)
+{
+	return;
+}
+#endif
+
+#ifdef CONFIG_USB_EHCI_MX6
+iomux_v3_cfg_t const usb_otg_pads[] = {
+	MX6_PAD_EIM_D22__USB_OTG_PWR | MUX_PAD_CTRL(NO_PAD_CTRL),
+	MX6_PAD_GPIO_1__USB_OTG_ID | MUX_PAD_CTRL(NO_PAD_CTRL),
+};
+
+int board_ehci_hcd_init(int port)
+{
+	switch (port) {
+	case 0:
+		imx_iomux_v3_setup_multiple_pads(usb_otg_pads,
+			ARRAY_SIZE(usb_otg_pads));
+
+		/*set daisy chain for otg_pin_id on 6q. for 6dl, this bit is reserved*/
+		mxc_iomux_set_gpr_register(1, 13, 1, 1);
+		break;
+	default:
+		printf("MXC USB port %d not yet supported\n", port);
+		return 1;
+	}
+	return 0;
+}
+#endif

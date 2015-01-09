@@ -222,6 +222,7 @@ static int bootm_find_os(cmd_tbl_t *cmdtp, int flag, int argc,
 			 char * const argv[])
 {
 	const void *os_hdr;
+	bool ep_found = false;
 
 	/* get kernel image header, start address and length */
 	os_hdr = boot_get_kernel(cmdtp, flag, argc, argv,
@@ -274,6 +275,18 @@ static int bootm_find_os(cmd_tbl_t *cmdtp, int flag, int argc,
 		}
 		break;
 #endif
+#ifdef CONFIG_ANDROID_BOOT_IMAGE
+	case IMAGE_FORMAT_ANDROID:
+		images.os.type = IH_TYPE_KERNEL;
+		images.os.comp = IH_COMP_NONE;
+		images.os.os = IH_OS_LINUX;
+		images.ep = images.os.load;
+		ep_found = true;
+
+		images.os.end = android_image_get_end(os_hdr);
+		images.os.load = android_image_get_kload(os_hdr);
+		break;
+#endif
 	default:
 		puts("ERROR: unknown image format type!\n");
 		return 1;
@@ -293,7 +306,7 @@ static int bootm_find_os(cmd_tbl_t *cmdtp, int flag, int argc,
 			return 1;
 		}
 #endif
-	} else {
+	} else if (!ep_found) {
 		puts("Could not find kernel entry point!\n");
 		return 1;
 	}
@@ -813,6 +826,16 @@ int do_bootm(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 			return do_bootm_subcommand(cmdtp, flag, argc, argv);
 	}
 
+#ifdef CONFIG_SECURE_BOOT
+	extern uint32_t authenticate_image(
+			uint32_t ddr_start, uint32_t image_size);
+	if (authenticate_image(load_addr,
+		image_get_image_size((image_header_t *)load_addr)) == 0) {
+		printf("Authenticate uImage Fail, Please check\n");
+		return 1;
+	}
+#endif
+
 	return do_bootm_states(cmdtp, flag, argc, argv, BOOTM_STATE_START |
 		BOOTM_STATE_FINDOS | BOOTM_STATE_FINDOTHER |
 		BOOTM_STATE_LOADOS |
@@ -1000,6 +1023,14 @@ static const void *boot_get_kernel(cmd_tbl_t *cmdtp, int flag, int argc,
 		images->fit_uname_os = fit_uname_kernel;
 		images->fit_uname_cfg = fit_uname_config;
 		images->fit_noffset_os = os_noffset;
+		break;
+#endif
+#ifdef CONFIG_ANDROID_BOOT_IMAGE
+	case IMAGE_FORMAT_ANDROID:
+		printf("## Booting Android Image at 0x%08lx ...\n", img_addr);
+		if (android_image_get_kernel((void *)img_addr, images->verify,
+					     os_data, os_len))
+			return NULL;
 		break;
 #endif
 	default:
@@ -1877,6 +1908,15 @@ static int bootz_start(cmd_tbl_t *cmdtp, int flag, int argc,
 #if defined(CONFIG_OF_LIBFDT)
 	if (bootm_find_fdt(flag, argc, argv))
 		return 1;
+#endif
+
+#ifdef CONFIG_SECURE_BOOT
+	extern uint32_t authenticate_image(
+			uint32_t ddr_start, uint32_t image_size);
+	if (authenticate_image(images->ep, zi_end - zi_start) == 0) {
+		printf("Authenticate zImage Fail, Please check\n");
+		return 1;
+	}
 #endif
 
 	return 0;

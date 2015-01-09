@@ -42,6 +42,7 @@ obj-$(CONFIG_ENV_IS_IN_FAT) += env_fat.o
 obj-$(CONFIG_ENV_IS_IN_NAND) += env_nand.o
 obj-$(CONFIG_ENV_IS_IN_NVRAM) += env_nvram.o
 obj-$(CONFIG_ENV_IS_IN_ONENAND) += env_onenand.o
+obj-$(CONFIG_ENV_IS_IN_SATA) += env_sata.o
 obj-$(CONFIG_ENV_IS_IN_SPI_FLASH) += env_sf.o
 obj-$(CONFIG_ENV_IS_IN_REMOTE) += env_remote.o
 obj-$(CONFIG_ENV_IS_IN_UBI) += env_ubi.o
@@ -189,8 +190,10 @@ obj-$(CONFIG_MENU) += menu.o
 obj-$(CONFIG_MODEM_SUPPORT) += modem.o
 obj-$(CONFIG_UPDATE_TFTP) += update.o
 obj-$(CONFIG_USB_KEYBOARD) += usb_kbd.o
+obj-$(CONFIG_FASTBOOT) += cmd_fastboot.o
 obj-$(CONFIG_CMD_DFU) += cmd_dfu.o
 obj-$(CONFIG_CMD_GPT) += cmd_gpt.o
+obj-$(CONFIG_CMD_BOOTAUX) += cmd_bootaux.o
 endif
 
 ifdef CONFIG_SPL_BUILD
@@ -236,6 +239,7 @@ obj-y += console.o
 obj-$(CONFIG_CROS_EC) += cros_ec.o
 obj-y += dlmalloc.o
 obj-y += image.o
+obj-$(CONFIG_ANDROID_BOOT_IMAGE) += image-android.o
 obj-$(CONFIG_OF_LIBFDT) += image-fdt.o
 obj-$(CONFIG_FIT) += image-fit.o
 obj-$(CONFIG_FIT_SIGNATURE) += image-sig.o
