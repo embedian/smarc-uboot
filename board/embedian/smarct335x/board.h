@@ -44,6 +44,11 @@ static inline int board_is_smarc_t335x(struct am335x_baseboard_id *header)
         return !strncmp(header->name, "SMARCT33", HDR_NAME_LEN);
 }
 
+static inline int board_is_smarc_t335x_80(struct am335x_baseboard_id *header)
+{
+        return !strncmp(header->name, "SMARCT80", HDR_NAME_LEN);
+}
+
 static inline int board_is_smarc_t335x_1g(struct am335x_baseboard_id *header)
 {
         return !strncmp(header->name, "SMARCT1G", HDR_NAME_LEN);

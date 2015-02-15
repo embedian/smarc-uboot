@@ -179,6 +179,8 @@
                         "setenv fdtfile am335x-boneblack.dtb; setenv fdtbase am335x-boneblack; fi; " \
                 "if test $board_name = SMARCT33; then " \
                         "setenv fdtfile am335x-smarct335x.dtb; setenv fdtbase am335x-smarct335x.dtb; fi; " \
+                "if test $board_name = SMARCT80; then " \
+                        "setenv fdtfile am335x-smarct335x.dtb; setenv fdtbase am335x-smarct335x.dtb; fi; " \
                 "if test $board_name = SMARCT1G; then " \
                         "setenv fdtfile am335x-smarct335x.dtb; setenv fdtbase am335x-smarct335x.dtb; fi; " \
 		"if test $board_name = A33515BB; then " \

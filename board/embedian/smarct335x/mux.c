@@ -475,6 +475,17 @@ void enable_board_pin_mux(struct am335x_baseboard_id *header)
                 configure_module_pin_mux(smarc_gpio_pin_mux);
                 configure_module_pin_mux(spi0_pin_mux);
                 configure_module_pin_mux(lcdc_pin_mux);
+        } else if (!strncmp(header->name, "SMARCT80", HDR_NAME_LEN)) {
+                /* SMARC T335X 800MHz pinmux */
+                configure_module_pin_mux(i2c1_pin_mux);
+                configure_module_pin_mux(mmc0_pin_mux);
+                configure_module_pin_mux(mmc1_pin_mux);
+                configure_module_pin_mux(uart3_pin_mux);
+                configure_module_pin_mux(rmii1_pin_mux);
+                configure_module_pin_mux(rmii2_pin_mux);
+                configure_module_pin_mux(smarc_gpio_pin_mux);
+                configure_module_pin_mux(spi0_pin_mux);
+                configure_module_pin_mux(lcdc_pin_mux);
         } else if (!strncmp(header->name, "SMARCT1G", HDR_NAME_LEN)) {
                 /* SMARC T335X 1G pinmux */
                 configure_module_pin_mux(i2c1_pin_mux);

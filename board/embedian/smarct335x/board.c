@@ -278,7 +278,7 @@ void am33xx_spl_board_init(void)
 	/* Get the frequency */
 	dpll_mpu_opp100.m = am335x_get_efuse_mpu_max_freq(cdev);
 
-	if (board_is_bone(&header) || board_is_bone_lt(&header) || board_is_smarc_t335x(&header) || board_is_smarc_t335x_1g(&header)) {
+	if (board_is_bone(&header) || board_is_bone_lt(&header) || board_is_smarc_t335x(&header) || board_is_smarc_t335x_80(&header) || board_is_smarc_t335x_1g(&header)) {
 		/* BeagleBone and SMARC T335X PMIC Code */
 		int usb_cur_lim;
 
@@ -424,7 +424,7 @@ const struct dpll_params *get_dpll_ddr_params(void)
 		return &dpll_ddr_evm_sk;
 	else if (board_is_bone_lt(&header))
 		return &dpll_ddr_bone_black;
-        else if (board_is_smarc_t335x(&header) || board_is_smarc_t335x_1g(&header))
+        else if (board_is_smarc_t335x(&header) || board_is_smarc_t335x_80(&header) || board_is_smarc_t335x_1g(&header))
                 return &dpll_ddr_smarc_t335x;
 	else if (board_is_evm_15_or_later(&header))
 		return &dpll_ddr_evm_sk;
@@ -528,7 +528,7 @@ void sdram_init(void)
                            &ddr3_beagleblack_data,
                            &ddr3_beagleblack_cmd_ctrl_data,
                            &ddr3_beagleblack_emif_reg_data, 0);
-        else if (board_is_smarc_t335x(&header) || board_is_smarc_t335x_1g(&header)) {
+        else if (board_is_smarc_t335x(&header) || board_is_smarc_t335x_80(&header) || board_is_smarc_t335x_1g(&header)) {
                 /*
                  * SMARC T335X rev. 00B0 and later use gpio0_7 as LCD backlight PWM and gpio1_22 as LCD backlight enable.
                  * This is safe enough to do on older revs.
@@ -700,7 +700,7 @@ int board_eth_init(bd_t *bis)
                 writel(MII_MODE_ENABLE, &cdev->miisel);
                 cpsw_slaves[0].phy_if = cpsw_slaves[1].phy_if =
                                 PHY_INTERFACE_MODE_MII;
-        } else if (board_is_smarc_t335x(&header) || board_is_smarc_t335x_1g(&header)) {
+        } else if (board_is_smarc_t335x(&header) || board_is_smarc_t335x_80(&header) || board_is_smarc_t335x_1g(&header)) {
                writel((RMII_MODE_ENABLE | RMII_CHIPCKL_ENABLE), &cdev->miisel);
                cpsw_slaves[0].phy_if = cpsw_slaves[1].phy_if =
                                PHY_INTERFACE_MODE_RMII;
