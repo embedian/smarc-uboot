@@ -238,8 +238,8 @@ static ulong mmc_bread(int dev_num, lbaint_t start, lbaint_t blkcnt, void *dst)
 
 	if ((start + blkcnt) > mmc->block_dev.lba) {
 #if !defined(CONFIG_SPL_BUILD) || defined(CONFIG_SPL_LIBCOMMON_SUPPORT)
-		printf("MMC: block number 0x" LBAF " exceeds max(0x" LBAF ")\n",
-			start + blkcnt, mmc->block_dev.lba);
+		/*printf("MMC: block number 0x" LBAF " exceeds max(0x" LBAF ")\n",
+			start + blkcnt, mmc->block_dev.lba);*/
 #endif
 		return 0;
 	}
@@ -963,6 +963,9 @@ static int mmc_startup(struct mmc *mmc)
 		case 6:
 			mmc->version = MMC_VERSION_4_5;
 			break;
+                case 7:
+                        mmc->version = MMC_VERSION_5_0;
+                        break;
 		}
 
 		/*
