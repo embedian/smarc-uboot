@@ -28,7 +28,6 @@
 #include <mxc_epdc_fb.h>
 #endif
 #include <asm/arch/mxc_hdmi.h>
-#include <asm/arch/crm_regs.h>
 #include <linux/fb.h>
 #include <ipu_pixfmt.h>
 #include <asm/io.h>
@@ -78,6 +77,9 @@ DECLARE_GLOBAL_DATA_PTR;
 
 #ifdef CONFIG_SYS_I2C_MXC
 #define PC MUX_PAD_CTRL(I2C_PAD_CTRL)
+
+#define OUTPUT_40OHM (PAD_CTL_SPEED_MED|PAD_CTL_DSE_40ohm)
+
 /*I2C1 I2C_PM*/
 struct i2c_pads_info i2c_pad_info1 = {
         .scl = {
@@ -161,6 +163,10 @@ iomux_v3_cfg_t const wdt_pads[] = {
         MX6_PAD_EIM_D16__GPIO3_IO16 | MUX_PAD_CTRL(NO_PAD_CTRL),
 };
 
+iomux_v3_cfg_t const reset_out_pads[] = {
+        MX6_PAD_NANDF_CS3__GPIO6_IO16 | MUX_PAD_CTRL(NO_PAD_CTRL),
+};
+
 iomux_v3_cfg_t const enet_pads[] = {
 	MX6_PAD_ENET_MDIO__ENET_MDIO		| MUX_PAD_CTRL(ENET_PAD_CTRL),
 	MX6_PAD_ENET_MDC__ENET_MDC		| MUX_PAD_CTRL(ENET_PAD_CTRL),
@@ -230,16 +236,13 @@ iomux_v3_cfg_t const ecspi2_pads[] = {
 	MX6_PAD_CSI0_DAT10__ECSPI2_MISO | MUX_PAD_CTRL(SPI_PAD_CTRL),
 	MX6_PAD_CSI0_DAT9__ECSPI2_MOSI | MUX_PAD_CTRL(SPI_PAD_CTRL),
 	MX6_PAD_CSI0_DAT11__GPIO5_IO29 | MUX_PAD_CTRL(NO_PAD_CTRL),	/*SS0#*/
-        MX6_PAD_EIM_D24__GPIO3_IO24 | MUX_PAD_CTRL(NO_PAD_CTRL),	/*SS2#*/
-        MX6_PAD_EIM_D25__GPIO3_IO25 | MUX_PAD_CTRL(NO_PAD_CTRL),	/*SS3#*/
+        MX6_PAD_EIM_D24__ECSPI2_SS2 | MUX_PAD_CTRL(NO_PAD_CTRL),	/*SS2#*/
+        MX6_PAD_EIM_D25__ECSPI2_SS3 | MUX_PAD_CTRL(NO_PAD_CTRL),	/*SS3#*/
 };
 
 static void setup_spinor(void)
 {
 	imx_iomux_v3_setup_multiple_pads(ecspi2_pads, ARRAY_SIZE(ecspi2_pads));
-	gpio_direction_output(IMX_GPIO_NR(5, 29), 0);
-        gpio_direction_output(IMX_GPIO_NR(3, 24), 0);
-        gpio_direction_output(IMX_GPIO_NR(3, 25), 0);
 }
 #endif
 
@@ -248,8 +251,8 @@ static void setup_spinor(void)
         MX6_PAD_KEY_COL0__ECSPI1_SCLK | MUX_PAD_CTRL(SPI_PAD_CTRL),
         MX6_PAD_KEY_COL1__ECSPI1_MISO | MUX_PAD_CTRL(SPI_PAD_CTRL),
         MX6_PAD_KEY_ROW0__ECSPI1_MOSI | MUX_PAD_CTRL(SPI_PAD_CTRL),
-        MX6_PAD_KEY_ROW1__GPIO4_IO09 | MUX_PAD_CTRL(NO_PAD_CTRL),	/*SS0#*/
-        MX6_PAD_KEY_COL2__GPIO4_IO10 | MUX_PAD_CTRL(NO_PAD_CTRL),	/*SS1#*/
+        MX6_PAD_KEY_ROW1__ECSPI1_SS0 | MUX_PAD_CTRL(NO_PAD_CTRL),	/*SS0#*/
+        MX6_PAD_KEY_COL2__ECSPI1_SS1 | MUX_PAD_CTRL(NO_PAD_CTRL),	/*SS1#*/
 };
 
 iomux_v3_cfg_t const pcie_pads[] = {
@@ -264,7 +267,6 @@ static void setup_pcie(void)
 	gpio_direction_input(IMX_GPIO_NR(1, 16));
 	gpio_direction_input(IMX_GPIO_NR(1, 17));
         gpio_direction_input(IMX_GPIO_NR(1, 19));
-        gpio_direction_output(IMX_GPIO_NR(1, 20), 0);
 }
 
 /* CAN0/FLEXCAN1 */
@@ -368,6 +370,14 @@ static void setup_iomux_wdt(void)
 
         /* Set HW_WDT as Output High */
         gpio_direction_output(IMX_GPIO_NR(3, 16) , 1);
+}
+
+static void setup_iomux_reset_out(void)
+{
+        imx_iomux_v3_setup_multiple_pads(reset_out_pads, ARRAY_SIZE(reset_out_pads));
+
+        /* Set CPU RESET_OUT as Output */
+        gpio_direction_output(IMX_GPIO_NR(6, 16) , 0);
 }
 
 static void setup_spi1(void)
@@ -1141,6 +1151,7 @@ int board_eth_init(bd_t *bis)
 int board_early_init_f(void)
 {
         setup_iomux_wdt();
+        setup_iomux_reset_out();
         setup_iomux_uart1();
         setup_iomux_uart2();
         setup_iomux_uart4();
@@ -1346,7 +1357,7 @@ void board_recovery_setup(void)
 
 #ifdef CONFIG_IMX_UDC
 iomux_v3_cfg_t const otg_udc_pads[] = {
-	(MX6_PAD_ENET_RX_ER__USB_OTG_ID | MUX_PAD_CTRL(NO_PAD_CTRL)),
+	(MX6_PAD_ENET_RX_ER__USB_OTG_ID | MUX_PAD_CTRL(WEAK_PULLUP)),
 };
 void udc_pins_setting(void)
 {
@@ -1360,12 +1371,16 @@ void udc_pins_setting(void)
 
 #ifdef CONFIG_USB_EHCI_MX6
 iomux_v3_cfg_t const usb_otg_pads[] = {
-	MX6_PAD_EIM_D22__USB_OTG_PWR | MUX_PAD_CTRL(NO_PAD_CTRL),
-	MX6_PAD_ENET_RX_ER__USB_OTG_ID | MUX_PAD_CTRL(NO_PAD_CTRL),
+	MX6_PAD_ENET_TXD0__GPIO1_IO30	| MUX_PAD_CTRL(WEAK_PULLUP),
+	MX6_PAD_ENET_RX_ER__USB_OTG_ID	| MUX_PAD_CTRL(WEAK_PULLUP),
+        /* OTG Power enable */
+        MX6_PAD_ENET_TXD1__GPIO1_IO29	| MUX_PAD_CTRL(OUTPUT_40OHM),
 };
 
 iomux_v3_cfg_t const usb_hc1_pads[] = {
-	MX6_PAD_ENET_TXD1__GPIO1_IO29 | MUX_PAD_CTRL(NO_PAD_CTRL),
+        MX6_PAD_ENET_RXD0__GPIO1_IO27   | MUX_PAD_CTRL(WEAK_PULLUP),
+        /* USB1 Power enable */
+        MX6_PAD_ENET_RXD1__GPIO1_IO26   | MUX_PAD_CTRL(OUTPUT_40OHM),
 };
 
 int board_ehci_hcd_init(int port)
@@ -1393,14 +1408,20 @@ int board_ehci_power(int port, int on)
 {
 	switch (port) {
 	case 0:
+                	/* Set USB OTG Over Current */
+                	gpio_direction_input(IMX_GPIO_NR(1, 30));
+                	/* Trun On USB OTG Power */
+                	gpio_direction_output(IMX_GPIO_NR(1, 29),1);
 		break;
 	case 1:
 		if (on){
-			gpio_direction_output(IMX_GPIO_NR(1, 29), 1);
-                        gpio_direction_input(IMX_GPIO_NR(1, 30));
+                	/* Set USB1 Over Current */
+                	gpio_direction_input(IMX_GPIO_NR(1, 27));
+                	/* Trun On USB1 Power */
+                	gpio_direction_output(IMX_GPIO_NR(1, 26),1);
 			}
 		else
-			gpio_direction_output(IMX_GPIO_NR(1, 29), 0);
+			gpio_direction_output(IMX_GPIO_NR(1, 26), 0);
 		break;
 	default:
 		printf("MXC USB port %d not yet supported\n", port);
