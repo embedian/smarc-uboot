@@ -830,7 +830,7 @@ static iomux_v3_cfg_t const backlight_pads[] = {
         /* Backlight Enable for LVDS: S127 */
         /*MX6_PAD_GPIO_0__GPIO1_IO00 | MUX_PAD_CTRL(NO_PAD_CTRL),
 #define LVDS_BACKLIGHT_EN IMX_GPIO_NR(1, 00)*/
-        /* LCD VDD Enable: S133 */
+        /* LCD VDD Enable(for parallel LCD): S133 */
         MX6_PAD_GPIO_2__GPIO1_IO02 | MUX_PAD_CTRL(NO_PAD_CTRL),
 #define LCD_VDD_EN IMX_GPIO_NR(1, 02)
 };
@@ -902,7 +902,6 @@ static void enable_lvds(struct display_info_t const *dev)
         u32 reg = readl(&iomux->gpr[2]);
         reg |= IOMUXC_GPR2_DATA_WIDTH_CH0_24BIT;
         writel(reg, &iomux->gpr[2]);
-        gpio_direction_output(BACKLIGHT_EN, 1);
 }
 
 static void enable_rgb(struct display_info_t const *dev)
@@ -910,9 +909,6 @@ static void enable_rgb(struct display_info_t const *dev)
         imx_iomux_v3_setup_multiple_pads(
                 rgb_pads,
                  ARRAY_SIZE(rgb_pads));
-        gpio_direction_output(BACKLIGHT_EN, 1);
-	gpio_direction_output(LCD_VDD_EN, 1);
-	gpio_direction_output(BACKLIGHT_PWM, 1);
 }
 
 static struct display_info_t const displays[] = {{
@@ -976,9 +972,9 @@ static struct display_info_t const displays[] = {{
                 .sync           = FB_SYNC_EXT,
                 .vmode          = FB_VMODE_NONINTERLACED
 } }, {
-        .bus    = 3,
-        .addr   = 0x48,
-        .pixfmt = IPU_PIX_FMT_RGB666,
+        .bus    = 4,
+        .addr   = 0x54,
+        .pixfmt = IPU_PIX_FMT_RGB24,
         .detect = detect_i2c,
         .enable = enable_rgb,
         .mode   = {
@@ -1093,6 +1089,10 @@ static void setup_display(void)
         /*imx_iomux_v3_setup_multiple_pads(backlight_pads,
                                          ARRAY_SIZE(backlight_pads));
         gpio_direction_input(BACKLIGHT_EN);*/
+	/* turn on backlight */
+        gpio_direction_output(BACKLIGHT_EN, 1);
+        gpio_direction_output(BACKLIGHT_PWM, 1);
+        gpio_direction_output(LCD_VDD_EN, 1);
 }
 #endif /* CONFIG_VIDEO_IPUV3 */
 
