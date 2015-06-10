@@ -63,6 +63,9 @@ DECLARE_GLOBAL_DATA_PTR;
 #define SPI_PAD_CTRL (PAD_CTL_HYS | PAD_CTL_SPEED_MED | \
 		      PAD_CTL_DSE_40ohm | PAD_CTL_SRE_FAST)
 
+#define LCD_PAD_CTRL (PAD_CTL_HYS | PAD_CTL_SPEED_HIGH | \
+                      PAD_CTL_DSE_40ohm | PAD_CTL_SRE_FAST)
+
 #define I2C_PAD_CTRL	(PAD_CTL_PKE | PAD_CTL_PUE |		\
 	PAD_CTL_PUS_100K_UP | PAD_CTL_SPEED_MED |		\
 	PAD_CTL_DSE_40ohm | PAD_CTL_HYS |			\
@@ -277,6 +280,7 @@ iomux_v3_cfg_t const di0_pads[] = {
 
 /* CAN0/FLEXCAN1 */
 iomux_v3_cfg_t const flexcan1_pads[] = {
+
         MX6_PAD_GPIO_7__FLEXCAN1_TX | MUX_PAD_CTRL(WEAK_PULLUP),
         MX6_PAD_GPIO_8__FLEXCAN1_RX | MUX_PAD_CTRL(WEAK_PULLUP),
 };
@@ -841,6 +845,38 @@ static iomux_v3_cfg_t const backlight_pads[] = {
 #define LCD_VDD_EN IMX_GPIO_NR(1, 02)
 };
 
+static iomux_v3_cfg_t const rgb_pads[] = {
+        MX6_PAD_DI0_DISP_CLK__IPU1_DI0_DISP_CLK | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DI0_PIN15__IPU1_DI0_PIN15 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DI0_PIN2__IPU1_DI0_PIN02 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DI0_PIN3__IPU1_DI0_PIN03 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DI0_PIN15__IPU1_DI0_PIN15 | MUX_PAD_CTRL(LCD_PAD_CTRL), /* DISP0_DRDY */
+        MX6_PAD_DISP0_DAT0__IPU1_DISP0_DATA00 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT1__IPU1_DISP0_DATA01 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT2__IPU1_DISP0_DATA02 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT3__IPU1_DISP0_DATA03 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT4__IPU1_DISP0_DATA04 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT5__IPU1_DISP0_DATA05 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT6__IPU1_DISP0_DATA06 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT7__IPU1_DISP0_DATA07 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT8__IPU1_DISP0_DATA08 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT9__IPU1_DISP0_DATA09 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT10__IPU1_DISP0_DATA10 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT11__IPU1_DISP0_DATA11 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT12__IPU1_DISP0_DATA12 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT13__IPU1_DISP0_DATA13 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT14__IPU1_DISP0_DATA14 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT15__IPU1_DISP0_DATA15 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT16__IPU1_DISP0_DATA16 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT17__IPU1_DISP0_DATA17 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT18__IPU1_DISP0_DATA18 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT19__IPU1_DISP0_DATA19 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT20__IPU1_DISP0_DATA20 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT21__IPU1_DISP0_DATA21 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT22__IPU1_DISP0_DATA22 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+        MX6_PAD_DISP0_DAT23__IPU1_DISP0_DATA23 | MUX_PAD_CTRL(LCD_PAD_CTRL),
+};
+
 struct display_info_t {
         int     bus;
         int     addr;
@@ -850,7 +886,7 @@ struct display_info_t {
         struct  fb_videomode mode;
 };
 
-static void disable_lvds(struct display_info_t const *dev)
+/*static void disable_lvds(struct display_info_t const *dev)
 {
         struct iomuxc *iomux = (struct iomuxc *)IOMUXC_BASE_ADDR;
 
@@ -860,13 +896,20 @@ static void disable_lvds(struct display_info_t const *dev)
                  IOMUXC_GPR2_LVDS_CH1_MODE_MASK);
 
         writel(reg, &iomux->gpr[2]);
-}
+}*/
 
-static void do_enable_hdmi(struct display_info_t const *dev)
+/*static void do_enable_hdmi(struct display_info_t const *dev)
 {
         disable_lvds(dev);
         imx_enable_hdmi_phy();
 }
+
+static void enable_rgb(struct display_info_t const *dev)
+{
+        imx_iomux_v3_setup_multiple_pads(
+                rgb_pads,
+                 ARRAY_SIZE(rgb_pads));
+}*/
 
 static struct display_info_t const displays[] = {{
         .bus    = -1,
@@ -908,6 +951,26 @@ static struct display_info_t const displays[] = {{
                 .hsync_len      = 60,
                 .vsync_len      = 10,
                 .sync           = FB_SYNC_EXT,
+                .vmode          = FB_VMODE_NONINTERLACED
+} }, {
+        .bus    = -1,
+        .addr   = 0,
+        .pixfmt = IPU_PIX_FMT_RGB24,
+        .detect = NULL,
+        .enable = NULL,
+        .mode   = {
+                .name           = "wvga-rgb",
+                .refresh        = 57,
+                .xres           = 800,
+                .yres           = 480,
+                .pixclock       = 37037,
+                .left_margin    = 40,
+                .right_margin   = 60,
+                .upper_margin   = 10,
+                .lower_margin   = 10,
+                .hsync_len      = 20,
+                .vsync_len      = 10,
+                .sync           = 0,
                 .vmode          = FB_VMODE_NONINTERLACED
 } } };
 
