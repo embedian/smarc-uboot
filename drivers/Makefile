@@ -15,3 +15,4 @@ obj-y += video/
 obj-y += watchdog/
 obj-y += fastboot/
 obj-$(CONFIG_QE) += qe/
+obj-y += pwm/
