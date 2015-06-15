@@ -40,6 +40,10 @@
 
 #include "smarcfimx6_common.h"
 
+/* PWM Configs */
+#define CONFIG_PWM_IMX
+#define CONFIG_IMX6_PWM_PER_CLK	66000000
+
 /* USB Configs */
 #define CONFIG_CMD_USB
 #define CONFIG_USB_EHCI

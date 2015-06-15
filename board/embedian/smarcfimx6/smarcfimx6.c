@@ -32,6 +32,7 @@
 #include <ipu_pixfmt.h>
 #include <asm/io.h>
 #include <asm/arch/sys_proto.h>
+#include <pwm.h>
 #ifdef CONFIG_SYS_I2C_MXC
 #include <i2c.h>
 #include <asm/imx-common/mxc_i2c.h>
@@ -835,11 +836,9 @@ static iomux_v3_cfg_t const backlight_pads[] = {
         MX6_PAD_GPIO_0__GPIO1_IO00 | MUX_PAD_CTRL(NO_PAD_CTRL),
 #define BACKLIGHT_EN IMX_GPIO_NR(1, 00)
         /* PWM Backlight Control: S141 */
-        MX6_PAD_GPIO_1__GPIO1_IO01 | MUX_PAD_CTRL(NO_PAD_CTRL),
-#define BACKLIGHT_PWM IMX_GPIO_NR(1, 01)
+
         /* Backlight Enable for LVDS: S127 */
-        /*MX6_PAD_GPIO_0__GPIO1_IO00 | MUX_PAD_CTRL(NO_PAD_CTRL),
-#define LVDS_BACKLIGHT_EN IMX_GPIO_NR(1, 00)*/
+        MX6_PAD_GPIO_1__PWM2_OUT | MUX_PAD_CTRL(NO_PAD_CTRL),
         /* LCD VDD Enable(for parallel LCD): S133 */
         MX6_PAD_GPIO_2__GPIO1_IO02 | MUX_PAD_CTRL(NO_PAD_CTRL),
 #define LCD_VDD_EN IMX_GPIO_NR(1, 02)
@@ -1075,13 +1074,25 @@ static void setup_display(void)
         writel(reg, &iomux->gpr[3]);
         /* backlights off until needed */
 
-        /*imx_iomux_v3_setup_multiple_pads(backlight_pads,
+        imx_iomux_v3_setup_multiple_pads(backlight_pads,
                                          ARRAY_SIZE(backlight_pads));
-        gpio_direction_input(BACKLIGHT_EN);*/
+        /*gpio_direction_input(BACKLIGHT_EN);*/
 	/* turn on backlight */
         gpio_direction_output(BACKLIGHT_EN, 1);
-        gpio_direction_output(BACKLIGHT_PWM, 1);
         gpio_direction_output(LCD_VDD_EN, 1);
+        /* enable backlight PWM 2 */
+        if (pwm_init(1, 0, 0))
+                goto error;
+        /* duty cycle 500ns, period: 3000ns */
+        if (pwm_config(1, 1000, 3000))
+                goto error;
+        if (pwm_enable(1))
+                goto error;
+        return;
+
+error:
+        puts("error init pwm for backlight\n");
+        return;
 }
 #endif /* CONFIG_VIDEO_IPUV3 */
 
