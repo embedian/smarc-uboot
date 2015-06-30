@@ -75,13 +75,12 @@
  * Remove the mask freely, if the uboot pcie functions, rather than
  * the kernel's, are required.
  */
-/* #define CONFIG_CMD_PCI */
+#define CONFIG_CMD_PCI
 #ifdef CONFIG_CMD_PCI
 #define CONFIG_PCI
 #define CONFIG_PCI_PNP
 #define CONFIG_PCI_SCAN_SHOW
 #define CONFIG_PCIE_IMX
-#define CONFIG_PCIE_IMX_PERST_GPIO	IMX_GPIO_NR(1, 20)
 #endif
 
 /*#define CONFIG_SPLASH_SCREEN*/
