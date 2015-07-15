@@ -271,6 +271,7 @@ static void setup_pcie(void)
 	gpio_direction_input(IMX_GPIO_NR(1, 16));
 	gpio_direction_input(IMX_GPIO_NR(1, 17));
         gpio_direction_input(IMX_GPIO_NR(1, 19));
+	gpio_direction_output(IMX_GPIO_NR(1,20), 0);
 }
 
 iomux_v3_cfg_t const di0_pads[] = {
