@@ -46,7 +46,7 @@ struct scu_regs {
 };
 
 #define TEMPERATURE_MIN		-40
-#define TEMPERATURE_HOT		80
+#define TEMPERATURE_HOT		85
 #define TEMPERATURE_MAX		125
 #define FACTOR1			15976
 #define FACTOR2			4297157

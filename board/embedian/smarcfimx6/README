@@ -1,0 +1,50 @@
+U-Boot for SMARC-FIMX6
+--------------------
+
+This file contains information for the port of U-Boot to the Embedian SMARC-FiMX6.
+
+SMARC-FiMX6 is a computer on module that has six variants based on the following
+SoCs and memory configurations: mx6 quad 2G, mx6 quad 1G, mx6 dual 2G, mx6 dual 1G, mx6 dual lite and mx6 solo.
+
+For more details about SMARC-FiMX6, please refer to:
+http://www.embedian.com/
+
+Building U-boot for SMARC-FiMX6
+-----------------------------
+
+To build U-Boot for the SMARC-FiMX6 Dual Lite version:
+
+$ make smarcfimx6_dl_1g_ser3_config
+$ make
+
+To build U-Boot for the SMARC-FiMX6 Solo version:
+
+$ make smarcfimx6_solo_ser3_config
+$ make
+
+To build U-Boot for the SMARC-FiMX6 Quad and Dual 1G memory version:
+
+$ make smarcfimx6_quad_1g_ser3_config
+$ make
+
+To build U-Boot for the SMARC-FiMX6 Quad and Dual 2G memory version:
+
+$ make smarcfimx6_quad_2g_ser3_config
+$ make
+
+Flashing U-boot into the SD card
+--------------------------------
+
+- After the 'make' command completes, the generated 'u-boot.imx' binary must be
+flashed into the SD card;
+
+$ sudo dd if=u-boot.imx of=/dev/mmcblk0 bs=512 seek=2; sync
+
+(Note - the SD card node may vary, so adjust this as needed).
+
+- Insert the SD card into the slot located in the bottom of the board (same side
+as the mx6 processor)
+
+- Connect the serial cable to the host PC
+
+- Power up the board and U-boot messages will appear in the serial console.

@@ -127,6 +127,11 @@ static int i2c_mux_set(struct i2c_adapter *adap, int mux_id, int chip,
 			return -1;
 		buf = (uint8_t)((channel & 0x03) | (1 << 2));
 		break;
+        case I2C_MUX_PCA9546_ID:
+                if (channel > 4)
+                        return -1;
+                buf = (uint8_t)((channel & 0x04) | (1 << 3));
+                break;
 	case I2C_MUX_PCA9547_ID:
 		if (channel > 7)
 			return -1;
