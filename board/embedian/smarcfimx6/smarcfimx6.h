@@ -84,6 +84,21 @@ static inline int board_is_fimx6q2g(struct smarcfimx6_id *header)
         return !strncmp(header->name, "SMCMXQ2G", HDR_NAME_LEN);
 }
 
+static inline int revision_is_00a0(struct smarcfimx6_id *header)
+{
+        return !strncmp(header->version, "00A0", 4);
+}
+
+static inline int revision_is_00b0(struct smarcfimx6_id *header)
+{
+        return !strncmp(header->version, "00B0", 4);
+}
+
+static inline int revision_is_00c0(struct smarcfimx6_id *header)
+{
+        return !strncmp(header->version, "00C0", 4);
+}
+
 /*
  * Read ethernet MAC address from EEPROM for SMARC-FiMX6DVEVM compatible boards.
  * Returns 1 if found, 0 otherwise.

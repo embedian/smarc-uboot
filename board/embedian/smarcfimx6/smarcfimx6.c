@@ -84,6 +84,48 @@ DECLARE_GLOBAL_DATA_PTR;
 
 #define OUTPUT_40OHM (PAD_CTL_SPEED_MED|PAD_CTL_DSE_40ohm)
 
+/*
+ * Read header information from EEPROM into global structure.
+ */
+static int read_eeprom(struct smarcfimx6_id *header)
+{
+        /* Check if baseboard eeprom is available */
+        if (i2c_probe(CONFIG_SYS_I2C_EEPROM_ADDR)) {
+                puts("Could not probe the EEPROM; something fundamentally "
+                        "wrong on the I2C bus.\n");
+                return -ENODEV;
+        }
+
+        /* read the eeprom using i2c */
+        if (i2c_read(CONFIG_SYS_I2C_EEPROM_ADDR, 0, 2, (uchar *)header,
+                     sizeof(struct smarcfimx6_id))) {
+                puts("Could not read the EEPROM; something fundamentally"
+                        " wrong on the I2C bus.\n");
+                return -EIO;
+        }
+
+        if (header->magic != 0xEE3355AA) {
+                /*
+                 * read the eeprom using i2c again,
+                 * but use only a 1 byte address
+                 */
+                if (i2c_read(CONFIG_SYS_I2C_EEPROM_ADDR, 0, 1, (uchar *)header,
+                             sizeof(struct smarcfimx6_id))) {
+                        puts("Could not read the EEPROM; something "
+                                "fundamentally wrong on the I2C bus.\n");
+                        return -EIO;
+                }
+
+                if (header->magic != 0xEE3355AA) {
+                        printf("Incorrect magic number (0x%x) in EEPROM\n",
+                                        header->magic);
+                        return -EINVAL;
+                }
+        }
+
+        return 0;
+}
+
 /*I2C1 I2C_PM*/
 struct i2c_pads_info i2c_pad_info1 = {
         .scl = {
@@ -1237,8 +1279,29 @@ int board_late_init(void)
 
 int checkboard(void)
 {
-	puts("Board: SMARC-FiMX6 Rev.00A0\n");
-	return 0;
+        struct smarcfimx6_id header;
+
+        if (read_eeprom(&header) < 0)
+        puts("Could not get board ID.\n");
+
+        if (revision_is_00a0(&header)) {
+        puts("Board: SMARC-FiMX6 Rev.00A0\n");
+
+        return 0;
+        } else if (revision_is_00b0(&header)) {
+        puts("Board: SMARC-FiMX6 Rev.00B0\n");
+
+        return 0;
+        } else if (revision_is_00c0(&header)) {
+        puts("Board: SMARC-FiMX6 Rev.00C0\n");
+
+        return 0;
+        } else {
+        puts("Board: SMARC-FiMX6, Cannot find Revision number from EEPROM\n");
+
+        return 0;
+        }
+
 }
 
 #ifdef CONFIG_FASTBOOT
