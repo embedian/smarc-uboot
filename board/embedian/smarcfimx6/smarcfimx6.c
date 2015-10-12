@@ -1230,8 +1230,6 @@ int board_init(void)
 #endif
 
 #ifdef CONFIG_SYS_I2C_MXC
-        setup_i2c(0, CONFIG_SYS_I2C_SPEED,
-                        0x50, &i2c_pad_info1);
         setup_i2c(2, CONFIG_SYS_I2C_SPEED,
                         0x70, &i2c_pad_info3);
 
@@ -1280,6 +1278,9 @@ int board_late_init(void)
 
 int checkboard(void)
 {
+        setup_i2c(0, CONFIG_SYS_I2C_SPEED,
+                        0x50, &i2c_pad_info1);
+
         struct smarcfimx6_id header;
 
         if (read_eeprom(&header) < 0)
