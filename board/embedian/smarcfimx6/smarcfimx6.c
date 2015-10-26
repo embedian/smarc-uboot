@@ -1204,7 +1204,12 @@ int board_early_init_f(void)
 #endif
 
 #ifdef CONFIG_SYS_USE_SPINOR
-	setup_spinor();
+        /*Unlock SPI Flash*/
+        gpio_direction_output(IMX_GPIO_NR(4,20), 1);
+        udelay(100);
+        setup_spinor();
+        /*Lock SPI Flash and Free SPI0*/
+        gpio_direction_output(IMX_GPIO_NR(4,20), 0);
 #endif
 
         setup_spi1();
