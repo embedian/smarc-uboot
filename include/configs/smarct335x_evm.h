@@ -411,6 +411,7 @@
 					"128k(u-boot-env2),3464k(kernel)," \
 					"-(rootfs)"
 #elif defined(CONFIG_EMMC_BOOT)
+#undef CONFIG_SPL_OS_BOOT
 #undef CONFIG_ENV_IS_NOWHERE
 #define CONFIG_ENV_IS_IN_MMC
 #define CONFIG_SYS_MMC_ENV_DEV		1
