@@ -1103,6 +1103,7 @@ extern unsigned int __machine_arch_type;
 #define MACH_TYPE_THALES_ADC           3492
 #define MACH_TYPE_UBISYS_P9D_EVP       3493
 #define MACH_TYPE_ATDGP318             3494
+#define MACH_TYPE_SMARCT335XEVM        3600
 #define MACH_TYPE_OMAP5_SEVM           3777
 #define MACH_TYPE_ARMADILLO_800EVA     3863
 #define MACH_TYPE_KZM9G                4140
@@ -14200,6 +14201,18 @@ extern unsigned int __machine_arch_type;
 # define machine_is_atdgp318()	(machine_arch_type == MACH_TYPE_ATDGP318)
 #else
 # define machine_is_atdgp318()	(0)
+#endif
+
+#ifdef CONFIG_MACH_SMARCT335XEVM
+# ifdef machine_arch_type
+#  undef machine_arch_type
+#  define machine_arch_type     __machine_arch_type
+# else
+#  define machine_arch_type     MACH_TYPE_SMARCT335XEVM
+# endif
+# define machine_is_smarct335xevm()        (machine_arch_type == MACH_TYPE_SMARCT335XEVM)
+#else
+# define machine_is_smarct335xevm()        (0)
 #endif
 
 #ifdef CONFIG_MACH_OMAP5_SEVM

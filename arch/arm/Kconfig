@@ -390,6 +390,14 @@ config TARGET_AM335X_EVM
 	select DM_SERIAL
 	select DM_GPIO
 
+config TARGET_SMARCT335X_EVM
+        bool "Support smarct335x_evm"
+        select CPU_V7
+        select SUPPORT_SPL
+        select DM
+        select DM_SERIAL
+        select DM_GPIO
+
 config TARGET_AM43XX_EVM
 	bool "Support am43xx_evm"
 	select CPU_V7
@@ -964,6 +972,7 @@ source "board/st/stv0991/Kconfig"
 source "board/sunxi/Kconfig"
 source "board/syteco/zmx25/Kconfig"
 source "board/tbs/tbs2910/Kconfig"
+source "board/embedian/smarct335x/Kconfig"
 source "board/ti/am335x/Kconfig"
 source "board/ti/am43xx/Kconfig"
 source "board/birdland/bav335x/Kconfig"

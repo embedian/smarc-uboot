@@ -261,6 +261,13 @@ void update_rtc_magic(void)
  */
 int board_early_init_f(void)
 {
+#ifdef CONFIG_NOR_BOOT
+        gd->baudrate = CONFIG_BAUDRATE;
+        serial_init();
+        gd->have_console = 1;
+#elif defined(CONFIG_SPL_BUILD)
+        preloader_console_init();
+#endif
 	prcm_init();
 	set_mux_conf_regs();
 #if defined(CONFIG_SPL_BUILD) && defined(CONFIG_SPL_RTC_ONLY_SUPPORT)
