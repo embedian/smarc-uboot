@@ -403,6 +403,11 @@ config TARGET_AM43XX_EVM
 	select CPU_V7
 	select SUPPORT_SPL
 
+config TARGET_SMARCT437X_EVM
+        bool "Support smarct437x_evm"
+        select CPU_V7
+        select SUPPORT_SPL
+
 config TARGET_BAV335X
 	bool "Support bav335x"
 	select CPU_V7
@@ -975,6 +980,7 @@ source "board/tbs/tbs2910/Kconfig"
 source "board/embedian/smarct335x/Kconfig"
 source "board/ti/am335x/Kconfig"
 source "board/ti/am43xx/Kconfig"
+source "board/embedian/smarct437x/Kconfig"
 source "board/birdland/bav335x/Kconfig"
 source "board/ti/ti814x/Kconfig"
 source "board/ti/ti816x/Kconfig"

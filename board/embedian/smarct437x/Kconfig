@@ -1,0 +1,15 @@
+if TARGET_SMARCT437X_EVM
+
+config SYS_BOARD
+	default "smarct437x"
+
+config SYS_VENDOR
+	default "embedian"
+
+config SYS_SOC
+	default "am33xx"
+
+config SYS_CONFIG_NAME
+	default "smarct437x_evm"
+
+endif

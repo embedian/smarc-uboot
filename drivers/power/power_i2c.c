@@ -104,6 +104,7 @@ int pmic_probe(struct pmic *p)
 {
 	i2c_set_bus_num(p->bus);
 	debug("Bus: %d PMIC:%s probed!\n", p->bus, p->name);
+	i2c_set_bus_num(1);
 	if (i2c_probe(pmic_i2c_addr)) {
 		printf("Can't find PMIC:%s\n", p->name);
 		return -1;

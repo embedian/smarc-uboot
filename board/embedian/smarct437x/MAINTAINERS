@@ -1,0 +1,11 @@
+SMARCT437X SMARC BOARD
+M:	Eric Lee <eric.lee@embedian.com>
+S:	Maintained
+F:	board/embedian/smarct437x/
+F:	include/configs/smarct437x_evm.h
+F:	configs/smarct437x_evm_defconfig
+F:	configs/smarct437x_evm_qspiboot_defconfig
+F:	configs/am43xx_evm_ethboot_defconfig
+F:	configs/am43xx_evm_usbhost_boot_defconfig
+F:	configs/am43xx_evm_rtconly_defconfig
+F:	configs/am43xx_evm_usbspl_defconfig

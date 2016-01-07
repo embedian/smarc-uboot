@@ -101,4 +101,11 @@
 /* EDMA3 Base Address */
 #define EDMA3_BASE				0x49000000
 
+/* LCD Controller */
+#define LCD_CNTL_BASE                   	0x4832A000
+
+/* PWMSS */
+#define PWMSS0_BASE                     	0x48300000
+#define AM33XX_EHRPWM0_BASE               	0x48300200
+
 #endif /* __AM43XX_HARDWARE_AM43XX_H */

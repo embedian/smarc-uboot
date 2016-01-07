@@ -113,13 +113,17 @@ const struct gpio_bank *const omap_gpio_bank = gpio_bank_am33xx;
 #if defined(CONFIG_OMAP_HSMMC) && !defined(CONFIG_SPL_BUILD)
 int cpu_mmc_init(bd_t *bis)
 {
-	int ret;
+	/*int ret;
 
 	ret = omap_mmc_init(0, 0, 0, -1, -1);
 	if (ret)
 		return ret;
 
-	return omap_mmc_init(1, 0, 0, -1, -1);
+	return omap_mmc_init(1, 0, 0, -1, -1);*/
+        omap_mmc_init(0, 0, 0, -1, -1);
+        omap_mmc_init(1, 0, 0, -1, -1);
+        omap_mmc_init(2, 0, 0, -1, -1);
+        return 0;
 }
 #endif
 
@@ -261,13 +265,6 @@ void update_rtc_magic(void)
  */
 int board_early_init_f(void)
 {
-#ifdef CONFIG_NOR_BOOT
-        gd->baudrate = CONFIG_BAUDRATE;
-        serial_init();
-        gd->have_console = 1;
-#elif defined(CONFIG_SPL_BUILD)
-        preloader_console_init();
-#endif
 	prcm_init();
 	set_mux_conf_regs();
 #if defined(CONFIG_SPL_BUILD) && defined(CONFIG_SPL_RTC_ONLY_SUPPORT)

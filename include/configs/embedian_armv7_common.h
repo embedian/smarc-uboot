@@ -103,10 +103,12 @@
 /* MMC/SD IP block */
 #define CONFIG_MMC
 #define CONFIG_GENERIC_MMC
+#define CONFIG_OMAP_HSMMC
 #define CONFIG_CMD_MMC
 
 /* McSPI IP block */
 #define CONFIG_SPI
+#define CONFIG_OMAP3_SPI
 #define CONFIG_CMD_SPI
 
 /* GPIO block */
@@ -224,12 +226,12 @@
 
 /* FAT sd card locations. */
 #define CONFIG_SYS_MMCSD_FS_BOOT_PARTITION	1
-#define CONFIG_SPL_FS_LOAD_PAYLOAD_NAME	"u-boot.img"
+#define CONFIG_SPL_FAT_LOAD_PAYLOAD_NAME	"u-boot.img"
 
 #ifdef CONFIG_SPL_OS_BOOT
 /* FAT */
-#define CONFIG_SPL_FS_LOAD_KERNEL_NAME		"uImage"
-#define CONFIG_SPL_FS_LOAD_ARGS_NAME		"args"
+#define CONFIG_SPL_FAT_LOAD_KERNEL_NAME		"uImage"
+#define CONFIG_SPL_FAT_LOAD_ARGS_NAME		"args"
 
 /* RAW SD card / eMMC */
 #define CONFIG_SYS_MMCSD_RAW_MODE_KERNEL_SECTOR	0x900	/* address 0x120000 */

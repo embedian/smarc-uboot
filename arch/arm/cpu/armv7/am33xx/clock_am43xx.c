@@ -60,6 +60,10 @@ void setup_clocks_for_console(void)
 			CD_CLKCTRL_CLKTRCTRL_SW_WKUP <<
 			CD_CLKCTRL_CLKTRCTRL_SHIFT);
 
+        clrsetbits_le32(&cmper->l4lsclkstctrl, CD_CLKCTRL_CLKTRCTRL_MASK,
+                        CD_CLKCTRL_CLKTRCTRL_SW_WKUP <<
+                        CD_CLKCTRL_CLKTRCTRL_SHIFT);
+
 	/* Enable UART0 */
 	clrsetbits_le32(&cmwkup->wkup_uart0ctrl,
 			MODULE_CLKCTRL_MODULEMODE_MASK,
@@ -71,6 +75,42 @@ void setup_clocks_for_console(void)
 		clkctrl = readl(&cmwkup->wkup_uart0ctrl);
 		idlest = (clkctrl & MODULE_CLKCTRL_IDLEST_MASK) >>
 			 MODULE_CLKCTRL_IDLEST_SHIFT;
+	}
+
+        /* Enable UART2 */
+        clrsetbits_le32(&cmper->uart2clkctrl,
+                        MODULE_CLKCTRL_MODULEMODE_MASK,
+                        MODULE_CLKCTRL_MODULEMODE_SW_EXPLICIT_EN <<
+                        MODULE_CLKCTRL_MODULEMODE_SHIFT);
+        while ((idlest == MODULE_CLKCTRL_IDLEST_DISABLED) ||
+                (idlest == MODULE_CLKCTRL_IDLEST_TRANSITIONING)) {
+                clkctrl = readl(&cmper->uart2clkctrl);
+                idlest = (clkctrl & MODULE_CLKCTRL_IDLEST_MASK) >>
+                         MODULE_CLKCTRL_IDLEST_SHIFT;
+        }
+
+        /* Enable UART3 */
+        clrsetbits_le32(&cmper->uart3clkctrl,
+                        MODULE_CLKCTRL_MODULEMODE_MASK,
+                        MODULE_CLKCTRL_MODULEMODE_SW_EXPLICIT_EN <<
+                        MODULE_CLKCTRL_MODULEMODE_SHIFT);
+        while ((idlest == MODULE_CLKCTRL_IDLEST_DISABLED) ||
+                (idlest == MODULE_CLKCTRL_IDLEST_TRANSITIONING)) {
+                clkctrl = readl(&cmper->uart3clkctrl);
+                idlest = (clkctrl & MODULE_CLKCTRL_IDLEST_MASK) >>
+                         MODULE_CLKCTRL_IDLEST_SHIFT;
+        }
+
+        /* Enable UART4 */
+        clrsetbits_le32(&cmper->uart4clkctrl,
+                        MODULE_CLKCTRL_MODULEMODE_MASK,
+                        MODULE_CLKCTRL_MODULEMODE_SW_EXPLICIT_EN <<
+                        MODULE_CLKCTRL_MODULEMODE_SHIFT);
+        while ((idlest == MODULE_CLKCTRL_IDLEST_DISABLED) ||
+                (idlest == MODULE_CLKCTRL_IDLEST_TRANSITIONING)) {
+                clkctrl = readl(&cmper->uart4clkctrl);
+                idlest = (clkctrl & MODULE_CLKCTRL_IDLEST_MASK) >>
+                         MODULE_CLKCTRL_IDLEST_SHIFT;
 	}
 }
 
@@ -99,6 +139,7 @@ void enable_basic_clocks(void)
 		&cmper->elmclkctrl,
 		&cmper->mmc0clkctrl,
 		&cmper->mmc1clkctrl,
+                &cmper->mmc2clkctrl,
 		&cmwkup->wkup_i2c0ctrl,
 		&cmper->gpio1clkctrl,
 		&cmper->gpio2clkctrl,
@@ -106,11 +147,12 @@ void enable_basic_clocks(void)
 		&cmper->gpio4clkctrl,
 		&cmper->gpio5clkctrl,
 		&cmper->i2c1clkctrl,
+                &cmper->i2c2clkctrl,
 		&cmper->cpgmac0clkctrl,
 		&cmper->emiffwclkctrl,
 		&cmper->emifclkctrl,
 		&cmper->otfaemifclkctrl,
-		&cmper->qspiclkctrl,
+                &cmper->spi0clkctrl,
 		0
 	};
 
@@ -121,6 +163,10 @@ void enable_basic_clocks(void)
 
 	/* For OPP100 the mac clock should be /5. */
 	writel(0x4, &cmdpll->clkselmacclk);
+
+	/* enable i2c1 clock */	
+	writel(0x2, &cmper->i2c1clkctrl);
+	while (readl(&cmper->i2c1clkctrl) != 0x2) ;
 }
 
 void rtc_only_enable_basic_clocks(void)
