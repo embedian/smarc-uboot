@@ -829,6 +829,26 @@ int board_late_init(void)
 	safe_string[sizeof(header.version)] = 0;
 	setenv("board_rev", safe_string);
 #endif
+
+	/* Get Board Name and Revision Number */
+        if (revision_is_00a0(&header)) {
+        puts("Board: SMARC-T437X Rev.00A0\n");
+
+        return 0;
+        } else if (revision_is_00b0(&header)) {
+        puts("Board: SMARC-T437X Rev.00B0\n");
+
+        return 0;
+        } else if (revision_is_00c0(&header)) {
+        puts("Board: SMARC-T437X Rev.00C0\n");
+
+        return 0;
+        } else {
+        puts("Board: SMARC-FiMX6, Cannot find Revision number from EEPROM\n");
+
+        return 0;
+        }
+
 	/* Turn on LCD Backlight */
 #define GPIO_LCD_BKLT_EN       	68
 #define GPIO_LCD_PWM_EN        	138
