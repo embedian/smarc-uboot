@@ -834,15 +834,12 @@ int board_late_init(void)
         if (revision_is_00a0(&header)) {
         puts("Board: SMARC-T437X Rev.00A0\n");
 
-        return 0;
         } else if (revision_is_00b0(&header)) {
         puts("Board: SMARC-T437X Rev.00B0\n");
 
-        return 0;
         } else if (revision_is_00c0(&header)) {
         puts("Board: SMARC-T437X Rev.00C0\n");
 
-        return 0;
         } else {
         puts("Board: SMARC-FiMX6, Cannot find Revision number from EEPROM\n");
 
@@ -859,9 +856,6 @@ int board_late_init(void)
 
 	/* Read BOOT_SEL Configuration */
         if ((gpio_get_value(168) == 0)&&(gpio_get_value(169) == 0)&&(gpio_get_value(170) == 0)) {
-                puts("CARRIER SATA Boot 000\n");
-                /*setenv("bootcmd", "run bootcmd_uboot_sata;");*/
-        } else if ((gpio_get_value(168) == 0)&&(gpio_get_value(169) == 0)&&(gpio_get_value(170) == 0)) {
                 puts("BOOT_SEL Detected: OFF OFF OFF, SATA Boot Up Not Defined...\n");
                 hang();
         } else if ((gpio_get_value(168) == 0)&&(gpio_get_value(169) == 1)&&(gpio_get_value(170) == 0)) {
