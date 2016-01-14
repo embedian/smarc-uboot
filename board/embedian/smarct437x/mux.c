@@ -323,6 +323,7 @@ void enable_board_pin_mux(void)
 {
 	configure_module_pin_mux(i2c1_pin_mux);
        	configure_module_pin_mux(spi0_pin_mux);
+      	configure_module_pin_mux(mmc0_pin_mux);
 	if (board_is_gpevm()) {
 		configure_module_pin_mux(gpio5_7_pin_mux);
 		configure_module_pin_mux(rgmii1_pin_mux);
