@@ -1276,37 +1276,67 @@ int board_late_init(void)
 #ifdef CONFIG_ENV_IS_IN_MMC
 	board_late_mmc_env_init();
 #endif
-	return 0;
-}
 
-int checkboard(void)
-{
+/* Check Board Revision */
         setup_i2c(0, CONFIG_SYS_I2C_SPEED,
                         0x50, &i2c_pad_info1);
 
         struct smarcfimx6_id header;
 
         if (read_eeprom(&header) < 0)
-       	puts("Could not get board ID.\n");
+        puts("Could not get board ID.\n");
 
-       	if (revision_is_00a0(&header)) {
-     	puts("Board: SMARC-FiMX6 Rev.00A0\n");
+        if (revision_is_00a0(&header)) {
+        puts("Board: SMARC-FiMX6 Rev.00A0\n");
 
-     	return 0;
-	} else if (revision_is_00b0(&header)) {
+        } else if (revision_is_00b0(&header)) {
         puts("Board: SMARC-FiMX6 Rev.00B0\n");
 
-       	return 0;
-       	} else if (revision_is_00c0(&header)) {
-      	puts("Board: SMARC-FiMX6 Rev.00C0\n");
+        } else if (revision_is_00c0(&header)) {
+        puts("Board: SMARC-FiMX6 Rev.00C0\n");
 
-     	return 0;
-	} else {
-	puts("Board: SMARC-FiMX6, Cannot find Revision number from EEPROM\n");
+        } else {
+        puts("Board: SMARC-FiMX6, Cannot find Revision number from EEPROM\n");
 
-	return 0;
-	}
-		
+        return 0;
+        }
+
+/* SMARC BOOT_SEL*/
+        if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
+                puts("BOOT_SEL Detected: OFF OFF OFF, Load zImage from Carrier SATA...\n");
+		setenv("root", "/dev/sda1 rootwait rw ");
+                setenv("bootcmd", "sata init; sata read 0x12000000 0x800  0x4000; sata read 0x18000000 0x8000 0x800; bootz 0x12000000 - 0x18000000;");
+        } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
+                puts("BOOT_SEL Detected: OFF OFF ON, USB Boot Up Not Defined...Carrier SPI Boot Not Supported...\n");
+                hang();
+        } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
+                puts("BOOT_SEL Detected: OFF ON OFF, Load zImage from Carrier SDMMC...\n");
+                setenv_ulong("mmcdev", 1);
+                setenv("bootcmd", "mmc rescan; run loadbootenv; run importbootenv; run loadzimage; run loadfdt; run mmcboot;");
+        } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
+                puts("BOOT_SEL Detected: ON OFF OFF, Load zImage from Carrier SD Card...\n");
+                setenv_ulong("mmcdev", 0);
+                setenv("bootcmd", "mmc rescan; run loadbootenv; run importbootenv; run loadzimage; run loadfdt; run mmcboot;");
+        } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
+                puts("BOOT_SEL Detected: OFF ON ON, Load zImage from Module eMMC Flash...\n");
+                setenv_ulong("mmcdev", 2);
+                setenv("bootcmd", "mmc rescan; run loadbootenv; run importbootenv; run loadzimage; run loadfdt; run mmcboot;");
+        } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
+                puts("BOOT_SEL Detected: ON OFF ON, Load zImage from GBE...\n");
+                setenv("bootcmd", "run netboot;");
+        } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
+                puts("Carrier SPI Boot 110\n");
+                hang();
+        } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
+                puts("BOOT_SEL Detected: ON ON ON, MOdule SPI Boot up is Default, Load zImage from Module eMMC...\n");
+                setenv_ulong("mmcdev", 2);
+                setenv("bootcmd", "mmc rescan; run loadbootenv; run importbootenv; run loadzimage; run loadfdt; run mmcboot;");
+        } else {
+                puts("unsupported boot devices\n");
+                hang();
+        }
+
+        return 0;
 }
 
 #ifdef CONFIG_FASTBOOT
