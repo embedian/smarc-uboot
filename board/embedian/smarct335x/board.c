@@ -150,10 +150,17 @@ static const struct ddr_data ddr3_beagleblack_data = {
 };
 
 static const struct ddr_data ddr3_smarct335x_data = {
-        .datardsratio0 = MT41K256M16HA125E_RD_DQS,
-        .datawdsratio0 = MT41K256M16HA125E_WR_DQS,
-        .datafwsratio0 = MT41K256M16HA125E_PHY_FIFO_WE,
-        .datawrsratio0 = MT41K256M16HA125E_PHY_WR_DATA,
+        .datardsratio0 = K4B4G1646EBYK0_RD_DQS,
+        .datawdsratio0 = K4B4G1646EBYK0_WR_DQS,
+        .datafwsratio0 = K4B4G1646EBYK0_PHY_FIFO_WE,
+        .datawrsratio0 = K4B4G1646EBYK0_PHY_WR_DATA,
+};
+
+static const struct ddr_data ddr3_smarct335x80_data = {
+        .datardsratio0 = MT41K256M16HA125ITE_RD_DQS,
+        .datawdsratio0 = MT41K256M16HA125ITE_WR_DQS,
+        .datafwsratio0 = MT41K256M16HA125ITE_PHY_FIFO_WE,
+        .datawrsratio0 = MT41K256M16HA125ITE_PHY_WR_DATA,
 };
 
 static const struct ddr_data ddr3_evm_data = {
@@ -186,14 +193,25 @@ static const struct cmd_control ddr3_beagleblack_cmd_ctrl_data = {
 };
 
 static const struct cmd_control ddr3_smarct335x_cmd_ctrl_data = {
-        .cmd0csratio = MT41K256M16HA125E_RATIO,
-        .cmd0iclkout = MT41K256M16HA125E_INVERT_CLKOUT,
+        .cmd0csratio = K4B4G1646EBYK0_RATIO,
+        .cmd0iclkout = K4B4G1646EBYK0_INVERT_CLKOUT,
 
-        .cmd1csratio = MT41K256M16HA125E_RATIO,
-        .cmd1iclkout = MT41K256M16HA125E_INVERT_CLKOUT,
+        .cmd1csratio = K4B4G1646EBYK0_RATIO,
+        .cmd1iclkout = K4B4G1646EBYK0_INVERT_CLKOUT,
 
-        .cmd2csratio = MT41K256M16HA125E_RATIO,
-        .cmd2iclkout = MT41K256M16HA125E_INVERT_CLKOUT,
+        .cmd2csratio = K4B4G1646EBYK0_RATIO,
+        .cmd2iclkout = K4B4G1646EBYK0_INVERT_CLKOUT,
+};
+
+static const struct cmd_control ddr3_smarct335x80_cmd_ctrl_data = {
+        .cmd0csratio = MT41K256M16HA125ITE_RATIO,
+        .cmd0iclkout = MT41K256M16HA125ITE_INVERT_CLKOUT,
+
+        .cmd1csratio = MT41K256M16HA125ITE_RATIO,
+        .cmd1iclkout = MT41K256M16HA125ITE_INVERT_CLKOUT,
+
+        .cmd2csratio = MT41K256M16HA125ITE_RATIO,
+        .cmd2iclkout = MT41K256M16HA125ITE_INVERT_CLKOUT,
 };
 
 static const struct cmd_control ddr3_evm_cmd_ctrl_data = {
@@ -229,13 +247,23 @@ static struct emif_regs ddr3_beagleblack_emif_reg_data = {
 };
 
 static struct emif_regs ddr3_smarct335x_emif_reg_data = {
-        .sdram_config = MT41K256M16HA125E_EMIF_SDCFG,
-        .ref_ctrl = MT41K256M16HA125E_EMIF_SDREF,
-        .sdram_tim1 = MT41K256M16HA125E_EMIF_TIM1,
-        .sdram_tim2 = MT41K256M16HA125E_EMIF_TIM2,
-        .sdram_tim3 = MT41K256M16HA125E_EMIF_TIM3,
-        .zq_config = MT41K256M16HA125E_ZQ_CFG,
-        .emif_ddr_phy_ctlr_1 = MT41K256M16HA125E_EMIF_READ_LATENCY,
+        .sdram_config = K4B4G1646EBYK0_EMIF_SDCFG,
+        .ref_ctrl = K4B4G1646EBYK0_EMIF_SDREF,
+        .sdram_tim1 = K4B4G1646EBYK0_EMIF_TIM1,
+        .sdram_tim2 = K4B4G1646EBYK0_EMIF_TIM2,
+        .sdram_tim3 = K4B4G1646EBYK0_EMIF_TIM3,
+        .zq_config = K4B4G1646EBYK0_ZQ_CFG,
+        .emif_ddr_phy_ctlr_1 = K4B4G1646EBYK0_EMIF_READ_LATENCY,
+};
+
+static struct emif_regs ddr3_smarct335x80_emif_reg_data = {
+        .sdram_config = MT41K256M16HA125ITE_EMIF_SDCFG,
+        .ref_ctrl = MT41K256M16HA125ITE_EMIF_SDREF,
+        .sdram_tim1 = MT41K256M16HA125ITE_EMIF_TIM1,
+        .sdram_tim2 = MT41K256M16HA125ITE_EMIF_TIM2,
+        .sdram_tim3 = MT41K256M16HA125ITE_EMIF_TIM3,
+        .zq_config = MT41K256M16HA125ITE_ZQ_CFG,
+        .emif_ddr_phy_ctlr_1 = MT41K256M16HA125ITE_EMIF_READ_LATENCY,
 };
 
 static struct emif_regs ddr3_evm_emif_reg_data = {
@@ -481,11 +509,19 @@ const struct ctrl_ioregs ioregs_bonelt = {
 };
 
 const struct ctrl_ioregs ioregs_smarct335x = {
-        .cm0ioctl               = MT41K256M16HA125E_IOCTRL_VALUE,
-        .cm1ioctl               = MT41K256M16HA125E_IOCTRL_VALUE,
-        .cm2ioctl               = MT41K256M16HA125E_IOCTRL_VALUE,
-        .dt0ioctl               = MT41K256M16HA125E_IOCTRL_VALUE,
-        .dt1ioctl               = MT41K256M16HA125E_IOCTRL_VALUE,
+        .cm0ioctl               = K4B4G1646EBYK0_IOCTRL_VALUE,
+        .cm1ioctl               = K4B4G1646EBYK0_IOCTRL_VALUE,
+        .cm2ioctl               = K4B4G1646EBYK0_IOCTRL_VALUE,
+        .dt0ioctl               = K4B4G1646EBYK0_IOCTRL_VALUE,
+        .dt1ioctl               = K4B4G1646EBYK0_IOCTRL_VALUE,
+};
+
+const struct ctrl_ioregs ioregs_smarct335x80 = {
+        .cm0ioctl               = MT41K256M16HA125ITE_IOCTRL_VALUE,
+        .cm1ioctl               = MT41K256M16HA125ITE_IOCTRL_VALUE,
+        .cm2ioctl               = MT41K256M16HA125ITE_IOCTRL_VALUE,
+        .dt0ioctl               = MT41K256M16HA125ITE_IOCTRL_VALUE,
+        .dt1ioctl               = MT41K256M16HA125ITE_IOCTRL_VALUE,
 };
 
 const struct ctrl_ioregs ioregs_evm15 = {
@@ -528,7 +564,7 @@ void sdram_init(void)
                            &ddr3_beagleblack_data,
                            &ddr3_beagleblack_cmd_ctrl_data,
                            &ddr3_beagleblack_emif_reg_data, 0);
-        else if (board_is_smarc_t335x(&header) || board_is_smarc_t335x_80(&header) || board_is_smarc_t335x_1g(&header)) {
+        else if (board_is_smarc_t335x(&header) || board_is_smarc_t335x_1g(&header)) {
                 /*
                  * SMARC T335X rev. 00B0 and later use gpio0_7 as LCD backlight PWM and gpio1_22 as LCD backlight enable.
                  * This is safe enough to do on older revs.
@@ -541,8 +577,23 @@ void sdram_init(void)
                            &ddr3_smarct335x_data,
                            &ddr3_smarct335x_cmd_ctrl_data,
                            &ddr3_smarct335x_emif_reg_data, 0);
-		puts("Set DDR3 to 800MHz.\n");
+		udelay(1600);
 	}
+        else if (board_is_smarc_t335x_80(&header)) {
+                /*
+                 * SMARC T335X rev. 00B0 and later use gpio0_7 as LCD backlight PWM and gpio1_22 as LCD backlight enable.
+                 * This is safe enough to do on older revs.
+                 */
+                gpio_request(GPIO_LCD_BKLT_EN, "lcd_bklt_en");
+                gpio_direction_output(GPIO_LCD_BKLT_EN, 1);
+                gpio_request(GPIO_LCD_PWM_EN, "lcd_pwm_en");
+                gpio_direction_output(GPIO_LCD_PWM_EN, 1);
+                config_ddr(400, &ioregs_smarct335x80,
+                           &ddr3_smarct335x80_data,
+                           &ddr3_smarct335x80_cmd_ctrl_data,
+                           &ddr3_smarct335x80_emif_reg_data, 0);
+		udelay(1200);
+        }
 	else if (board_is_evm_15_or_later(&header))
 		config_ddr(303, MT41J512M8RH125_IOCTRL_VALUE, &ddr3_evm_data,
 			   &ddr3_evm_cmd_ctrl_data, &ddr3_evm_emif_reg_data, 0);
