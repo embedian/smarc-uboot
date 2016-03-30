@@ -543,7 +543,6 @@ int board_mmc_init(bd_t *bis)
 		case 0:
 			imx_iomux_v3_setup_multiple_pads(
 				usdhc2_pads, ARRAY_SIZE(usdhc2_pads));
-                        gpio_direction_output(IMX_GPIO_NR(1, 18), 1);
 			gpio_direction_input(USDHC2_CD_GPIO);
 			usdhc_cfg[0].sdhc_clk = mxc_get_clock(MXC_ESDHC2_CLK);
 			break;
