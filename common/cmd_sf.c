@@ -12,6 +12,7 @@
 #include <malloc.h>
 #include <spi.h>
 #include <spi_flash.h>
+#include <asm/gpio.h>
 
 #include <asm/io.h>
 #include <dm/device-internal.h>
@@ -517,7 +518,9 @@ static int do_spi_flash(cmd_tbl_t *cmdtp, int flag, int argc,
 	++argv;
 
 	if (strcmp(cmd, "probe") == 0) {
+		gpio_direction_output(IMX_GPIO_NR(4,20), 1);
 		ret = do_spi_flash_probe(argc, argv);
+		gpio_direction_output(IMX_GPIO_NR(4,20), 0);
 		goto done;
 	}
 
@@ -528,13 +531,21 @@ static int do_spi_flash(cmd_tbl_t *cmdtp, int flag, int argc,
 	}
 
 	if (strcmp(cmd, "read") == 0 || strcmp(cmd, "write") == 0 ||
-	    strcmp(cmd, "update") == 0)
+	    strcmp(cmd, "update") == 0){
+		gpio_direction_output(IMX_GPIO_NR(4,20), 1);
 		ret = do_spi_flash_read_write(argc, argv);
-	else if (strcmp(cmd, "erase") == 0)
+		gpio_direction_output(IMX_GPIO_NR(4,20), 0);
+		}
+	else if (strcmp(cmd, "erase") == 0){
+                gpio_direction_output(IMX_GPIO_NR(4,20), 1);
 		ret = do_spi_flash_erase(argc, argv);
+                gpio_direction_output(IMX_GPIO_NR(4,20), 0);
+		}
 #ifdef CONFIG_CMD_SF_TEST
 	else if (!strcmp(cmd, "test"))
+                gpio_direction_output(IMX_GPIO_NR(4,20), 1);
 		ret = do_spi_flash_test(argc, argv);
+                gpio_direction_output(IMX_GPIO_NR(4,20), 0);
 #endif
 	else
 		ret = -1;

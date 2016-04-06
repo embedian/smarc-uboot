@@ -1,0 +1,15 @@
+if TARGET_SMARCFIMX6
+
+config SYS_BOARD
+	default "smarcfimx6"
+
+config SYS_VENDOR
+	default "embedian"
+
+config SYS_SOC
+	default "mx6"
+
+config SYS_CONFIG_NAME
+	default "smarcfimx6"
+
+endif

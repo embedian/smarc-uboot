@@ -523,6 +523,10 @@ config TARGET_MX6SABRESD
 	select CPU_V7
 	select SUPPORT_SPL
 
+config TARGET_SMARCFIMX6
+    	bool "Support smarcfimx6"
+    	select CPU_V7
+
 config TARGET_MX6SLEVK
 	bool "Support mx6slevk"
 	select CPU_V7
@@ -884,6 +888,7 @@ source "board/freescale/mx7dsabresd/Kconfig"
 source "board/freescale/mx6ul_14x14_evk/Kconfig"
 source "board/freescale/mx6ul_14x14_ddr3_arm2/Kconfig"
 source "board/freescale/mx6ul_14x14_lpddr2_arm2/Kconfig"
+source "board/embedian/smarcfimx6/Kconfig"
 source "board/technexion/picosom-imx6ul/Kconfig"
 source "board/freescale/vf610twr/Kconfig"
 source "board/gateworks/gw_ventana/Kconfig"
