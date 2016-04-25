@@ -1276,7 +1276,7 @@ int board_late_init(void)
 	board_late_mmc_env_init();
 #endif
 
-/* Check Board Revision */
+/* Check Board Information */
         setup_i2c(0, CONFIG_SYS_I2C_SPEED,
                         0x50, &i2c_pad_info1);
 
@@ -1285,20 +1285,14 @@ int board_late_init(void)
         if (read_eeprom(&header) < 0)
         puts("Could not get board ID.\n");
 
-        if (revision_is_00a0(&header)) {
-        puts("Board: SMARC-FiMX6 Rev.00A0\n");
-
-        } else if (revision_is_00b0(&header)) {
-        puts("Board: SMARC-FiMX6 Rev.00B0\n");
-
-        } else if (revision_is_00c0(&header)) {
-        puts("Board: SMARC-FiMX6 Rev.00C0\n");
-
-        } else {
-        puts("Board: SMARC-FiMX6, Cannot find Revision number from EEPROM\n");
-
-	return 0;
-	}
+	puts("-----------------------------------------\n");
+        printf("Board ID:               %.*s\n",
+               sizeof(header.name), header.name);
+        printf("Board Revision:         %.*s\n",
+               sizeof(header.version), header.version);
+        printf("Board Serial#:          %.*s\n",
+               sizeof(header.serial), header.serial);
+	puts("-----------------------------------------\n");
 
 /* SMARC BOOT_SEL*/
         if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
