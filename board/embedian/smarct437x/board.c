@@ -840,19 +840,6 @@ int board_late_init(void)
 	setenv("board_rev", safe_string);
 #endif
 
-	/* Get Board Name and Revision Number */
-        if (revision_is_00a0(&header)) {
-        puts("Board: SMARC-T437X Rev.00A0\n");
-
-        } else if (revision_is_00b0(&header)) {
-        puts("Board: SMARC-T437X Rev.00B0\n");
-
-        } else if (revision_is_00c0(&header)) {
-        puts("Board: SMARC-T437X Rev.00C0\n");
-
-        } else {
-        puts("Board: SMARC-FiMX6, Cannot find Revision number from EEPROM\n");
-
         return 0;
         }
 

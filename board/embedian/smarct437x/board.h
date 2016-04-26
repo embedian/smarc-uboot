@@ -78,21 +78,6 @@ static inline int board_is_evm_12_or_later(void)
 	return (board_is_gpevm() && strncmp("1.2", am43xx_board_rev, 3) <= 0);
 }
 
-static inline int revision_is_00a0(struct am43xx_board_id *header)
-{
-        return !strncmp(header->version, "00A0", 4);
-}
-
-static inline int revision_is_00b0(struct am43xx_board_id *header)
-{
-        return !strncmp(header->version, "00B0", 4);
-}
-
-static inline int revision_is_00c0(struct am43xx_board_id *header)
-{
-        return !strncmp(header->version, "00C0", 4);
-}
-
 void enable_uart0_pin_mux(void);
 void enable_uart2_pin_mux(void);
 void enable_uart3_pin_mux(void);
