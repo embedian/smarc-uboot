@@ -559,7 +559,7 @@ void sdram_init(void)
 			   &ddr3_smarct335x_data,
                            &ddr3_smarct335x_cmd_ctrl_data, 
 			   &ddr3_smarct335x_emif_reg_data, 0);
-		udelay(1600);
+		udelay(3600);
         }
         else if (board_is_smarc_t335x_80(&header)) {
                 /*
@@ -628,6 +628,16 @@ int board_late_init(void)
 
 	if (read_eeprom(&header) < 0)
 		puts("Could not get board ID.\n");
+
+        /* Read Board Info from EEPROM */
+        puts("-----------------------------------------\n");
+        printf("Board ID:               %.*s\n",
+               sizeof(header.name), header.name);
+        printf("Board Revision:         %.*s\n",
+               sizeof(header.version), header.version);
+        printf("Board Serial#:          %.*s\n",
+               sizeof(header.serial), header.serial);
+        puts("-----------------------------------------\n");
 
 	/* Now set variables based on the header. */
 	strncpy(safe_string, (char *)header.name, sizeof(header.name));
