@@ -574,7 +574,7 @@ void sdram_init(void)
                            &ddr3_smarct335x80_data,
                            &ddr3_smarct335x80_cmd_ctrl_data,
                            &ddr3_smarct335x80_emif_reg_data, 0);
-		udelay(1600);
+		udelay(3600);
         }
 	else if (board_is_evm_15_or_later(&header))
 		config_ddr(400, &ioregs_evm15, &ddr3_evm_data,
