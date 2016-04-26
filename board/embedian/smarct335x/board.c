@@ -629,6 +629,15 @@ int board_late_init(void)
 	if (read_eeprom(&header) < 0)
 		puts("Could not get board ID.\n");
 
+        puts("-----------------------------------------\n");
+        printf("Board ID:               %.*s\n",
+               sizeof(header.name), header.name);
+        printf("Board Revision:         %.*s\n",
+               sizeof(header.version), header.version);
+        printf("Board Serial#:          %.*s\n",
+               sizeof(header.serial), header.serial);
+        puts("-----------------------------------------\n");
+
 	/* Now set variables based on the header. */
 	strncpy(safe_string, (char *)header.name, sizeof(header.name));
 	safe_string[sizeof(header.name)] = 0;
