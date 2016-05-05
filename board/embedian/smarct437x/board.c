@@ -841,7 +841,6 @@ int board_late_init(void)
 #endif
 
         return 0;
-        }
 
 	/* Turn on LCD Backlight */
 #define GPIO_LCD_BKLT_EN       	68
