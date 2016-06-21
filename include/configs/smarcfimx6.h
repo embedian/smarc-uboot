@@ -55,7 +55,7 @@
 
 #define CONFIG_SYS_FSL_USDHC_NUM	3
 #define CONFIG_SYS_MMC_ENV_DEV		2	/* 0 SDHC, 1 SDMMC, 2 eMMC */
-#define CONFIG_SYS_MMC_ENV_PART                1       /* user partition */
+#define CONFIG_SYS_MMC_ENV_PART                0       /* user partition */
 
 #ifdef CONFIG_SYS_USE_SPINOR
 #define CONFIG_SF_DEFAULT_CS   0	/* Use SPI2*/
