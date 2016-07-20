@@ -840,8 +840,6 @@ int board_late_init(void)
 	setenv("board_rev", safe_string);
 #endif
 
-        return 0;
-
 	/* Turn on LCD Backlight */
 #define GPIO_LCD_BKLT_EN       	68
 #define GPIO_LCD_PWM_EN        	138
@@ -856,7 +854,7 @@ int board_late_init(void)
                 hang();
         } else if ((gpio_get_value(168) == 0)&&(gpio_get_value(169) == 1)&&(gpio_get_value(170) == 0)) {
                 puts("BOOT_SEL Detected: OFF ON OFF, Load zImage from Carrier SDMMC...\n");
-                setenv_ulong("mmcdev", 2);
+                setenv_ulong("mmcdev", 2); 
                 setenv("bootcmd", "run findfdt; run mmcboot;");
         } else if ((gpio_get_value(168) == 1)&&(gpio_get_value(169) == 0)&&(gpio_get_value(170) == 0)) {
                 puts("BOOT_SEL Detected: ON OFF OFF, Load zImage from Carrier SD Card...\n");
@@ -864,8 +862,8 @@ int board_late_init(void)
                 setenv("bootcmd", "run findfdt; run mmcboot;");
         } else if ((gpio_get_value(168) == 0)&&(gpio_get_value(169) == 1)&&(gpio_get_value(170) == 1)) {
                 puts("BOOT_SEL Detected: OFF ON ON, Load zImage from Module eMMC Flash...\n");
-                setenv_ulong("mmcdev", 1);
-                setenv("bootcmd", "run findfdt; run mmcboot;");
+                setenv_ulong("mmcdev", 1); 
+                setenv("bootcmd", "mmc rescan; run findfdt; run mmcboot;");
         } else if ((gpio_get_value(168) == 1)&&(gpio_get_value(169) == 0)&&(gpio_get_value(170) == 1)) {
                 puts("BOOT_SEL Detected: ON OFF ON, Load zImage from GBE...\n");
                 setenv("bootcmd", "dhcp;");

@@ -269,7 +269,7 @@
         "bootdir=\0" \
         "fdtdir=/dtbs\0" \
         "bootfile=zImage\0" \
-        "fdtfile=undefined\0" \
+        "fdtfile=am437x-smarct437x.dtb\0" \
         "console=ttyO0,115200n8\0" \
 	"partitions=" \
 		"uuid_disk=${uuid_gpt_disk};" \
@@ -304,8 +304,8 @@
 		"root=${ramroot} " \
 		"rootfstype=${ramrootfstype}\0" \
 	"loadramdisk=load ${devtype} ${devnum} ${rdaddr} ramdisk.gz\0" \
-	"loadimage=load ${devtype} ${bootpart} ${loadaddr} ${bootdir}/${bootfile}\0" \
-	"loadfdt=echo loading ${fdtdir}/${fdtfile} ...; load ${devtype} ${bootpart} ${fdtaddr} ${bootdir}/${fdtfile}\0" \
+	"loadimage=load ${devtype} ${mmcdev}:1 ${loadaddr} ${bootdir}/${bootfile}\0" \
+	"loadfdt=echo loading ${fdtdir}/${fdtfile} ...; load ${devtype} ${mmcdev}:1 ${fdtaddr} ${fdtdir}/${fdtfile}\0" \
 	"mmcboot=mmc dev ${mmcdev}; " \
 		"setenv devnum ${mmcdev}; " \
 		"setenv bootpart ${mmcdev}:1; "\
