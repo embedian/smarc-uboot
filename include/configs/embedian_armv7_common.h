@@ -59,7 +59,6 @@
 	"bootm_size=0x10000000\0"
 
 #define DEFAULT_MMC_TI_ARGS \
-	"mmcdev=1\0" \
 	"mmcrootfstype=ext4 rootwait fixrtc\0" \
 	"finduuid=part uuid mmc 1:2 uuid\0" \
 	"args_mmc=run finduuid;setenv bootargs console=${console} " \
