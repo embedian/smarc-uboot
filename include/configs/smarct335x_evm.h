@@ -73,7 +73,7 @@
 	DEFAULT_LINUX_BOOT_ENV \
 	DEFAULT_MMC_TI_ARGS \
 	"boot_fdt=try\0" \
-	"bootpart=0:1\0" \
+	"bootpart=1:1\0" \
        	"bootdir=\0" \
        	"fdtdir=/dtbs\0" \
 	"bootfile=zImage\0" \
@@ -87,7 +87,6 @@
        	"cape_enable=\0" \
        	"cmdline=\0" \
        	"mmcpart=1\0" \
-        "mmcroot=/dev/mmcblk0p2 ro\0" \
 	"ramroot=/dev/ram0 rw\0" \
 	"ramrootfstype=ext2\0" \
         "spiroot=/dev/mtdblock4 rw\0" \
@@ -364,18 +363,10 @@
 
 #define CONFIG_BOOTCOMMAND \
        	"setenv umsmedia 0; "\
-        "gpio set 51; " \
         "i2c mw 0x24 1 0x3e; " \
 	"run findfdt; " \
-       	"setenv mmcdev 0; " \
-       	"setenv bootpart 0:1; " \
-	"run mmcboot;" \
-       	"gpio clear 7; " \
-       	"gpio clear 55; " \
-       	"gpio clear 54; " \
-	"setenv mmcdev 1; " \
-       	"setenv bootpart 1:1; " \
-	"run mmcboot;" \
+	"run finduuid; " \
+        "run mmcboot;" \
        	"run failumsboot;"
 
 /* NS16550 Configuration */

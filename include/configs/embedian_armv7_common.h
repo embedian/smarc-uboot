@@ -59,9 +59,9 @@
 	"bootm_size=0x10000000\0"
 
 #define DEFAULT_MMC_TI_ARGS \
-	"mmcdev=0\0" \
+	"mmcdev=1\0" \
 	"mmcrootfstype=ext4 rootwait fixrtc\0" \
-	"finduuid=part uuid mmc 0:2 uuid\0" \
+	"finduuid=part uuid mmc 1:2 uuid\0" \
 	"args_mmc=run finduuid;setenv bootargs console=${console} " \
 		"${optargs} " \
                	"${cape_disable} " \
@@ -103,6 +103,7 @@
 /* MMC/SD IP block */
 #define CONFIG_MMC
 #define CONFIG_GENERIC_MMC
+#define CONFIG_OMAP_HSMMC
 #define CONFIG_CMD_MMC
 
 /* McSPI IP block */
