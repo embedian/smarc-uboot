@@ -10,6 +10,18 @@ config TARGET_AM43XX_EVM
 	  to write software and develop hardware around
 	  an AM43xx processor subsystem.
 
+config TARGET_SMARCT437X_EVM
+        bool "Support smarct437x_evm"
+        help
+          The SMARC-T4378 integrates all the functions of an embedded
+          general-purpose computer in a small, easy to use SMARC module
+          which incorporates the popular Texas Instruments Sitara AM4378
+          32bit ARM Coretex-A9 processor, with fast DDR3L 512MB/1GB SDRAM,
+          4GB of embedded MMC and a dual Gigabit ethernet with simple
+          connection to external connectors.
+
+          For more information, visit: http://www.embedian.com/
+
 config ISW_ENTRY_ADDR
 	hex "Address in memory or XIP flash of bootloader entry point"
 	help
