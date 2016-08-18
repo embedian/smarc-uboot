@@ -1144,13 +1144,17 @@ int board_eth_init(bd_t *bis)
 #ifdef CONFIG_SPL_LOAD_FIT
 int board_fit_config_name_match(const char *name)
 {
-        if (board_is_gpevm() && !strcmp(name, "am437x-gp-evm"))
+        if (board_is_gpevm() && !strcmp(am43xx_board_name, "AM43__GP"))
                 return 0;
-        else if (board_is_sk() && !strcmp(name, "am437x-sk-evm"))
+        else if (board_is_sk() && !strcmp(am43xx_board_name, "AM43__SK"))
                 return 0;
-        else if (board_is_eposevm() && !strcmp(name, "am43x-epos-evm"))
+        else if (board_is_eposevm() && !strcmp(am43xx_board_name,"AM43EPOS"))
                 return 0;
-        else if (board_is_idk() && !strcmp(name, "am437x-idk-evm"))
+        else if (board_is_idk() && !strcmp(am43xx_board_name, "AM43_IDK"))
+                return 0;
+        else if (board_is_smarc_t437x_800() && !strcmp(am43xx_board_name, "SMCT4X80"))
+                return 0;
+        else if (board_is_smarc_t437x_01g() && !strcmp(am43xx_board_name, "SMCT4X1G"))
                 return 0;
         else
                 return -1;
