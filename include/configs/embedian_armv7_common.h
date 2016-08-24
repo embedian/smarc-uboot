@@ -57,36 +57,15 @@
 	"bootm_size=0x10000000\0"
 
 #define DEFAULT_MMC_TI_ARGS \
-	"mmcdev=0\0" \
-	"mmcrootfstype=ext4 rootwait fixrtc\0" \
-	"finduuid=part uuid mmc 0:2 uuid\0" \
+	"mmcrootfstype=ext4 rootwait\0" \
+	"finduuid=part uuid mmc 1:2 uuid\0" \
 	"args_mmc=run finduuid;setenv bootargs console=${console} " \
 		"${optargs} " \
+                "${cape_disable} " \
+                "${cape_enable} " \
 		"root=PARTUUID=${uuid} rw " \
-		"rootfstype=${mmcrootfstype}\0" \
-	"loadbootscript=load mmc ${mmcdev} ${loadaddr} boot.scr\0" \
-	"bootscript=echo Running bootscript from mmc${mmcdev} ...; " \
-		"source ${loadaddr}\0" \
-	"bootenvfile=uEnv.txt\0" \
-	"importbootenv=echo Importing environment from mmc${mmcdev} ...; " \
-		"env import -t ${loadaddr} ${filesize}\0" \
-	"loadbootenv=fatload mmc ${mmcdev} ${loadaddr} ${bootenvfile}\0" \
-	"envboot=mmc dev ${mmcdev}; " \
-		"if mmc rescan; then " \
-			"echo SD/MMC found on device ${mmcdev};" \
-			"if run loadbootscript; then " \
-				"run bootscript;" \
-			"else " \
-				"if run loadbootenv; then " \
-					"echo Loaded env from ${bootenvfile};" \
-					"run importbootenv;" \
-				"fi;" \
-				"if test -n $uenvcmd; then " \
-					"echo Running uenvcmd ...;" \
-					"run uenvcmd;" \
-				"fi;" \
-			"fi;" \
-		"fi;\0" \
+		"rootfstype=${mmcrootfstype} " \
+                "${cmdline}\0" \
 
 /*
  * DDR information.  If the CONFIG_NR_DRAM_BANKS is not defined,
@@ -113,9 +92,9 @@
 #define CONFIG_SYS_I2C
 
 /* MMC/SD IP block */
-#define CONFIG_OMAP3_SPI
 #define CONFIG_MMC
 #define CONFIG_GENERIC_MMC
+#define CONFIG_OMAP_HSMMC
 
 /* McSPI IP block */
 #define CONFIG_SPI
@@ -136,7 +115,6 @@
 #else
 #define CONFIG_SYS_MALLOC_LEN	(16 << 20)
 #endif
-#define CONFIG_CMD_SETEXPR
 #define CONFIG_SYS_CONSOLE_INFO_QUIET
 #define CONFIG_BAUDRATE			115200
 #define CONFIG_ENV_VARS_UBOOT_CONFIG	/* Strongly encouraged */
@@ -168,6 +146,8 @@
 #define CONFIG_MTD_DEVICE		/* Required for mtdparts */
 #define CONFIG_CMD_MTDPARTS
 #endif
+
+#define CONFIG_SUPPORT_RAW_INITRD
 
 /*
  * Common filesystems support.  When we have removable storage we

@@ -374,6 +374,14 @@ config TARGET_AM335X_EVM
 	select DM_GPIO
 	select TI_I2C_BOARD_DETECT
 
+config TARGET_SMARCT335X_EVM
+        bool "Support am335x_evm"
+        select CPU_V7
+        select SUPPORT_SPL
+        select DM
+        select DM_SERIAL
+        select DM_GPIO
+
 config TARGET_AM335X_SL50
 	bool "Support am335x_sl50"
 	select CPU_V7
@@ -872,6 +880,7 @@ source "board/syteco/zmx25/Kconfig"
 source "board/tcl/sl50/Kconfig"
 source "board/ti/am335x/Kconfig"
 source "board/ti/am43xx/Kconfig"
+source "board/embedian/smarct335x/Kconfig"
 source "board/embedian/smarct437x/Kconfig"
 source "board/birdland/bav335x/Kconfig"
 source "board/ti/ti814x/Kconfig"
