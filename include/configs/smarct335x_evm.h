@@ -108,7 +108,7 @@
 	DEFAULT_LINUX_BOOT_ENV \
 	DEFAULT_MMC_TI_ARGS \
 	"boot_fdt=try\0" \
-        "mmcdev=0\0" \
+        "mmcdev=1\0" \
         "bootpart=${mmcdev}:1\0" \
 	"bootdir=\0" \
         "fdtdir=/dtbs\0" \
