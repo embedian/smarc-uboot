@@ -1297,8 +1297,6 @@ int board_late_init(void)
 /* SMARC BOOT_SEL*/
         if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("BOOT_SEL Detected: OFF OFF OFF, Load zImage from Carrier SATA...\n");
-                if (!getenv("fastboot_dev"))
-                        setenv("fastboot_dev", "sata");
                 if (!getenv("bootcmd"))
                         setenv("bootcmd", "boota sata");
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
@@ -1307,33 +1305,37 @@ int board_late_init(void)
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("BOOT_SEL Detected: OFF ON OFF, Load zImage from Carrier SDMMC...\n");
                 setenv_ulong("mmcdev", 1);
-            if (!getenv("fastboot_dev"))
+            	if (!getenv("fastboot_dev"))
                         setenv("fastboot_dev", "mmc1");
-                setenv("bootcmd", "boota mmc1");
+                if (!getenv("bootcmd"))
+                	setenv("bootcmd", "boota mmc1");
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("BOOT_SEL Detected: ON OFF OFF, Load zImage from Carrier SD Card...\n");
                 setenv_ulong("mmcdev", 0);
-            if (!getenv("fastboot_dev"))
+            	if (!getenv("fastboot_dev"))
                         setenv("fastboot_dev", "mmc0");
-		setenv("bootcmd", "boota mmc0");
+                if (!getenv("bootcmd"))
+			setenv("bootcmd", "boota mmc0");
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: OFF ON ON, Load zImage from Module eMMC Flash...\n");
                 setenv_ulong("mmcdev", 2);
-            if (!getenv("fastboot_dev"))
+            	if (!getenv("fastboot_dev"))
                         setenv("fastboot_dev", "mmc2");
-                setenv("bootcmd", "boota mmc2");
+                if (!getenv("bootcmd"))
+                	setenv("bootcmd", "boota mmc2");
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: ON OFF ON, Load zImage from GBE...\n");
-                setenv("bootcmd", "run netboot;");
+                	setenv("bootcmd", "run netboot;");
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("Carrier SPI Boot 110\n");
                 hang();
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: ON ON ON, MOdule SPI Boot up is Default, Load zImage from Module eMMC...\n");
                 setenv_ulong("mmcdev", 2);
-            if (!getenv("fastboot_dev"))
+            	if (!getenv("fastboot_dev"))
                         setenv("fastboot_dev", "mmc2");
-                setenv("bootcmd", "boota mmc2");
+                if (!getenv("bootcmd"))
+                	setenv("bootcmd", "boota mmc2");
         } else {
                 puts("unsupported boot devices\n");
                 hang();
@@ -1346,40 +1348,36 @@ int board_late_init(void)
 
 void board_fastboot_setup(void)
 {
-	switch (get_boot_device()) {
 #if defined(CONFIG_FASTBOOT_STORAGE_SATA)
-	case SATA_BOOT:
+        if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0))
 		if (!getenv("fastboot_dev"))
 			setenv("fastboot_dev", "sata");
 		if (!getenv("bootcmd"))
 			setenv("bootcmd", "boota sata");
-		break;
 #endif /*CONFIG_FASTBOOT_STORAGE_SATA*/
 #if defined(CONFIG_FASTBOOT_STORAGE_MMC)
-	case SD2_BOOT:
-	case MMC2_BOOT:
+        if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
+                setenv_ulong("mmcdev", 0);
 	    if (!getenv("fastboot_dev"))
 			setenv("fastboot_dev", "mmc0");
 	    if (!getenv("bootcmd"))
 			setenv("bootcmd", "boota mmc0");
-	    break;
-	case SD3_BOOT:
-	case MMC3_BOOT:
+        } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
+                setenv_ulong("mmcdev", 1);
 	    if (!getenv("fastboot_dev"))
 			setenv("fastboot_dev", "mmc1");
 	    if (!getenv("bootcmd"))
 			setenv("bootcmd", "boota mmc1");
-	    break;
-	case MMC4_BOOT:
+        } else if((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
+                setenv_ulong("mmcdev", 2);
 	    if (!getenv("fastboot_dev"))
 			setenv("fastboot_dev", "mmc2");
 	    if (!getenv("bootcmd"))
 			setenv("bootcmd", "boota mmc2");
-	    break;
 #endif /*CONFIG_FASTBOOT_STORAGE_MMC*/
-	default:
+        } else {
 		printf("unsupported boot devices\n");
-		break;
+		return;
 	}
 
 }
@@ -1415,41 +1413,35 @@ int check_recovery_cmd_file(void)
 
 void board_recovery_setup(void)
 {
-	int bootdev = get_boot_device();
-
-	switch (bootdev) {
 #if defined(CONFIG_FASTBOOT_STORAGE_SATA)
-	case SATA_BOOT:
+        if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0))
+                puts("Entering Recovery Mode into SATA...\n");
 		if (!getenv("bootcmd_android_recovery"))
 			setenv("bootcmd_android_recovery",
 				"boota sata recovery");
-		break;
 #endif /*CONFIG_FASTBOOT_STORAGE_SATA*/
 #if defined(CONFIG_FASTBOOT_STORAGE_MMC)
-	case SD2_BOOT:
-	case MMC2_BOOT:
+	if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
+                puts("Entering Recovery Mode into Carrier SD Card...\n");
                 setenv_ulong("mmcdev", 0);
 		if (!getenv("bootcmd_android_recovery"))
 			setenv("bootcmd_android_recovery",
 				"boota mmc0 recovery");
-		break;
-	case SD3_BOOT:
-	case MMC3_BOOT:
+	} else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
+                puts("Entering Recovery Mode into Carrier SDMMC...\n");
                 setenv_ulong("mmcdev", 1);
 		if (!getenv("bootcmd_android_recovery"))
 			setenv("bootcmd_android_recovery",
 				"boota mmc1 recovery");
-		break;
-	case MMC4_BOOT:
+        } else if((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
+                puts("Entering Recovery Mode into on Module eMMC Flash...\n");
                 setenv_ulong("mmcdev", 2);
 		if (!getenv("bootcmd_android_recovery"))
 			setenv("bootcmd_android_recovery",
 				"boota mmc2 recovery");
-		break;
 #endif /*CONFIG_FASTBOOT_STORAGE_MMC*/
-	default:
-		printf("Unsupported bootup device for recovery: dev: %d\n",
-			bootdev);
+	} else {
+		puts("Unsupported bootup device for recovery\n");
 		return;
 	}
 
