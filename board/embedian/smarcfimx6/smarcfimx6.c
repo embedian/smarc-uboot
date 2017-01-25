@@ -1120,7 +1120,7 @@ int board_eth_init(bd_t *bis)
 
 static iomux_v3_cfg_t const usb_otg_pads[] = {
         MX6_PAD_ENET_TXD0__GPIO1_IO30   | MUX_PAD_CTRL(WEAK_PULLUP),
-        MX6_PAD_ENET_RX_ER__USB_OTG_ID  | MUX_PAD_CTRL(WEAK_PULLUP),
+        MX6_PAD_ENET_RX_ER__USB_OTG_ID  | MUX_PAD_CTRL(OTG_ID_PAD_CTRL),
         /* OTG Power enable */
         MX6_PAD_ENET_TXD1__GPIO1_IO29   | MUX_PAD_CTRL(OUTPUT_40OHM),
 };
