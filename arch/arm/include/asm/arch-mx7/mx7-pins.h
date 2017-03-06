@@ -8,7 +8,7 @@
 
 #include <asm/imx-common/iomux-v3.h>
 
-#if defined(CONFIG_MX7D)
+#if defined(CONFIG_MX7D) || defined(CONFIG_MX7S)
 #include "mx7d_pins.h"
 #elif defined(CONFIG_MX7S)
 #include "mx7s_pins.h"

@@ -7,7 +7,7 @@
 #ifndef __IMX_RDC_H__
 #define __IMX_RDC_H__
 
-#if defined(CONFIG_MX7D)
+#if defined(CONFIG_MX7D) || defined(CONFIG_MX7S)
 #include "mx7d_rdc.h"
 #else
 #error "Please select cpu"
