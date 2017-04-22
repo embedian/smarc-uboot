@@ -118,7 +118,7 @@ void smarcfimx7_sync_env_enetaddr(uint8_t *rom_enetaddr)
                 printf("Failed to set mac address from EEPROM: %d\n", ret);
 }
 
-int smarcfimx7_read_mac_address1(uint8_t *buf)
+int smarcfimx7_read_mac1_address(uint8_t *buf)
 {
 #ifdef CONFIG_SYS_I2C_EEPROM_ADDR
         /* Read MAC address. */
@@ -152,7 +152,7 @@ void smarcfimx7_sync_env_enet1addr(uint8_t *rom_enet1addr)
         uint8_t env_enet1addr[6];
         int ret;
 
-        ret = eth_getenv_enetaddr_by_index("eth1", 0, env_enet1addr);
+        ret = eth_getenv_enetaddr_by_index("eth", 1, env_enet1addr);
         if (!ret) {
                 /*
                  * There is no MAC address in the environment, so we

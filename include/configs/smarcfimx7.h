@@ -184,13 +184,10 @@
         "fdt_file=" CONFIG_DEFAULT_FDT_FILE "\0" \
 	"fdt_addr=0x83000000\0" \
         "ethprime=FEC0\0" \
-        "fec.macaddr=${ethaddr}\0" \
-        "fec1.macaddr=${eth1addr}\0" \
         "ipaddr=192.168.1.60\0" \
 	"boot_fdt=try\0" \
 	"ip_dyn=yes\0" \
 	"panel=G070VW01\0" \
-        "optargs= fec.macaddr=${ethaddr} fec1.macaddr=${eth1addr}\0" \
 	"mmcdev="__stringify(CONFIG_SYS_MMC_ENV_DEV)"\0" \
 	"mmcpart=" __stringify(CONFIG_SYS_MMC_IMG_LOAD_PART) "\0" \
 	"mmcroot=" CONFIG_MMCROOT " rootwait rw\0" \

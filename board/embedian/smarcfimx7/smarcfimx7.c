@@ -183,7 +183,7 @@ int dram_init(void)
 }
 
 static iomux_v3_cfg_t const wdog_pads[] = {
-	MX7D_PAD_ENET1_RX_CLK__WDOG2_WDOG_B | MUX_PAD_CTRL(NO_PAD_CTRL),
+	MX7D_PAD_GPIO1_IO00__WDOG1_WDOG_B | MUX_PAD_CTRL(NO_PAD_CTRL),
 };
 
 /* SER0/UART6 */
@@ -302,12 +302,13 @@ static iomux_v3_cfg_t const lvds_ch_sel_pads[] = {
 /* Misc. pins */
 static iomux_v3_cfg_t const misc_pads[] = {
         MX7D_PAD_SD2_DATA0__GPIO5_IO14 | MUX_PAD_CTRL(WEAK_PULLUP),     /* SLEEP# */
-        MX7D_PAD_GPIO1_IO09__GPIO1_IO9 | MUX_PAD_CTRL(WEAK_PULLUP),     /* CHARGER_PRSNT# */
+        MX7D_PAD_ENET1_RX_CLK__GPIO7_IO13 | MUX_PAD_CTRL(WEAK_PULLUP), 	/* CHARGER_PRSNT# */
         MX7D_PAD_GPIO1_IO08__GPIO1_IO8 | MUX_PAD_CTRL(WEAK_PULLUP),     /* CHARGING# */
         MX7D_PAD_SAI1_RX_SYNC__GPIO6_IO16 | MUX_PAD_CTRL(WEAK_PULLUP),  /* CARRIER_STBY# */
         MX7D_PAD_SAI1_RX_BCLK__GPIO6_IO17 | MUX_PAD_CTRL(WEAK_PULLUP),  /* CARRIER_PWR_ON# */
         MX7D_PAD_SD2_RESET_B__GPIO5_IO11 | MUX_PAD_CTRL(WEAK_PULLUP),   /* BATLOW# */
 	MX7D_PAD_EPDC_BDR0__GPIO2_IO28 | MUX_PAD_CTRL(NO_PAD_CTRL),   	/* PCIe_RST# */
+        MX7D_PAD_EPDC_PWR_STAT__GPIO2_IO31 | MUX_PAD_CTRL(NO_PAD_CTRL),	/* PCIe_WAKE# */
 };
 
 #ifdef CONFIG_VIDEO_MXS
@@ -349,7 +350,7 @@ static iomux_v3_cfg_t const backlight_pads[] = {
 	MX7D_PAD_GPIO1_IO02__GPIO1_IO2 | MUX_PAD_CTRL(WEAK_PULLUP),
 
         /* PWM Backlight Control: S141. Use GPIO for Brightness adjustment, duty cycle = period */
-       	MX7D_PAD_GPIO1_IO00__GPIO1_IO0 | MUX_PAD_CTRL(NO_PAD_CTRL),
+       	MX7D_PAD_GPIO1_IO01__GPIO1_IO1 | MUX_PAD_CTRL(NO_PAD_CTRL),
 };
 
 void do_enable_parallel_lcd(struct display_info_t const *dev)
@@ -359,15 +360,13 @@ void do_enable_parallel_lcd(struct display_info_t const *dev)
 	imx_iomux_v3_setup_multiple_pads(backlight_pads, ARRAY_SIZE(backlight_pads));
 
 	/* Reset LCD */
-	/*gpio_direction_output(IMX_GPIO_NR(3, 4) , 0);
-	udelay(500);*/
 	gpio_direction_output(IMX_GPIO_NR(3, 4) , 1);
 
 	/* Turn on Backlight */
         gpio_direction_output(IMX_GPIO_NR(1, 2), 1);
 
         /* Set Brightness to high */
-        gpio_direction_output(IMX_GPIO_NR(1, 0) , 1);
+       	gpio_direction_output(IMX_GPIO_NR(1, 1) , 1);
 }
 
 
@@ -469,6 +468,9 @@ static void setup_iomux_misc(void)
         gpio_direction_output(IMX_GPIO_NR(6, 16), 0);
         gpio_direction_output(IMX_GPIO_NR(6, 17), 0);
         gpio_direction_output(IMX_GPIO_NR(2, 28), 0);
+       	udelay(500);
+        gpio_direction_output(IMX_GPIO_NR(2, 28), 1);
+        gpio_direction_input(IMX_GPIO_NR(2, 31));
 }
 
 static void setup_iomux_flexcan1(void)
@@ -661,7 +663,7 @@ int board_eth_init(bd_t *bis)
         int eeprom_mac1_read;
 
         /* Read Ethernet MAC address from EEPROM */
-        eeprom_mac1_read = smarcfimx7_read_mac_address(enet1addr);
+        eeprom_mac1_read = smarcfimx7_read_mac1_address(enet1addr);
 
         /*
          * MAC address not present in the environment

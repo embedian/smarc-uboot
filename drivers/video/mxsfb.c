@@ -170,6 +170,11 @@ void lcdif_power_down(void)
 {
 	struct mxs_lcdif_regs *regs = (struct mxs_lcdif_regs *)(panel.isaBase);
 	int timeout = 1000000;
+       	char *penv;
+	
+       	penv = getenv("videomode");
+       	if (!penv)
+               	return;
 
 #ifdef CONFIG_MX6
 	if (check_module_fused(MX6_MODULE_LCDIF))
