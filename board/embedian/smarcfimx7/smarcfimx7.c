@@ -302,13 +302,13 @@ static iomux_v3_cfg_t const lvds_ch_sel_pads[] = {
 /* Misc. pins */
 static iomux_v3_cfg_t const misc_pads[] = {
         MX7D_PAD_SD2_DATA0__GPIO5_IO14 | MUX_PAD_CTRL(WEAK_PULLUP),     /* SLEEP# */
-        MX7D_PAD_ENET1_RX_CLK__GPIO7_IO13 | MUX_PAD_CTRL(WEAK_PULLUP), 	/* CHARGER_PRSNT# */
+        MX7D_PAD_GPIO1_IO09__GPIO1_IO9 | MUX_PAD_CTRL(WEAK_PULLUP), 	/* CHARGER_PRSNT# */
         MX7D_PAD_GPIO1_IO08__GPIO1_IO8 | MUX_PAD_CTRL(WEAK_PULLUP),     /* CHARGING# */
         MX7D_PAD_SAI1_RX_SYNC__GPIO6_IO16 | MUX_PAD_CTRL(WEAK_PULLUP),  /* CARRIER_STBY# */
-        MX7D_PAD_SAI1_RX_BCLK__GPIO6_IO17 | MUX_PAD_CTRL(WEAK_PULLUP),  /* CARRIER_PWR_ON# */
         MX7D_PAD_SD2_RESET_B__GPIO5_IO11 | MUX_PAD_CTRL(WEAK_PULLUP),   /* BATLOW# */
 	MX7D_PAD_EPDC_BDR0__GPIO2_IO28 | MUX_PAD_CTRL(NO_PAD_CTRL),   	/* PCIe_RST# */
         MX7D_PAD_EPDC_PWR_STAT__GPIO2_IO31 | MUX_PAD_CTRL(NO_PAD_CTRL),	/* PCIe_WAKE# */
+        MX7D_PAD_ENET1_CRS__GPIO7_IO14 | MUX_PAD_CTRL(NO_PAD_CTRL), 	/* WDT_TIME_OUT# */
 };
 
 #ifdef CONFIG_VIDEO_MXS
@@ -347,10 +347,10 @@ static iomux_v3_cfg_t const lcd_pads[] = {
 
 static iomux_v3_cfg_t const backlight_pads[] = {
         /* Backlight Enable for RGB: S127 */
-	MX7D_PAD_GPIO1_IO02__GPIO1_IO2 | MUX_PAD_CTRL(WEAK_PULLUP),
+        MX7D_PAD_SAI1_RX_BCLK__GPIO6_IO17 | MUX_PAD_CTRL(WEAK_PULLUP),
 
         /* PWM Backlight Control: S141. Use GPIO for Brightness adjustment, duty cycle = period */
-       	MX7D_PAD_GPIO1_IO01__GPIO1_IO1 | MUX_PAD_CTRL(NO_PAD_CTRL),
+       	MX7D_PAD_GPIO1_IO02__GPIO1_IO2 | MUX_PAD_CTRL(NO_PAD_CTRL),
 };
 
 void do_enable_parallel_lcd(struct display_info_t const *dev)
@@ -363,10 +363,10 @@ void do_enable_parallel_lcd(struct display_info_t const *dev)
 	gpio_direction_output(IMX_GPIO_NR(3, 4) , 1);
 
 	/* Turn on Backlight */
-        gpio_direction_output(IMX_GPIO_NR(1, 2), 1);
+        gpio_direction_output(IMX_GPIO_NR(6, 17), 1);
 
         /* Set Brightness to high */
-       	gpio_direction_output(IMX_GPIO_NR(1, 1) , 1);
+       	gpio_direction_output(IMX_GPIO_NR(1, 2) , 1);
 }
 
 
@@ -466,11 +466,12 @@ static void setup_iomux_misc(void)
         gpio_direction_input(IMX_GPIO_NR(1, 9));
         gpio_direction_input(IMX_GPIO_NR(5, 11));
         gpio_direction_output(IMX_GPIO_NR(6, 16), 0);
-        gpio_direction_output(IMX_GPIO_NR(6, 17), 0);
         gpio_direction_output(IMX_GPIO_NR(2, 28), 0);
        	udelay(500);
         gpio_direction_output(IMX_GPIO_NR(2, 28), 1);
         gpio_direction_input(IMX_GPIO_NR(2, 31));
+        /* Set WDT_TIME_OUT# as Output High */
+        gpio_direction_output(IMX_GPIO_NR(7, 14), 1);
 }
 
 static void setup_iomux_flexcan1(void)
@@ -615,7 +616,7 @@ static void setup_iomux_fec(void)
         	gpio_direction_input(IMX_GPIO_NR(7, 15));
 	} else {
 		imx_iomux_v3_setup_multiple_pads(fec2_pads, ARRAY_SIZE(fec2_pads));
-                gpio_direction_input(IMX_GPIO_NR(7, 14));
+                gpio_direction_input(IMX_GPIO_NR(7, 13));
 	}
 }
 
