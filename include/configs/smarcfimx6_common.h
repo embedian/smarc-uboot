@@ -182,7 +182,7 @@
 		"fdt_high=0xffffffff\0"   \
 		"bootargs=console=" CONFIG_CONSOLE_DEV ",115200 \0"\
 		"bootargs_sata=setenv bootargs ${bootargs} " \
-			"root=/dev/sda1 rootwait rw \0" \
+			"root=/dev/sda2 rootwait rw \0" \
 		"bootcmd_sata=run bootargs_sata; sata init; " \
 			"sata read ${loadaddr} 0x800  0x4000; " \
 			"sata read ${fdt_addr} 0x8000 0x800; " \
@@ -208,7 +208,9 @@
 	"mmcdev=" __stringify(CONFIG_SYS_MMC_ENV_DEV) "\0" \
 	"mmcpart=" __stringify(CONFIG_SYS_MMC_IMG_LOAD_PART) "\0" \
 	"mmcroot=" CONFIG_MMCROOT " rootwait rw\0" \
+       	"sataroot=/dev/sda2 rootwait rw\0" \
         "mmcrootfstype=ext4 rootwait\0" \
+	"satarootfstype=ext4 rootwait\0" \
 	"mmcautodetect=yes\0" \
 	"update_sd_firmware=" \
 		"if test ${ip_dyn} = yes; then " \
@@ -230,7 +232,13 @@
 		"root=${mmcroot}\0" \
                 "rootfstype=${mmcrootfstype} " \
                 "video=${video}\0" \
+        "sataargs=setenv bootargs console=${console},${baudrate} ${smp} " \
+                "${optargs} " \
+                "root=${sataroot}\0" \
+                "rootfstype=${satarootfstype} " \
+                "video=${video}\0" \
         "loadbootenv=load mmc ${mmcdev}:${mmcpart} ${loadaddr} uEnv.txt\0" \
+	"loadsataenv=load sata 0:1 ${loadaddr} uEnv.txt\0" \
         "importbootenv=echo Importing environment from mmc (uEnv.txt)...; " \
                 "env import -t $loadaddr $filesize\0" \
 	"loadbootscript=" \
@@ -239,7 +247,9 @@
 		"source\0" \
 	"loadimage=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}\0" \
         "loadzimage=load mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}\0" \
+	"loadsatazimage=load sata 0:1 ${loadaddr} ${image}\0" \
         "loadfdt=load mmc ${mmcdev}:${mmcpart} ${fdt_addr} /dtbs/${fdt_file}\0" \
+	"loadsatafdt=load sata 0:1 ${fdt_addr} /dtbs/${fdt_file}\0" \
 	"mmcboot=echo Booting from mmc ...; " \
 		"run mmcargs; " \
 		"if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
@@ -255,6 +265,21 @@
 		"else " \
 			"bootz; " \
 		"fi;\0" \
+        "sataboot=echo Booting from sata ...; " \
+                "run sataargs; " \
+                "if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
+                        "if run loadsatafdt; then " \
+                                "bootz ${loadaddr} - ${fdt_addr}; " \
+                        "else " \
+                                "if test ${boot_fdt} = try; then " \
+                                        "bootz; " \
+                                "else " \
+                                        "echo WARN: Cannot load the DT; " \
+                                "fi; " \
+                        "fi; " \
+                "else " \
+                        "bootz; " \
+                "fi;\0" \
 	"netargs=setenv bootargs console=${console},${baudrate} ${smp} " \
 		"root=/dev/nfs " \
 		"ip=dhcp nfsroot=${serverip}:${nfsroot},v3,tcp\0" \

@@ -1298,7 +1298,7 @@ int board_late_init(void)
         if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("BOOT_SEL Detected: OFF OFF OFF, Load zImage from Carrier SATA...\n");
                 setenv("root", "/dev/sda1 rootwait rw ");
-                setenv("bootcmd", "sata init; sata read 0x12000000 0x800  0x4000; sata read 0x18000000 0x8000 0x800; bootz 0x12000000 - 0x18000000;");
+		setenv("bootcmd", "sata init; run loadsataenv; run importbootenv; run uenvcmd; run loadsatazimage; run loadsatafdt; run sataboot;");
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: OFF OFF ON, USB Boot Up Not Defined...Carrier SPI Boot Not Supported...\n");
                 hang();
