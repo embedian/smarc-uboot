@@ -20,6 +20,15 @@ config TARGET_AM335X_EVM
 	  to write software and develop hardware around
 	  an AM335x processor subsystem.
 
+config TARGET_SMARCT335X_EVM
+        bool "Support smarc_t335x"
+        select DM
+        select DM_SERIAL
+        select DM_GPIO
+        select TI_I2C_BOARD_DETECT
+        select SPL_SYS_MALLOC_SIMPLE if SPL
+        select SPL_SEPARATE_BSS if SPL
+
 config TARGET_AM335X_BALTOS
 	bool "Support am335x_baltos"
 	select DM

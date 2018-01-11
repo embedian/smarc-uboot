@@ -1,0 +1,9 @@
+SMARCT335X SMARC BOARD
+M:      Eric Lee <eric.lee@embedian.com>
+S:      Maintained
+F:      board/embedian/smarct335x/
+F:	board/embedian/common/
+F:      include/configs/smarct335x_evm.h
+F:      configs/smarct335x_evm_uart0_defconfig
+F:      configs/smarct335x_evm_uart2_defconfig
+F:      configs/smarct335x_evm_uart3_defconfig

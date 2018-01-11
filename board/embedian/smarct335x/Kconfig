@@ -1,0 +1,26 @@
+if TARGET_SMARCT335X_EVM
+
+config SPL_ENV_SUPPORT
+	default y
+
+config SPL_WATCHDOG_SUPPORT
+	default y
+
+config SPL_YMODEM_SUPPORT
+	default y
+
+config SYS_BOARD
+	default "smarct335x"
+
+config SYS_VENDOR
+	default "embedian"
+
+config SYS_SOC
+	default "am33xx"
+
+config SYS_CONFIG_NAME
+	default "smarct335x_evm"
+
+source "board/embedian/common/Kconfig"
+
+endif

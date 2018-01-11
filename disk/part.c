@@ -348,8 +348,8 @@ int blk_get_device_by_str(const char *ifname, const char *dev_hwpart_str,
 
 	dev = simple_strtoul(dev_str, &ep, 16);
 	if (*ep) {
-		printf("** Bad device specification %s %s **\n",
-		       ifname, dev_str);
+		/*printf("** Bad device specification %s %s **\n",
+		       ifname, dev_str);*/
 		dev = -EINVAL;
 		goto cleanup;
 	}
