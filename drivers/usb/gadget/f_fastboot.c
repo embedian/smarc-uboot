@@ -2909,9 +2909,19 @@ static void cb_getvar(struct usb_ep *ep, struct usb_request *req)
 #endif
 	}
 	else {
-		char envstr[32];
+		char *envstr = NULL;
+		unsigned int len;
 
-		snprintf(envstr, sizeof(envstr) - 1, "fastboot.%s", cmd);
+		len = strlen("fastboot.") + strlen(cmd) + 1;
+
+		envstr = malloc(len);
+		if (!envstr) {
+		error("variable malloc error");
+		fastboot_tx_write_str("FAILvar malloc error");
+		return;
+		}
+
+		sprintf(envstr, "fastboot.%s", cmd);
 		s = getenv(envstr);
 		if (s) {
 			strncat(response, s, chars_left);

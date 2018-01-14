@@ -211,6 +211,14 @@ config TARGET_MX6SABRESD
 	select DM_THERMAL
 	select BOARD_EARLY_INIT_F
 
+config TARGET_SMARCFIMX6
+        bool "snarcfimx6"
+        select BOARD_LATE_INIT
+        select SUPPORT_SPL
+        select DM
+        select DM_THERMAL
+        select BOARD_EARLY_INIT_F
+
 config TARGET_MX6SLEVK
 	bool "mx6slevk"
 	select SUPPORT_SPL
@@ -486,6 +494,7 @@ source "board/engicam/icorem6_rqs/Kconfig"
 source "board/freescale/mx6qarm2/Kconfig"
 source "board/freescale/mx6qsabreauto/Kconfig"
 source "board/freescale/mx6sabresd/Kconfig"
+source "board/embedian/smarcfimx6/Kconfig"
 source "board/freescale/mx6slevk/Kconfig"
 source "board/freescale/mx6sll_arm2/Kconfig"
 source "board/freescale/mx6sllevk/Kconfig"

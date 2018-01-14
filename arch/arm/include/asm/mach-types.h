@@ -3933,7 +3933,8 @@
 #define MACH_TYPE_TL80                 3987
 #define MACH_TYPE_POLATIS_NIC_1001     3988
 #define MACH_TYPE_TELY                 3989
-#define MACH_TYPE_U8520                3990
+/*#define MACH_TYPE_U8520                3990*/
+#define MACH_TYPE_SMARCFIMX6 	       3990
 #define MACH_TYPE_MANTA                3991
 #define MACH_TYPE_SPEAR_EM_S900        3992
 #define MACH_TYPE_MPQ8064_CDP          3993
