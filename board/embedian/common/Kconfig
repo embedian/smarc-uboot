@@ -7,7 +7,7 @@ config TI_I2C_BOARD_DETECT
 config EEPROM_BUS_ADDRESS
 	int "Board EEPROM's I2C bus address"
 	range 0 8
-	default 0
+	default 1
 
 config EEPROM_CHIP_ADDRESS
 	hex "Board EEPROM's I2C chip address"
@@ -48,5 +48,15 @@ config SPL_POWER_SUPPORT
 
 config SPL_SERIAL_SUPPORT
 	default y
+
+config CONFIG_SPL_SPI_BUS
+        int "Board NOR Flash SPI bus address"
+        range 0 8
+        default 0
+
+config CONFIG_SPL_SPI_CS
+        int "Board NOR Flash SPI bus chip select"
+        range 0 4
+        default 0
 
 endif

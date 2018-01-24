@@ -62,6 +62,36 @@
 	"fit_bootfile=fitImage\0" \
 	"update_to_fit=setenv loadaddr ${fit_loadaddr}; setenv bootfile ${fit_bootfile}\0" \
 	"loadfit=run args_mmc; bootm ${loadaddr}#${fdtfile};\0" \
+        "mmcdev=0\0" \
+        "mmcrootfstype=ext4 rootwait fixrtc\0" \
+        "finduuid=part uuid mmc 0:2 uuid\0" \
+        "args_mmc=run finduuid;setenv bootargs console=${console} " \
+                "${optargs} " \
+                "root=PARTUUID=${uuid} rw " \
+                "rootfstype=${mmcrootfstype}\0" \
+        "loadbootscript=load mmc ${mmcdev} ${loadaddr} boot.scr\0" \
+        "bootscript=echo Running bootscript from mmc${mmcdev} ...; " \
+                "source ${loadaddr}\0" \
+        "bootenvfile=uEnv.txt\0" \
+        "importbootenv=echo Importing environment from mmc${mmcdev} ...; " \
+                "env import -t ${loadaddr} ${filesize}\0" \
+        "loadbootenv=fatload mmc ${mmcdev} ${loadaddr} ${bootenvfile}\0" \
+        "envboot=mmc dev ${mmcdev}; " \
+                "if mmc rescan; then " \
+                        "echo SD/MMC found on device ${mmcdev};" \
+                        "if run loadbootscript; then " \
+                                "run bootscript;" \
+                        "else " \
+                                "if run loadbootenv; then " \
+                                        "echo Loaded env from ${bootenvfile};" \
+                                        "run importbootenv;" \
+                                "fi;" \
+                                "if test -n $uenvcmd; then " \
+                                        "echo Running uenvcmd ...;" \
+                                        "run uenvcmd;" \
+                                "fi;" \
+                        "fi;" \
+                "fi;\0" \
 
 /*
  * DDR information.  If the CONFIG_NR_DRAM_BANKS is not defined,

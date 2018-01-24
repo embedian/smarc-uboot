@@ -54,6 +54,7 @@ ALL-y += u-boot-spl_HS_2ND
 endif
 else
 ALL-y += MLO
+ALL-$(CONFIG_SPL_SPI_SUPPORT) += MLO.byteswap
 ifeq ($(CONFIG_AM33XX),y)
 ALL-y += MLO.byteswap
 endif

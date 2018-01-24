@@ -121,7 +121,16 @@ config TARGET_AM43XX_EVM
 	  GP EVM is a standalone test, development, and
 	  evaluation module system that enables developers
 	  to write software and develop hardware around
-	  an AM43xx processor subsystem.
+
+config TARGET_SMARCT437X_EVM
+        bool "Support smarc-t437x"
+        select TI_I2C_BOARD_DETECT
+        help
+          This option specifies support for the SMARC-T437X EVM 
+	  development platforms.The SMARC-T437X EVM is a standalone 
+	  test, development, and  evaluation module system that 
+	  enables developers to write software and develop 
+	  hardware around an SMARC-T437X processor subsystem.
 endif
 
 if AM43XX || AM33XX
