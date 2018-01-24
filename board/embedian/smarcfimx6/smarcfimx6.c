@@ -1358,6 +1358,8 @@ int board_late_init(void)
                sizeof(header.serial), header.serial);
         puts("-----------------------------------------\n");
 
+/* Lock Up SPI NOR First to Free ECSPI2 Bus */
+        gpio_direction_output(IMX_GPIO_NR(4,20), 0);
 /* SMARC BOOT_SEL*/
 	gpio_request(IMX_GPIO_NR(1, 4), "BOOT_SEL_1");
         gpio_request(IMX_GPIO_NR(1, 5), "BOOT_SEL_2");
