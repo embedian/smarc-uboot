@@ -1134,6 +1134,10 @@ int board_late_init(void)
         if (read_eeprom(&header) < 0)
         puts("Could not get board ID.\n");
 
+/* SDCARD POWER Enable */
+        gpio_request(IMX_GPIO_NR(5, 2), "SDIO_PWR_EN");
+        gpio_direction_output(IMX_GPIO_NR(5, 2), 1);
+
         puts("---------Embedian SMARC-FiMX7------------\n");
         printf("Board ID:               %.*s\n",
                sizeof(header.name), header.name);
