@@ -12,6 +12,10 @@ config MX7D
 	select ROM_UNIFIED_SECTIONS
 	bool
 
+config MX7S
+        select ROM_UNIFIED_SECTIONS
+        bool
+
 choice
 	prompt "MX7 board select"
 	optional
@@ -64,6 +68,13 @@ config TARGET_MX7D_19X19_LPDDR2_ARM2
 	select DM
 	select DM_THERMAL
 
+config TARGET_SMARCFIMX7
+        bool "smarcfimx7"
+        select BOARD_LATE_INIT
+        select MX7D
+        select DM
+        select DM_THERMAL
+
 config TARGET_WARP7
 	bool "warp7"
 	select BOARD_LATE_INIT
@@ -83,6 +94,7 @@ endchoice
 config SYS_SOC
 	default "mx7"
 
+source "board/embedian/smarcfimx7/Kconfig"
 source "board/freescale/mx7dsabresd/Kconfig"
 source "board/freescale/mx7d_12x12_lpddr3_arm2/Kconfig"
 source "board/freescale/mx7d_12x12_ddr3_arm2/Kconfig"

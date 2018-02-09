@@ -1,0 +1,12 @@
+if TARGET_SMARCFIMX7
+
+config SYS_BOARD
+	default "smarcfimx7"
+
+config SYS_VENDOR
+	default "embedian"
+
+config SYS_CONFIG_NAME
+	default "smarcfimx7"
+
+endif
