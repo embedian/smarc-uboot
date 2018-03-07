@@ -739,7 +739,6 @@ static void setup_usb(void)
 
 int board_early_init_f(void)
 {
-        setup_iomux_reset_out();
         setup_iomux_uart6();
         setup_iomux_uart2();
         setup_iomux_uart7();
@@ -749,14 +748,8 @@ int board_early_init_f(void)
         setup_spinor();
 #endif
 
-        setup_iomux_spi1();
-        setup_iomux_spi3();
-        setup_usb();
         setup_iomux_flexcan1();
         setup_iomux_flexcan2();
-        setup_iomux_gpios();
-        setup_iomux_lvds_ch_sel();
-        setup_iomux_misc();
 
 	return 0;
 }
@@ -904,6 +897,21 @@ int board_late_init(void)
         if (is_valid_ethaddr(mac1))
                 eth_setenv_enetaddr("eth1addr", mac1);
 #endif
+
+/* RESET_OUT Pin */
+        setup_iomux_reset_out();
+/* ECSPI1 CS Pins */
+        setup_iomux_spi1();
+/* ECSPI3 CS Pins */
+        setup_iomux_spi3();
+/* USB Power Control Pins */
+        setup_usb();
+/* GPIO Pins */
+        setup_iomux_gpios();
+/* LVDS Channel Selection Pin */
+        setup_iomux_lvds_ch_sel();
+/* MISC Pins */
+        setup_iomux_misc();
 
 /* SDCARD POWER Enable */
         gpio_request(IMX_GPIO_NR(5, 2), "SDIO_PWR_EN");
