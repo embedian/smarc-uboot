@@ -1078,6 +1078,7 @@ int power_init_board(void)
 
 	p = pmic_get("PFUZE3000");
 	ret = pmic_probe(p);
+	udelay(100);
 	if (ret)
 		return ret;
 
