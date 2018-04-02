@@ -646,7 +646,7 @@
 };
 
 &i2c2 {
-        status = "okay";
+        status = "disabled";
         pinctrl-names = "default";
         pinctrl-0 = <&i2c2_pins>;
         clock-frequency = <100000>;
@@ -662,8 +662,8 @@
 &epwmss0 {
         status = "okay";
 
-        ehrpwm0: ehrpwm@48300200 {
-                status = "okay";
+        ehrpwm@48300200 {
+                status = "disabled";
                 pinctrl-names = "default";
                 pinctrl-0 = <&ehrpwm0b_pins>;
         };
@@ -715,7 +715,7 @@
 /*If carrier board eMMC (or 2nd SD slot) is present and used, un-comment out the following nodes. SD card will be emulated /dev/mmcblk2 instead of /dev/mmcblk1*/
 
 &mmc3 {
-        status = "okay";
+        status = "disabled";
         dmas = <&edma 30
                 &edma 31>;
         dma-names = "tx", "rx";
@@ -810,7 +810,7 @@
 
 &spi2 {
         ti,spi-num-cs = <2>;
-        status = "okay";
+        status = "disabled";
         pinctrl-names = "default";
         pinctrl-0 = <&spi2_pins>;
         dmas = <&edma 18
@@ -838,7 +838,7 @@
 
 &spi4 {
         ti,spi-num-cs = <2>;
-        status = "okay";
+        status = "disabled";
         pinctrl-names = "default";
         pinctrl-0 = <&spi4_pins>;
         dmas = <&edma 26
@@ -899,13 +899,13 @@
 &dcan0 {
         pinctrl-names = "default";
         pinctrl-0 = <&dcan0_default>;
-        status = "okay";
+        status = "disabled";
 };
 
 &dcan1 {
         pinctrl-names = "default";
         pinctrl-0 = <&dcan1_default>;
-        status = "okay";
+        status = "disabled";
 };
 
 &mac {
@@ -945,7 +945,7 @@
         pinctrl-0 = <&mcasp1_pins>;
         pinctrl-1 = <&mcasp1_sleep_pins>;
 
-        status = "okay";
+        status = "disabled";
 
                 op-mode = <0>;          /* MCASP_IIS_MODE */
                 tdm-slots = <2>;
@@ -959,7 +959,7 @@
 };
 
 &dss {
-        status = "okay";
+        status = "disabled";
 
         pinctrl-names = "default";
         pinctrl-0 = <&dss_pins>;

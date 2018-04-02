@@ -1133,9 +1133,9 @@ int board_fit_config_name_match(const char *name)
 		return 0;
 	else if (board_is_idk() && !strcmp(name, "am437x-idk-evm"))
 		return 0;
-        else if (board_is_smarc_t437x_800() && !strcmp(name, "am437x-smarct437x"))
+        else if (board_is_smarc_t437x_800() && !strcmp(name, "SMCT4X80"))
                 return 0;
-        else if (board_is_smarc_t437x_01g() && !strcmp(name, "am437x-smarct437xSMCT4X1G"))
+        else if (board_is_smarc_t437x_01g() && !strcmp(name, "SMCT4X1G"))
                 return 0;
 	else
 		return -1;
