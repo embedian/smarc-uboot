@@ -917,6 +917,13 @@ int board_late_init(void)
         gpio_request(IMX_GPIO_NR(5, 2), "SDIO_PWR_EN");
         gpio_direction_output(IMX_GPIO_NR(5, 2), 1);
 
+/* eMMC Power Reset */
+#define USDHC3_PWR_GPIO IMX_GPIO_NR(6, 11)
+    	gpio_request(USDHC3_PWR_GPIO, "usdhc3_pwr");
+       	gpio_direction_output(USDHC3_PWR_GPIO, 0);
+      	udelay(500);
+    	gpio_direction_output(USDHC3_PWR_GPIO, 1);
+
 /* SMARC BOOT_SEL*/
         gpio_request(IMX_GPIO_NR(5, 15), "BOOT_SEL_1");
         gpio_request(IMX_GPIO_NR(5, 16), "BOOT_SEL_2");
