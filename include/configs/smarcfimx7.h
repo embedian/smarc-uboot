@@ -13,7 +13,11 @@
 
 #define CONFIG_DBG_MONITOR
 #if defined(CONFIG_MX7D)
+#if defined(CONFIG_2GDDR3)
+#define PHYS_SDRAM_SIZE                 SZ_2G
+#else
 #define PHYS_SDRAM_SIZE			SZ_1G
+#endif
 #else
 #define PHYS_SDRAM_SIZE                 SZ_512M
 #endif
@@ -255,10 +259,6 @@
                         "run importbootenv;" \
                 "fi;" \
                 "echo Checking if uenvcmd is set ...;" \
-                "if test -n $uenvcmd; then " \
-                        "echo Running uenvcmd ...;" \
-                        "run uenvcmd;" \
-                "fi;" \
                 "echo Running default loadzimage ...;" \
                 "if run loadzimage; then " \
                         "run loadfdt;" \
