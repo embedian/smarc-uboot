@@ -12,10 +12,14 @@
 #include "mx7smarc_common.h"
 
 #define CONFIG_DBG_MONITOR
-#if defined(CONFIG_MX7S)
-#define PHYS_SDRAM_SIZE                 SZ_512M
+#if defined(CONFIG_MX7D)
+#if defined(CONFIG_2GDDR3)
+#define PHYS_SDRAM_SIZE                 SZ_2G
 #else
 #define PHYS_SDRAM_SIZE                 SZ_1G
+#endif
+#else
+#define PHYS_SDRAM_SIZE                 SZ_512M
 #endif
 
 /* Size of malloc() pool */

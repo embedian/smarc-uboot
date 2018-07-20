@@ -16,6 +16,10 @@ config MX7S
         select ROM_UNIFIED_SECTIONS
         bool
 
+config 2GDDR3
+        select ROM_UNIFIED_SECTIONS
+        bool
+
 choice
 	prompt "MX7 board select"
 	optional
