@@ -865,11 +865,15 @@ int board_late_init(void)
          */
         clrsetbits_le16(&wdog->wcr, 0, 0x10);
 
-	/* Read eth0 and eth1 MAC Address from on module EEPROM and pass 
-	 * pass to kernel
+        puts("---------Embedian SMARC-FiMX7------------\n");
+        /* Read Module Information from on module EEPROM and pass
+         * mac address to kernel
 	*/
 	struct udevice *dev;
 	int ret;
+        u8 name[8];
+        u8 serial[12];
+        u8 revision[4];
 	u8 mac[6];
 	u8 mac1[6];
 
@@ -879,6 +883,34 @@ int board_late_init(void)
 		return 0;
 	}
 
+        /* Board ID */
+        ret = dm_i2c_read(dev, 0x4, name, 8);
+        if (ret) {
+                debug("failed to read board ID from EEPROM\n");
+                return 0;
+        }
+        printf("  Board ID:          	%c%c%c%c%c%c%c%c\n",
+               name[0], name[1], name[2], name[3], name[4], name[5], name[6], name[7]);
+
+        /* Board Hardware Revision */
+        ret = dm_i2c_read(dev, 0xc, revision, 4);
+        if (ret) {
+                debug("failed to read hardware revison from EEPROM\n");
+                return 0;
+        }
+        printf("  Hardware Revision:  	%c%c%c%c\n",
+               revision[0], revision[1], revision[2], revision[3]);
+
+        /* Serial number */
+        ret = dm_i2c_read(dev, 0x10, serial, 12);
+        if (ret) {
+                debug("failed to read srial number from EEPROM\n");
+                return 0;
+        }
+        printf("  Serial Number#:     	%c%c%c%c%c%c%c%c%c%c%c%c\n",
+               serial[0], serial[1], serial[2], serial[3], serial[4], serial[5], serial[6], serial[7], serial[8], serial[9], serial[10], serial[11]);
+
+	/*MAC address*/
 	ret = dm_i2c_read(dev, 0x3c, mac, 6);
 	if (ret) {
 		debug("failed to read eth0 mac address from EEPROM\n");
@@ -886,6 +918,8 @@ int board_late_init(void)
 	}
 
 	if (is_valid_ethaddr(mac))
+        printf("  MAC Address:        	%02x:%02x:%02x:%02x:%02x:%02x\n",
+               mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
 		eth_setenv_enetaddr("ethaddr", mac);
 #ifdef CONFIG_MX7D
         ret = dm_i2c_read(dev, 0x42, mac1, 6);
@@ -895,8 +929,11 @@ int board_late_init(void)
         }
 
         if (is_valid_ethaddr(mac1))
+        printf("  MAC1 Address:        	%02x:%02x:%02x:%02x:%02x:%02x\n",
+               mac1[0], mac1[1], mac1[2], mac1[3], mac1[4], mac1[5]);
                 eth_setenv_enetaddr("eth1addr", mac1);
 #endif
+        puts("-----------------------------------------\n");
 
 /* RESET_OUT Pin */
         setup_iomux_reset_out();
