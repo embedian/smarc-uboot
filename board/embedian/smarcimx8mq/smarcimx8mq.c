@@ -189,7 +189,7 @@ static void setup_iomux_gpio(void)
         gpio_direction_output(IMX_GPIO_NR(3, 20), 0);
         /* Set GPIO3 as Output Low*/
         gpio_request(IMX_GPIO_NR(3, 21), "GPIO3");
-        gpio_direction_output(IMX_GPIO_NR(3, 11), 0);
+        gpio_direction_output(IMX_GPIO_NR(3, 21), 0);
         /* Set GPIO4 as Output Low*/
         gpio_request(IMX_GPIO_NR(3, 22), "GPIO4");
         gpio_direction_output(IMX_GPIO_NR(3, 22), 0);
