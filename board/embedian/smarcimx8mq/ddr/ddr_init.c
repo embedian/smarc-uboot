@@ -109,7 +109,7 @@ void ddr_init(void)
 	#endif
 	#elif CONFIG_4GB_LPDDR4
         reg32_write(0x3d400200,0x17);
-	#elif
+	#else
 	#error unsupported memory size
 	#endif
 	reg32_write(0x3d40020c,0x0);
@@ -124,7 +124,7 @@ void ddr_init(void)
 	#endif
        	#elif CONFIG_4GB_LPDDR4
         reg32_write(0x3d400218,0x7070707);
-       	#elif
+       	#else
        	#error unsupported memory size
        	#endif
 	reg32_write(0x3d402020,0x1);

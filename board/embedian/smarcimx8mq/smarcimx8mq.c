@@ -641,20 +641,25 @@ int board_late_init(void)
                 puts("BOOT_SEL Detected: OFF OFF OFF, Boot from Carrier SATA is not supported...\n");
 		hang();
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
-                puts("BOOT_SEL Detected: OFF OFF ON, Load Image from USB0...\n");
-                setenv_ulong("usb dev", 1);
-                setenv("bootcmd", "usb start; run loadusbbootenv; run importusbbootenv; run uenvcmd; loadusbimage; run usbboot;");
+                puts("BOOT_SEL Detected: OFF OFF ON, Boot from USB is not supported...\n");
+		hang();
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("BOOT_SEL Detected: OFF ON OFF, Boot from Carrier eSPI is not supported...\n");
 		hang();
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("BOOT_SEL Detected: ON OFF OFF, Load Image from Carrier SD Card...\n");
                 setenv_ulong("mmcdev", 1);
-                setenv("bootcmd", "mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadimage; run mmcboot;");
+                if (!getenv("fastboot_dev"))
+                        setenv("fastboot_dev", "mmc1");
+                if (!getenv("bootcmd"))
+                        setenv("bootcmd", "boota mmc1");
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: OFF ON ON, Load Image from Module eMMC Flash...\n");
                 setenv_ulong("mmcdev", 0);
-                setenv("bootcmd", "mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadimage; run mmcboot;");
+                if (!getenv("fastboot_dev"))
+                        setenv("fastboot_dev", "mmc0");
+                if (!getenv("bootcmd"))
+                        setenv("bootcmd", "boota mmc0");
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: ON OFF ON, Load zImage from GBE...\n");
                 setenv("bootcmd", "run netboot;");
@@ -679,10 +684,11 @@ int board_late_init(void)
 #define LID_PAD_CTRL   (PAD_CTL_DSE6 | PAD_CTL_HYS | PAD_CTL_PUE)
 
 static iomux_v3_cfg_t const lid_pads[] = {
-        IMX8MQ_PAD_GPIO1_IO09__GPIO1_IO9 | MUX_PAD_CTRL(BACK_PAD_CTRL),
+        IMX8MQ_PAD_GPIO1_IO09__GPIO1_IO9 | MUX_PAD_CTRL(LID_PAD_CTRL),
 };
 
 int is_recovery_key_pressing(void)
+{
         imx_iomux_v3_setup_multiple_pads(lid_pads, ARRAY_SIZE(lid_pads));
         gpio_request(LID_KEY, "LID");
         gpio_direction_input(LID_KEY);
@@ -690,8 +696,7 @@ int is_recovery_key_pressing(void)
                 printf("Recovery key pressed\n");
                 return 1;
         }
-{
-	return 0; /*TODO*/
+	return 0;
 }
 #endif /*CONFIG_ANDROID_RECOVERY*/
 #endif /*CONFIG_FSL_FASTBOOT*/
