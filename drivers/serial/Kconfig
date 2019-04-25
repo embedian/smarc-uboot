@@ -567,6 +567,26 @@ config PXA_SERIAL
 	  If you have a machine based on a Marvell XScale PXA2xx CPU you
 	  can enable its onboard serial ports by enabling this option.
 
+config CONSOLE_SER0
+       	bool "SMARC-iMX8M default console serial output port"
+       	help
+          Select this to enable a debug UART port from SER0 of SMARC-iMX8M.
+
+config CONSOLE_SER1
+       	bool "SMARC-iMX8M default console serial output port"
+       	help
+          Select this to enable a debug UART port from SER1 of SMARC-iMX8M.
+
+config CONSOLE_SER2
+       	bool "SMARC-iMX8M default console serial output port"
+       	help
+          Select this to enable a debug UART port from SER2 of SMARC-iMX8M.
+
+config CONSOLE_SER3
+       	bool "SMARC-iMX8M default console serial output port"
+       	help
+          Select this to enable a debug UART port from SER3 of SMARC-iMX8M.
+
 config STI_ASC_SERIAL
 	bool "STMicroelectronics on-chip UART"
 	depends on DM_SERIAL && ARCH_STI
