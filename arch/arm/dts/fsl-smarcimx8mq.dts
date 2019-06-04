@@ -24,11 +24,6 @@
 	model = "Embedian SMARC-iMX8M Computer on Module";
 	compatible = "embedian,imx8mq-smarcimx8m", "fsl,imx8mq";
 
-	chosen {
-		bootargs = "console=ttymxc0,115200 earlycon=ec_imx6q,0x30860000,115200";
-		stdout-path = &uart1;
-	};
-
 	regulators {
 		compatible = "simple-bus";
 		#address-cells = <1>;
