@@ -236,7 +236,21 @@ void board_init_f(ulong dummy)
 
 	arch_cpu_init();
 
-	init_uart_clk(0); /* Init UART0 clock */
+#ifdef CONFIG_CONSOLE_SER3
+ 	init_uart_clk(0); /* Init UART0 clock */
+#endif
+
+#ifdef CONFIG_CONSOLE_SER2
+        init_uart_clk(1); /* Init UART1 clock */
+#endif
+
+#ifdef CONFIG_CONSOLE_SER1
+        init_uart_clk(2); /* Init UART2 clock */
+#endif
+
+#ifdef CONFIG_CONSOLE_SER0
+        init_uart_clk(3); /* Init UART3 clock */
+#endif
 
 	board_early_init_f();
 
