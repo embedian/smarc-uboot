@@ -245,6 +245,8 @@
 #define PHYS_SDRAM                      0x40000000
 #ifdef CONFIG_2GB_LPDDR4
 #define PHYS_SDRAM_SIZE                 0x80000000 /* 2GB DDR */
+#elif CONFIG_2GB_LPDDR4_IND
+#define PHYS_SDRAM_SIZE                 0x80000000 /* 2GB DDR */
 #else
 #define PHYS_SDRAM_SIZE                 0xc0000000 /* 4GB DDR, temporary workaround */
 #endif

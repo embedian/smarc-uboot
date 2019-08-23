@@ -27,7 +27,7 @@ config 4GB_LPDDR4
        	help
           Select this if the board is SMARC-iMX8M-D/L/Q-4G
 
-config IND
+config 2GB_LPDDR4_IND
        	bool "SMARC-iMX8M with 16Gb LPDDR4 Memory in industrial temperature range"
        	help
           Select this if the board is SMARC-iMX8M-D/L/Q-2G-I
