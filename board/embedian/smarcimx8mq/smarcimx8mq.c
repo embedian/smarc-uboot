@@ -115,11 +115,11 @@ static iomux_v3_cfg_t const ecspi1_pads[] = {
 static iomux_v3_cfg_t const misc_pads[] = {
         IMX8MQ_PAD_NAND_CLE__GPIO3_IO5 | MUX_PAD_CTRL(WEAK_PULLUP),             /*S146, PCIE_WAKE*/
         IMX8MQ_PAD_GPIO1_IO09__GPIO1_IO9 | MUX_PAD_CTRL(WEAK_PULLUP),           /*S148, LID#*/
-        IMX8MQ_PAD_GPIO1_IO10__GPIO1_IO10 | MUX_PAD_CTRL(WEAK_PULLUP),          /*S149, SLEEP#*/
+        IMX8MQ_PAD_GPIO1_IO12__GPIO1_IO12 | MUX_PAD_CTRL(WEAK_PULLUP),          /*S149, SLEEP#*/
         IMX8MQ_PAD_GPIO1_IO01__GPIO1_IO1 | MUX_PAD_CTRL(WEAK_PULLUP),           /*S151, CHARGING#*/
-        IMX8MQ_PAD_GPIO1_IO12__GPIO1_IO12 | MUX_PAD_CTRL(WEAK_PULLUP),          /*S152, CHARGER_PRSNT#*/
+        IMX8MQ_PAD_SAI2_RXC__GPIO4_IO22 | MUX_PAD_CTRL(WEAK_PULLUP),          	/*S152, CHARGER_PRSNT#*/
         IMX8MQ_PAD_SAI3_MCLK__GPIO5_IO2 | MUX_PAD_CTRL(WEAK_PULLUP),            /*S153, CARRIER_STBY#*/
-        IMX8MQ_PAD_GPIO1_IO08__GPIO1_IO8 | MUX_PAD_CTRL(WEAK_PULLUP),           /*S156, BATLOW#*/
+        IMX8MQ_PAD_SAI2_RXFS__GPIO4_IO21 | MUX_PAD_CTRL(WEAK_PULLUP),          	/*S156, BATLOW#*/
         IMX8MQ_PAD_NAND_WP_B__GPIO3_IO18 | MUX_PAD_CTRL(WEAK_PULLUP),           /*CAN0_INT#*/
         IMX8MQ_PAD_NAND_READY_B__GPIO3_IO16 | MUX_PAD_CTRL(WEAK_PULLUP),        /*CAN1_INT#*/
 };
@@ -132,20 +132,20 @@ static void setup_iomux_misc(void)
         gpio_request(IMX_GPIO_NR(1, 9), "LID#");
         gpio_direction_input(IMX_GPIO_NR(1, 9));
         /* Set CARRIER_SLEEP# as Input*/
-        gpio_request(IMX_GPIO_NR(1, 10), "SLEEP#");
-        gpio_direction_input(IMX_GPIO_NR(1, 10));
+        gpio_request(IMX_GPIO_NR(1, 12), "SLEEP#");
+        gpio_direction_input(IMX_GPIO_NR(1, 12));
         /* Set CARRIER_CHARGING# as Input*/
         gpio_request(IMX_GPIO_NR(1, 01), "CHARGING#");
         gpio_direction_input(IMX_GPIO_NR(1, 01));
         /* Set CARRIER_CHARGER_PRSNT# as Input*/
-        gpio_request(IMX_GPIO_NR(1, 12), "CHARGER_PRSNT#");
-        gpio_direction_input(IMX_GPIO_NR(1, 12));
+        gpio_request(IMX_GPIO_NR(4, 22), "CHARGER_PRSNT#");
+        gpio_direction_input(IMX_GPIO_NR(4, 22));
         /* Set CARRIER_STBY# as Output High*/
         gpio_request(IMX_GPIO_NR(5, 02), "CARRIER_STBY#");
         gpio_direction_output(IMX_GPIO_NR(5, 02) , 1);
         /* Set CARRIER_BATLOW# as Input*/
-        gpio_request(IMX_GPIO_NR(1, 8), "BATLOW#");
-        gpio_direction_input(IMX_GPIO_NR(1, 8));
+        gpio_request(IMX_GPIO_NR(4, 21), "BATLOW#");
+        gpio_direction_input(IMX_GPIO_NR(4, 21));
         /* Set PCIE_WAKE# as Input*/
         gpio_request(IMX_GPIO_NR(3, 5), "PCIE_WAKE#");
         gpio_direction_input(IMX_GPIO_NR(3, 5));
@@ -400,7 +400,11 @@ int board_spi_cs_gpio(unsigned bus, unsigned cs)
 #define USB_PHY_CTRL2_TXENABLEN0	BIT(8)
 
 static struct dwc3_device dwc3_device_data = {
-	.maximum_speed = USB_SPEED_HIGH,
+#ifdef CONFIG_SPL_BUILD
+        .maximum_speed = USB_SPEED_HIGH,
+#else
+        .maximum_speed = USB_SPEED_SUPER,
+#endif
 	.base = USB1_BASE_ADDR,
 	.dr_mode = USB_DR_MODE_PERIPHERAL,
 	.index = 0,
@@ -440,7 +444,6 @@ static void dwc3_nxp_usb_phy_init(struct dwc3_device *dwc3)
 /*USB Enable Over-Current Pin Setting*/
 static iomux_v3_cfg_t const usb_en_oc_pads[] = {
         IMX8MQ_PAD_NAND_DATA04__GPIO3_IO10 | MUX_PAD_CTRL(WEAK_PULLUP),
-        IMX8MQ_PAD_NAND_DATA05__GPIO3_IO11 | MUX_PAD_CTRL(WEAK_PULLUP),
         IMX8MQ_PAD_NAND_DATA06__GPIO3_IO12 | MUX_PAD_CTRL(WEAK_PULLUP),
         IMX8MQ_PAD_NAND_DATA07__GPIO3_IO13 | MUX_PAD_CTRL(WEAK_PULLUP),
 };
@@ -452,8 +455,6 @@ static void setup_iomux_usb_en_oc(void)
 
         gpio_request(IMX_GPIO_NR(3, 10), "usb0_en_oc#");
         gpio_direction_input(IMX_GPIO_NR(3, 10));
-        gpio_request(IMX_GPIO_NR(3, 11), "usb1_en_oc#");
-        gpio_direction_input(IMX_GPIO_NR(3, 11));
         gpio_request(IMX_GPIO_NR(3, 12), "usb2_en_oc#");
         gpio_direction_input(IMX_GPIO_NR(3, 12));
         gpio_request(IMX_GPIO_NR(3, 13), "usb3_en_oc#");
@@ -639,34 +640,34 @@ int board_late_init(void)
 #endif
 
 /* SMARC BOOT_SEL*/
-        gpio_request(IMX_GPIO_NR(1, 4), "BOOT_SEL_1");
+        gpio_request(IMX_GPIO_NR(1, 8), "BOOT_SEL_1");
         gpio_request(IMX_GPIO_NR(1, 5), "BOOT_SEL_2");
         gpio_request(IMX_GPIO_NR(1, 6), "BOOT_SEL_3");
-        if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
+        if ((gpio_get_value(IMX_GPIO_NR(1, 8)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("BOOT_SEL Detected: OFF OFF OFF, Boot from Carrier SATA is not supported...\n");
                 hang();
-        } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
+        } else if ((gpio_get_value(IMX_GPIO_NR(1, 8)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: OFF OFF ON, Load Image from USB0...\n");
                 env_set_ulong("usb dev", 1);
                 env_set("bootcmd", "usb start; run loadusbbootenv; run importusbbootenv; run uenvcmd; loadusbimage; run usbboot;");
-        } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
+        } else if ((gpio_get_value(IMX_GPIO_NR(1, 8)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("BOOT_SEL Detected: OFF ON OFF, Boot from Carrier eSPI is not supported...\n");
                 hang();
-        } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
+        } else if ((gpio_get_value(IMX_GPIO_NR(1, 8)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("BOOT_SEL Detected: ON OFF OFF, Load Image from Carrier SD Card...\n");
                 env_set_ulong("mmcdev", 1);
                 env_set("bootcmd", "mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadimage; run mmcboot;");
-        } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
+        } else if ((gpio_get_value(IMX_GPIO_NR(1, 8)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: OFF ON ON, Load Image from Module eMMC Flash...\n");
                 env_set_ulong("mmcdev", 0);
                 env_set("bootcmd", "mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadimage; run mmcboot;");
-        } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
+        } else if ((gpio_get_value(IMX_GPIO_NR(1, 8)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: ON OFF ON, Load zImage from GBE...\n");
                 env_set("bootcmd", "run netboot;");
-        } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
+        } else if ((gpio_get_value(IMX_GPIO_NR(1, 8)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("Carrier SPI Boot is not supported...\n");
                 hang();
-        } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
+        } else if ((gpio_get_value(IMX_GPIO_NR(1, 8)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: ON ON ON, Boot from Module SPI is not supported...\n");
                 hang();
         } else {

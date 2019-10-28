@@ -636,7 +636,7 @@
 };
 
 &usb3_1 {
-	status = "okay";
+	status = "disabled";
 };
 
 &usb_dwc3_1 {
