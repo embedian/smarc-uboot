@@ -1,0 +1,14 @@
+if TARGET_SMARCFIMX7
+
+config SYS_BOARD
+        default "smarcfimx7"
+
+config SYS_VENDOR
+        default "embedian"
+
+config SYS_CONFIG_NAME
+        default "smarcfimx7"
+
+config SYS_TEXT_BASE
+	default 0x87800000
+endif

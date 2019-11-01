@@ -1,0 +1,14 @@
+SMARCFIMX7D BOARD
+M:	Eric Lee <eric.lee@embedian.com>
+S:	Maintained
+F:	board/embedian/smarcfimx7
+F:      include/configs/smarcfimx7.h
+F:      include/configs/mx7smarc_common.h
+F:      configs/smarcfimx7d_ser0_defconfig
+F:      configs/smarcfimx7d_ser1_defconfig
+F:      configs/smarcfimx7d_ser2_defconfig
+F:      configs/smarcfimx7d_ser3_defconfig
+F:      configs/smarcfimx7s_ser0_defconfig
+F:      configs/smarcfimx7s_ser1_defconfig
+F:      configs/smarcfimx7s_ser2_defconfig
+F:      configs/smarcfimx7s_ser3_defconfig

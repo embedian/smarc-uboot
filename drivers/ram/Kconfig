@@ -33,3 +33,8 @@ config STM32_SDRAM
 	  STM32F7 family devices support flexible memory controller(FMC) to
 	  support external memories like sdram, psram & nand.
 	  This driver is for the sdram memory interface with the FMC.
+
+config 2GDDR3
+       	bool "SMARC-FiMX7 with 2GB DDR3L Memory"
+       	help
+          Select this if the board is SMARC-FiMX7-D-2G

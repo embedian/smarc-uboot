@@ -323,7 +323,7 @@ void reset_misc(void)
 }
 
 #ifdef CONFIG_IMX_TRUSTY_OS
-#ifdef CONFIG_MX7D
+#ifdef (CONFIG_MX7D)||(CONFIG_MX7S)
 void smp_set_core_boot_addr(unsigned long addr, int corenr)
 {
             return;

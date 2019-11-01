@@ -70,7 +70,7 @@ void imx_wdog_disable_powerdown(void)
 	struct wdog_regs *wdog1 = (struct wdog_regs *)WDOG1_BASE_ADDR;
 	struct wdog_regs *wdog2 = (struct wdog_regs *)WDOG2_BASE_ADDR;
 	struct wdog_regs *wdog3 = (struct wdog_regs *)WDOG3_BASE_ADDR;
-#ifdef CONFIG_MX7D
+#if defined(CONFIG_MX7D) || defined(CONFIG_MX7S)
 	struct wdog_regs *wdog4 = (struct wdog_regs *)WDOG4_BASE_ADDR;
 #endif
 
@@ -80,7 +80,7 @@ void imx_wdog_disable_powerdown(void)
 
 	if (is_mx6sx() || is_mx6ul() || is_mx6ull() || is_mx7())
 		writew(0, &wdog3->wmcr);
-#ifdef CONFIG_MX7D
+#if defined(CONFIG_MX7D) || defined(CONFIG_MX7S)
 	writew(0, &wdog4->wmcr);
 #endif
 }

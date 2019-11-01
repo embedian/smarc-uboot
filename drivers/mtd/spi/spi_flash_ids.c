@@ -80,6 +80,7 @@ const struct spi_flash_info spi_flash_ids[] = {
 	{"mx25l4005",	   INFO(0xc22013, 0x0, 64 * 1024,     8, 0) },
 	{"mx25l8005",	   INFO(0xc22014, 0x0, 64 * 1024,    16, 0) },
 	{"mx25l1605d",	   INFO(0xc22015, 0x0, 64 * 1024,    32, 0) },
+	{"mx25u3235f",	   INFO(0xc22536, 0x0, 64 * 1024,    64, 0 | SECT_4K) },
 	{"mx25l3205d",	   INFO(0xc22016, 0x0, 64 * 1024,    64, 0) },
 	{"mx25l6405d",	   INFO(0xc22017, 0x0, 64 * 1024,   128, 0) },
 	{"mx25l12805",	   INFO(0xc22018, 0x0, 64 * 1024,   256, RD_FULL | WR_QPP) },
