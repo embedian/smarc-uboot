@@ -13,6 +13,7 @@
 #include <mapmem.h>
 #include <spi.h>
 #include <spi_flash.h>
+#include <asm/gpio.h>
 #include <jffs2/jffs2.h>
 #include <linux/mtd/mtd.h>
 
@@ -557,7 +558,12 @@ static int do_spi_flash(cmd_tbl_t *cmdtp, int flag, int argc,
 	++argv;
 
 	if (strcmp(cmd, "probe") == 0) {
+       	gpio_request(IMX_GPIO_NR(4, 20), "SPI_LOCK_PIN");
+       	/*Unlock SPI Flash*/
+       	gpio_direction_output(IMX_GPIO_NR(4,20), 1);
 		ret = do_spi_flash_probe(argc, argv);
+       	/*Lock Up SPI Flash*/
+       	gpio_direction_output(IMX_GPIO_NR(4,20), 0);
 		goto done;
 	}
 
@@ -568,15 +574,34 @@ static int do_spi_flash(cmd_tbl_t *cmdtp, int flag, int argc,
 	}
 
 	if (strcmp(cmd, "read") == 0 || strcmp(cmd, "write") == 0 ||
-	    strcmp(cmd, "update") == 0)
+	    strcmp(cmd, "update") == 0) {
+       	/*Unlock SPI Flash*/
+       	gpio_direction_output(IMX_GPIO_NR(4,20), 1);
 		ret = do_spi_flash_read_write(argc, argv);
-	else if (strcmp(cmd, "erase") == 0)
+       	/*Lock Up SPI Flash*/
+        gpio_direction_output(IMX_GPIO_NR(4,20), 0);
+	}
+	else if (strcmp(cmd, "erase") == 0) {
+       	/*Unlock SPI Flash*/
+       	gpio_direction_output(IMX_GPIO_NR(4,20), 1);
 		ret = do_spi_flash_erase(argc, argv);
-	else if (strcmp(cmd, "protect") == 0)
+       	/*Lock Up SPI Flash*/
+       	gpio_direction_output(IMX_GPIO_NR(4,20), 0);
+	}
+	else if (strcmp(cmd, "protect") == 0) {
+       	/*Unlock SPI Flash*/
+       	gpio_direction_output(IMX_GPIO_NR(4,20), 1);
 		ret = do_spi_protect(argc, argv);
+       	/*Lock Up SPI Flash*/
+       	gpio_direction_output(IMX_GPIO_NR(4,20), 0);
+	}
 #ifdef CONFIG_CMD_SF_TEST
 	else if (!strcmp(cmd, "test"))
+       	/*Unlock SPI Flash*/
+       	gpio_direction_output(IMX_GPIO_NR(4,20), 1);
 		ret = do_spi_flash_test(argc, argv);
+       	/*Lock Up SPI Flash*/
+       	gpio_direction_output(IMX_GPIO_NR(4,20), 0);
 #endif
 	else
 		ret = -1;

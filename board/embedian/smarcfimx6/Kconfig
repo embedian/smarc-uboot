@@ -1,0 +1,15 @@
+if TARGET_SMARCFIMX6
+
+config SYS_BOARD
+	default "smarcfimx6"
+
+config SYS_VENDOR
+	default "embedian"
+
+config SYS_CONFIG_NAME
+	default "smarcfimx6"
+
+config SYS_TEXT_BASE
+    	default 0x17800000
+
+endif
