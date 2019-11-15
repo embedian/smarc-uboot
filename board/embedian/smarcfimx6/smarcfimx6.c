@@ -1346,22 +1346,22 @@ int board_late_init(void)
         if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("BOOT_SEL Detected: OFF OFF OFF, Load zImage from Carrier SATA...\n");
                 env_set("root", "/dev/sda1 rootwait rw ");
-                env_set("bootcmd", "sata init; run findfdt; run loadsataenv; run importbootenv; run uenvcmd; run loadsatazimage; run loadsatafdt; run sataboot;");
+                env_set("bootcmd", "sata init; run loadsataenv; run importbootenv; run uenvcmd; run loadsatazimage; run loadsatafdt; run sataboot;");
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: OFF OFF ON, USB Boot Up Not Defined...Carrier SPI Boot Not Supported...\n");
                 hang();
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("BOOT_SEL Detected: OFF ON OFF, Load zImage from Carrier SDMMC...\n");
                 env_set_ulong("mmcdev", 1);
-                env_set("bootcmd", "mmc rescan; run findfdt; run loadbootenv; run importbootenv; run uenvcmd; run loadzimage; run loadfdt; run mmcboot;");
+                env_set("bootcmd", "mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadzimage; run loadfdt; run mmcboot;");
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("BOOT_SEL Detected: ON OFF OFF, Load zImage from Carrier SD Card...\n");
                 env_set_ulong("mmcdev", 0);
-                env_set("bootcmd", "mmc rescan; run findfdt; run loadbootenv; run importbootenv; run uenvcmd; run loadzimage; run loadfdt; run mmcboot;");
+                env_set("bootcmd", "mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadzimage; run loadfdt; run mmcboot;");
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: OFF ON ON, Load zImage from Module eMMC Flash...\n");
                 env_set_ulong("mmcdev", 2);
-                env_set("bootcmd", "mmc rescan; run findfdt; run loadbootenv; run importbootenv; run uenvcmd; run loadzimage; run loadfdt; run mmcboot;");
+                env_set("bootcmd", "mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadzimage; run loadfdt; run mmcboot;");
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: ON OFF ON, Load zImage from GBE...\n");
                 env_set("bootcmd", "run netboot;");
@@ -1371,7 +1371,7 @@ int board_late_init(void)
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 4)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: ON ON ON, MOdule SPI Boot up is Default, Load zImage from Module eMMC...\n");
                 env_set_ulong("mmcdev", 2);
-                env_set("bootcmd", "mmc rescan; run findfdt; run loadbootenv; run importbootenv; run uenvcmd; run loadzimage; run loadfdt; run mmcboot;");
+                env_set("bootcmd", "mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadzimage; run loadfdt; run mmcboot;");
         } else {
                 puts("unsupported boot devices\n");
                 hang();

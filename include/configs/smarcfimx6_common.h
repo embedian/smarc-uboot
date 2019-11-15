@@ -122,7 +122,7 @@
 		CONFIG_MFG_ENV_SETTINGS \
 		TEE_ENV \
 		"image=zImage\0" \
-		"fdt_file=undefined\0" \
+        	"fdt_file=" CONFIG_DEFAULT_FDT_FILE "\0" \
 		"fdt_addr=0x18000000\0" \
 		"fdt_high=0xffffffff\0"   \
 		"tee_addr=0x20000000\0" \
@@ -166,9 +166,8 @@
 		"bootargs_sata=setenv bootargs ${bootargs} " \
 			"root=/dev/sda2 rootwait rw \0" \
 		"bootcmd_sata=run bootargs_sata; sata init; " \
-			"run findfdt; run findtee;" \
 			"fatload sata 0:1 ${loadaddr} ${image}; " \
-			"fatload sata 0:1 ${fdt_addr} ${fdt_file}; " \
+			"fatload sata 0:1 ${fdt_addr} /dtbs/${fdt_file}; " \
 			"if test ${tee} = yes; then " \
 				"fatload sata 0:1 ${tee_addr} ${tee_file}; " \
 				"bootm ${tee_addr} - ${fdt_addr}; " \
@@ -185,7 +184,7 @@
 	"epdc_waveform=epdc_splash.bin\0" \
 	"script=boot.scr\0" \
 	"image=zImage\0" \
-	"fdt_file=undefined\0" \
+        "fdt_file=" CONFIG_DEFAULT_FDT_FILE "\0" \
 	"fdt_addr=0x18000000\0" \
 	"tee_addr=0x20000000\0" \
 	"tee_file=undefined\0" \
@@ -353,8 +352,6 @@
 			"fi;\0" \
 
 #define CONFIG_BOOTCOMMAND \
-	"run findfdt;" \
-	"run findtee;" \
        	"if mmc rescan; then " \
                	"echo SD/MMC found on device ${mmcdev};" \
                	"if run loadbootenv; then " \
