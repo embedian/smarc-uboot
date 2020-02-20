@@ -437,6 +437,7 @@ static iomux_v3_cfg_t const usb_en_oc_pads[] = {
         IMX8MM_PAD_NAND_DATA04_GPIO3_IO10 | MUX_PAD_CTRL(WEAK_PULLUP),
         IMX8MM_PAD_NAND_DATA05_GPIO3_IO11 | MUX_PAD_CTRL(WEAK_PULLUP),
         IMX8MM_PAD_GPIO1_IO10_GPIO1_IO10 | MUX_PAD_CTRL(NO_PAD_CTRL),
+        IMX8MM_PAD_GPIO1_IO11_GPIO1_IO11 | MUX_PAD_CTRL(NO_PAD_CTRL),
 };
 
 static void setup_iomux_usb_en_oc(void)
@@ -450,6 +451,8 @@ static void setup_iomux_usb_en_oc(void)
         gpio_direction_input(IMX_GPIO_NR(3, 11));
         gpio_request(IMX_GPIO_NR(1, 10), "usb0_id");
         gpio_direction_input(IMX_GPIO_NR(1, 10));
+        gpio_request(IMX_GPIO_NR(1, 11), "usb1_id");
+        gpio_direction_input(IMX_GPIO_NR(1, 11));
 }
 
 #ifdef CONFIG_USB_TCPC
