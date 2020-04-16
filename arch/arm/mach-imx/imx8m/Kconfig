@@ -40,6 +40,11 @@ config TARGET_IMX8MQ_EVK
 	select IMX8MQ
 	select IMX8M_LPDDR4
 
+config TARGET_SMARCIMX8MQ
+        bool "smarcimx8mq"
+        select IMX8MQ
+        select IMX8M_LPDDR4
+
 config TARGET_IMX8MQ_DDR3L_ARM2
 	bool "imx8mq_ddr3l_arm2"
 	select IMX8MQ
@@ -89,6 +94,7 @@ endchoice
 source "board/freescale/imx8mq_evk/Kconfig"
 source "board/freescale/imx8mq_arm2/Kconfig"
 source "board/freescale/imx8mq_aiy/Kconfig"
+source "board/embedian/smarcimx8mq/Kconfig"
 source "board/freescale/imx8mm_evk/Kconfig"
 source "board/freescale/imx8mm_val/Kconfig"
 source "board/freescale/imx8mn_evk/Kconfig"
