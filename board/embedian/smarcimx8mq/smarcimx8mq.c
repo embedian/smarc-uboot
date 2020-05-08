@@ -80,6 +80,9 @@ static iomux_v3_cfg_t const uart1_pads[] = {
 static iomux_v3_cfg_t const uart2_pads[] = {
         IMX8MQ_PAD_UART2_RXD__UART2_RX | MUX_PAD_CTRL(UART_PAD_CTRL),
         IMX8MQ_PAD_UART2_TXD__UART2_TX | MUX_PAD_CTRL(UART_PAD_CTRL),
+        IMX8MQ_PAD_UART4_TXD__UART2_RTS_B | MUX_PAD_CTRL(UART_PAD_CTRL),
+        IMX8MQ_PAD_UART4_RXD__UART2_CTS_B | MUX_PAD_CTRL(UART_PAD_CTRL),
+
 };
 #endif
 
@@ -92,10 +95,10 @@ static iomux_v3_cfg_t const uart3_pads[] = {
 
 #ifdef CONFIG_CONSOLE_SER0
 static iomux_v3_cfg_t const uart4_pads[] = {
-        IMX8MQ_PAD_UART4_RXD__UART4_RX | MUX_PAD_CTRL(UART_PAD_CTRL),
+        IMX8MQ_PAD_ECSPI2_SCLK__UART4_RX | MUX_PAD_CTRL(UART_PAD_CTRL),
         IMX8MQ_PAD_ECSPI2_SS0__UART4_RTS_B | MUX_PAD_CTRL(UART_PAD_CTRL),
         IMX8MQ_PAD_ECSPI2_MISO__UART4_CTS_B | MUX_PAD_CTRL(UART_PAD_CTRL),
-        IMX8MQ_PAD_UART4_TXD__UART4_TX | MUX_PAD_CTRL(UART_PAD_CTRL),
+        IMX8MQ_PAD_ECSPI2_MOSI__UART4_TX | MUX_PAD_CTRL(UART_PAD_CTRL),
 };
 #endif
 
