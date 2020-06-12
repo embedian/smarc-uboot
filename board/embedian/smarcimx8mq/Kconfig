@@ -1,0 +1,12 @@
+if TARGET_SMARCIMX8MQ
+
+config SYS_BOARD
+	default "smarcimx8mq"
+
+config SYS_VENDOR
+	default "embedian"
+
+config SYS_CONFIG_NAME
+	default "smarcimx8mq"
+
+endif

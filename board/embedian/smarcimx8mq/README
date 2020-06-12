@@ -1,0 +1,39 @@
+U-Boot for the Embedian SMARC-iMX8MQ CPU Module
+
+Quick Start
+===========
+- Build the ARM Trusted firmware binary
+- Get ddr and hdmi fimware
+- Build U-Boot
+- Boot
+
+Get and Build the ARM Trusted firmware
+======================================
+Note: srctree is U-Boot source directory
+Get ATF from: https://source.codeaurora.org/external/imx/imx-atf
+branch: imx_4.19.35_1.1.0
+$ make PLAT=imx8mq bl31
+$ cp build/imx8mq/release/bl31.bin $(srctree)
+
+Get the ddr and hdmi firmware
+=============================
+$ wget https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-8.5.bin
+$ chmod +x firmware-imx-8.5.bin
+$ ./firmware-imx-8.5.bin
+$ cp firmware-imx-8.5/firmware/hdmi/cadence/signed_hdmi_imx8m.bin $(srctree)
+$ cp firmware-imx-8.5/firmware/ddr/synopsys/lpddr4*.bin $(srctree)
+
+Build U-Boot
+============
+$ wget -c https://releases.linaro.org/components/toolchain/binaries/6.4-2017.11/aarch64-linux-gnu/gcc-linaro-6.4.1-2017.11-x86_64_aarch64-linux-gnu.tar.xz
+$ sudo tar -C /opt -xJf gcc-linaro-6.4.1-2017.11-x86_64_aarch64-linux-gnu.tar.xz
+$ export CC=/opt/gcc-linaro-6.4.1-2017.11-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-
+$ make ARCH=arm CROSS_COMPILE=${CC} smarcimx8mq_2g_ser3_defconfig
+$ make ARCH=arm CROSS_COMPILE=${CC}
+
+Burn the flash.bin to SD card offset 33KB
+$sudo dd if=flash.bin of=/dev/sd[x] bs=1024 seek=33
+
+Boot
+====
+Shunt cross TEST# pin to GND and Set BOOT_SEL to ON OFF OFF to boot from SD.
