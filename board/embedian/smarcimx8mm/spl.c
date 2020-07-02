@@ -45,7 +45,7 @@ struct i2c_pads_info i2c_pad_info1 = {
 };
 
 #define USDHC1_PWR_GPIO IMX_GPIO_NR(2, 10)
-#define USDHC2_CD_GPIO	IMX_GPIO_NR(2, 18)
+#define USDHC2_CD_GPIO	IMX_GPIO_NR(2, 12)
 #define USDHC2_PWR_GPIO IMX_GPIO_NR(2, 19)
 
 #define USDHC_PAD_CTRL	(PAD_CTL_DSE6 | PAD_CTL_HYS | PAD_CTL_PUE |PAD_CTL_PE | \
@@ -98,7 +98,7 @@ int board_mmc_init(bd_t *bis)
 			usdhc_cfg[0].sdhc_clk = mxc_get_clock(MXC_ESDHC_CLK);
 			imx_iomux_v3_setup_multiple_pads(
 				usdhc1_pads, ARRAY_SIZE(usdhc1_pads));
-			gpio_request(USDHC2_PWR_GPIO, "usdhc1_reset");
+			gpio_request(USDHC1_PWR_GPIO, "usdhc1_reset");
 			gpio_direction_output(USDHC1_PWR_GPIO, 0);
 			udelay(500);
 			gpio_direction_output(USDHC1_PWR_GPIO, 1);
