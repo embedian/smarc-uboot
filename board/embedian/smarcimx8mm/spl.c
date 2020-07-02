@@ -132,7 +132,7 @@ int board_mmc_getcd(struct mmc *mmc)
 	int ret = 0;
 
 	switch (cfg->esdhc_base) {
-	case USDHC3_BASE_ADDR:
+	case USDHC1_BASE_ADDR:
 		ret = 1;
 		break;
 	case USDHC2_BASE_ADDR:
