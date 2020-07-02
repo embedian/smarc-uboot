@@ -188,6 +188,7 @@
 	"bootscript=echo Running bootscript from mmc ...; " \
 		"source\0" \
 	"loadimage=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}\0" \
+        "loadusbimage=fatload usb 0:1 ${loadaddr} ${image}\0" \
 	"loadfdt=fatload mmc ${mmcdev}:${mmcpart} ${fdt_addr} /dtbs/${fdt_file}\0" \
         "loadusbfdt=fatload usb 0:1 ${fdt_addr} /dtbs/${fdt_file}\0" \
 	"mmcboot=echo Booting from mmc ...; " \
