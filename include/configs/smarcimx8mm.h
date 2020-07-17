@@ -288,7 +288,7 @@
 #define PHYS_SDRAM                      0x40000000
 #ifdef CONFIG_2GB_LPDDR4
 #define PHYS_SDRAM_SIZE                 0x80000000 /* 2GB DDR */
-#elif defined(CONFIG_IMX8M_4G_LPDDR4)
+#elif defined(CONFIG_IMX8M_4G_LPDDR4) || defined(CONFIG_4GB_LPDDR4)
 #undef PHYS_SDRAM_SIZE
 #define PHYS_SDRAM_SIZE                 0xC0000000 /* 3GB */
 #define PHYS_SDRAM_2                    0x100000000
@@ -297,9 +297,9 @@
 #define CONFIG_NR_DRAM_BANKS 2
 #else
 #undef PHYS_SDRAM_SIZE
-#define PHYS_SDRAM_SIZE                 0x80000000 /* 2GB */
+#define PHYS_SDRAM_SIZE                 0xC0000000 /* 3GB */
 #define PHYS_SDRAM_2                    0x100000000
-#define PHYS_SDRAM_2_SIZE               0x80000000 /* 2GB */
+#define PHYS_SDRAM_2_SIZE               0x40000000 /* 1GB */
 #undef CONFIG_NR_DRAM_BANKS
 #define CONFIG_NR_DRAM_BANKS 2
 #endif
