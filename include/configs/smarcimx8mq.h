@@ -85,8 +85,12 @@
 	"script=boot.scr\0" \
 	"image=Image\0" \
 	"splashimage=0x50000000\0" \
+        "m4_bin=hello_world.bin\0" \
+        "use_m4=no\0" \
 	"console=ttymxc0,115200\0" \
 	"fdt_addr=0x43000000\0"			\
+        "m4_addr=0x7e0000\0" \
+        "m4_addr_tmp=0x48000000\0"      \
 	"fdt_high=0xffffffffffffffff\0"		\
 	"boot_fdt=try\0" \
 	"fdt_file=" CONFIG_DEFAULT_FDT_FILE "\0" \
@@ -112,9 +116,11 @@
 	"bootscript=echo Running bootscript from mmc ...; " \
 		"source\0" \
 	"loadimage=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}\0" \
+        "loadm4bin=load mmc ${mmcdev}:${mmcpart} ${m4_addr_tmp} ${m4_bin}\0" \
        	"loadusbimage=fatload usb 0:1 ${loadaddr} ${image}\0" \
        	"loadfdt=fatload mmc ${mmcdev}:${mmcpart} ${fdt_addr} /dtbs/${fdt_file}\0" \
        	"loadusbfdt=fatload usb 0:1 ${fdt_addr} /dtbs/${fdt_file}\0" \
+        "cpm4mem=cp.b ${m4_addr_tmp} ${m4_addr} 20000\0" \
 	"mmcboot=echo Booting from mmc ...; " \
 		"run mmcargs; " \
 		"if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
@@ -126,6 +132,14 @@
 		"else " \
 			"echo wait for boot; " \
 		"fi;\0" \
+        "m4boot=" \
+                "if test ${m4_addr} = 0x7e0000; then " \
+                        "echo Booting M4 from TCM; " \
+                "else " \
+                        "echo Booting M4 from DRAM; " \
+                        "dcache flush; " \
+                "fi; " \
+                "bootaux ${m4_addr};\0" \
       	"usbboot=echo Booting from USB ...; " \
               	"run usbargs; " \
                	"if test ${boot_fdt} = yes || test ${boot_fdt} = try; then " \
@@ -160,6 +174,10 @@
 
 #define CONFIG_BOOTCOMMAND \
 	   "mmc dev ${mmcdev}; if mmc rescan; then " \
+                   "if test ${use_m4} = yes && run loadm4bin; then " \
+                           "run cpm4mem; " \
+                           "run m4boot; " \
+                   "fi; " \
               	"echo Checking for: uEnv.txt ...; " \
                	"if test -e mmc ${bootpart} /uEnv.txt; then " \
                        	"if run loadbootenv; then " \
