@@ -1,0 +1,38 @@
+U-Boot for the Embdian SMARC-iMX8MQ CPU board
+
+Quick Start
+===========
+- Build the ARM Trusted firmware binary
+- Get ddr and hdmi fimware
+- Build U-Boot
+- Boot
+
+Get and Build the ARM Trusted firmware
+======================================
+Note: srctree is U-Boot source directory
+Get ATF from: https://source.codeaurora.org/external/imx/imx-atf
+branch: imx_5.4.24_2.1.0
+$ make PLAT=imx8mm bl31
+$ cp build/imx8mm/release/bl31.bin $(builddir)
+
+Get the ddr and hdmi firmware
+=============================
+$ wget https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/firmware-imx-8.8.bin
+$ chmod +x firmware-imx-8.8.bin
+$ ./firmware-imx-8.8.bin
+$ cp firmware-imx-8.8/firmware/ddr/synopsys/lpddr4*.bin $(builddir)
+
+Build U-Boot
+============
+$ wget -c https://developer.arm.com/-/media/Files/downloads/gnu-a/8.3-2019.03/binrel/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz 
+$ sudo tar -C /opt -xJf gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz
+$ export CC=/opt/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu/bin/aarch64-linux-gnu-
+$ make ARCH=arm CROSS_COMPILE=${CC} smarcimx8mm_2/4g_ser1/2/3_defconfig
+$ make ARCH=arm CROSS_COMPILE=${CC}
+
+Burn the flash.bin to MicroSD card offset 33KB
+$sudo dd if=flash.bin of=/dev/sd[x] bs=1024 seek=33
+
+Boot
+====
+Shunt cross TEST# pin to GND and Set BOOT_SEL to ON OFF OFF to boot from SD.

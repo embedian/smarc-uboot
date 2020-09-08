@@ -1,0 +1,12 @@
+if TARGET_SMARCIMX8MM
+
+config SYS_BOARD
+	default "smarcimx8mm"
+
+config SYS_VENDOR
+	default "embedian"
+
+config SYS_CONFIG_NAME
+	default "smarcimx8mm"
+
+endif

@@ -86,6 +86,12 @@ config TARGET_IMX8MM_EVK
 	select SUPPORT_SPL
 	select IMX8M_LPDDR4
 
+config TARGET_SMARCIMX8MM
+        bool "smarcimx8mm CPU modules"
+        select IMX8MM
+        select SUPPORT_SPL
+        select IMX8M_LPDDR4
+
 config TARGET_IMX8MM_DDR4_EVK
 	bool "imx8mm DDR4 EVK board"
 	select IMX8MM
@@ -141,6 +147,7 @@ source "board/embedian/smarcimx8mq/Kconfig"
 source "board/freescale/imx8mq_val/Kconfig"
 source "board/freescale/imx8mm_ab2/Kconfig"
 source "board/freescale/imx8mm_evk/Kconfig"
+source "board/embedian/smarcimx8mm/Kconfig"
 source "board/freescale/imx8mm_val/Kconfig"
 source "board/freescale/imx8mn_evk/Kconfig"
 source "board/freescale/imx8mp_evk/Kconfig"
