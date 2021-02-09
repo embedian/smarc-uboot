@@ -187,6 +187,10 @@ static iomux_v3_cfg_t const misc_pads[] = {
         IMX8MM_PAD_NAND_WP_B_GPIO3_IO18 | MUX_PAD_CTRL(WEAK_PULLUP),            /*CAN0_INT#*/
         IMX8MM_PAD_NAND_READY_B_GPIO3_IO16 | MUX_PAD_CTRL(WEAK_PULLUP),         /*CAN1_INT#*/
         IMX8MM_PAD_NAND_DATA07_GPIO3_IO13 | MUX_PAD_CTRL(WEAK_PULLUP),          /*LVDS_EN*/
+	IMX8MM_PAD_GPIO1_IO05_GPIO1_IO5 | MUX_PAD_CTRL(WEAK_PULLUP),		/*BOOT_SEL0*/
+	IMX8MM_PAD_GPIO1_IO06_GPIO1_IO6 | MUX_PAD_CTRL(WEAK_PULLUP),		/*BOOT_SEL1*/
+	IMX8MM_PAD_GPIO1_IO07_GPIO1_IO7 | MUX_PAD_CTRL(WEAK_PULLUP),		/*BOOT_SEL2*/
+
 };
 
 static void setup_iomux_misc(void)
@@ -720,8 +724,11 @@ int board_late_init(void)
 
 /* SMARC BOOT_SEL*/
         gpio_request(IMX_GPIO_NR(1, 5), "BOOT_SEL_1");
+	gpio_direction_input(IMX_GPIO_NR(1, 5));
         gpio_request(IMX_GPIO_NR(1, 6), "BOOT_SEL_2");
+	gpio_direction_input(IMX_GPIO_NR(1, 6));
         gpio_request(IMX_GPIO_NR(1, 7), "BOOT_SEL_3");
+	gpio_direction_input(IMX_GPIO_NR(1, 7));
         if ((gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 7)) == 0)) {
                 puts("BOOT_SEL Detected: OFF OFF OFF, Boot from Carrier SATA is not supported...\n");
                 hang();
