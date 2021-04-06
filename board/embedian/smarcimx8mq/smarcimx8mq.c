@@ -620,21 +620,21 @@ int board_late_init(void)
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 8)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: OFF OFF ON, Load Image from USB0...\n");
                 env_set_ulong("usb dev", 1);
-                env_set("bootcmd", "usb start; run loadusbbootenv; run importusbbootenv; run uenvcmd; loadusbimage; run usbboot;");
+                env_set("bootcmd", "i2c dev 0; i2c mw 0x08 0x1a 0xf; usb start; run loadusbbootenv; run importusbbootenv; run uenvcmd; loadusbimage; run usbboot;");
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 8)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("BOOT_SEL Detected: OFF ON OFF, Boot from Carrier eSPI is not supported...\n");
                 hang();
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 8)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("BOOT_SEL Detected: ON OFF OFF, Load Image from Carrier SD Card...\n");
                 env_set_ulong("mmcdev", 1);
-                env_set("bootcmd", "mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadimage; run mmcboot;");
+                env_set("bootcmd", "i2c dev 0; i2c mw 0x08 0x1a 0xf; mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadimage; run mmcboot;");
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 8)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: OFF ON ON, Load Image from Module eMMC Flash...\n");
                 env_set_ulong("mmcdev", 0);
-                env_set("bootcmd", "mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadimage; run mmcboot;");
+                env_set("bootcmd", "i2c dev 0; i2c mw 0x08 0x1a 0xf; mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadimage; run mmcboot;");
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 8)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)) {
                 puts("BOOT_SEL Detected: ON OFF ON, Load zImage from GBE...\n");
-                env_set("bootcmd", "run netboot;");
+                env_set("bootcmd", "i2c dev 0; i2c mw 0x08 0x1a 0xf; run netboot;");
         } else if ((gpio_get_value(IMX_GPIO_NR(1, 8)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)) {
                 puts("Carrier SPI Boot is not supported...\n");
                 hang();
