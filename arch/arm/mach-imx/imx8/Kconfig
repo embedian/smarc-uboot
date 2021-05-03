@@ -117,6 +117,11 @@ config TARGET_IMX8QM_MEK
 	select BOARD_LATE_INIT
 	select IMX8QM
 
+config TARGET_SMARCIMX8QM
+        bool "Support SMARC-iMX8QM CPU Module"
+        select BOARD_LATE_INIT
+        select IMX8QM
+
 config TARGET_IMX8QM_LPDDR4_VAL
 	bool "Support i.MX8QM lpddr4 validation board"
 	select BOARD_LATE_INIT
@@ -176,6 +181,7 @@ config TARGET_IMX8DXL_DDR3_EVK
 
 endchoice
 
+source "board/embedian/smarcimx8qm/Kconfig"
 source "board/freescale/imx8qm_mek/Kconfig"
 source "board/freescale/imx8qxp_mek/Kconfig"
 source "board/freescale/imx8qm_val/Kconfig"

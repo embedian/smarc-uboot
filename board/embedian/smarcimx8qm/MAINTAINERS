@@ -1,0 +1,6 @@
+SMARC-iMX8QM CPU Module
+M:	Eric Lee <eric.lee@embedian.com>
+S:	Maintained
+F:	board/embedian/smarcimx8qm/
+F:	include/configs/smarcimx8qm.h
+F:	configs/smarcimx8qm_*_defconfig

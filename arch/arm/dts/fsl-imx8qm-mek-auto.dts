@@ -95,6 +95,7 @@
 /delete-node/ &irqsteer_lvds1;
 /delete-node/ &i2c1_lvds1;
 /delete-node/ &lpspi0;
+/delete-node/ &lpspi1;
 /delete-node/ &lpspi3;
 /delete-node/ &lpuart1;
 /delete-node/ &lpuart2;

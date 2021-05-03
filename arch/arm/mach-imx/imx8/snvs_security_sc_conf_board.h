@@ -8,6 +8,8 @@
 
 #ifdef CONFIG_TARGET_IMX8QM_MEK
 #include "snvs_security_sc_conf_8qm_mek.h"
+#elif CONFIG_TARGET_SMARCIMX8QM
+#include "snvs_security_sc_conf_8qm_smarc.h"
 #elif CONFIG_TARGET_IMX8QXP_MEK
 #include "snvs_security_sc_conf_8qxp_mek.h"
 #elif CONFIG_TARGET_IMX8DXL_EVK
