@@ -1,0 +1,14 @@
+if TARGET_SMARCIMX8MP
+
+config SYS_BOARD
+	default "smarcimx8mp"
+
+config SYS_VENDOR
+	default "embedian"
+
+config SYS_CONFIG_NAME
+	default "smarcimx8mp"
+
+source "board/freescale/common/Kconfig"
+
+endif

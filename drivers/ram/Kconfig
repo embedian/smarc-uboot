@@ -17,6 +17,16 @@ config SPL_RAM
 	  SPL, enable this option. It might provide a cleaner interface to
 	  setting up RAM (e.g. SDRAM / DDR) within SPL.
 
+config 4GB_LPDDR4
+	bool "SMARC-iMX8MP with 32Gb LPDDR4 Memory"
+	help
+	  Select this if the board is SMARC-iMX8MP-D/Q-4G
+
+config 6GB_LPDDR4
+	bool "SMARC-iMX8MP with 48Gb LPDDR4 Memory"
+	help
+	  Select this if the board is SMARC-iMX8MP-D/Q-6G
+
 config TPL_RAM
 	bool "Enable RAM support in TPL"
 	depends on RAM
