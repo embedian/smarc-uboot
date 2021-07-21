@@ -807,11 +807,11 @@ int board_late_init(void)
 	} else if ((gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 7)) == 0)) {
 		puts("BOOT_SEL Detected: ON OFF OFF, Load Image from Carrier SD Card...\n");
 		env_set_ulong("mmcdev", 1);
-		env_set("bootcmd", "mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadimage; run mmcboot;");
+		env_set("bootcmd", "i2c dev 0; i2c mw 0x25 0x0a 0x3; mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadimage; run mmcboot;");
 	} else if ((gpio_get_value(IMX_GPIO_NR(1, 5)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 7)) == 1)) {
 		puts("BOOT_SEL Detected: OFF ON ON, Load Image from Module eMMC Flash...\n");
 		env_set_ulong("mmcdev", 2);
-		env_set("bootcmd", "mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadimage; run mmcboot;");
+		env_set("bootcmd", "i2c dev 0; i2c mw 0x25 0x0a 0x3; mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadimage; run mmcboot;");
 	} else if ((gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)&&(gpio_get_value(IMX_GPIO_NR(1, 6)) == 0)&&(gpio_get_value(IMX_GPIO_NR(1, 7)) == 1)) {
 		puts("BOOT_SEL Detected: ON OFF ON, Load zImage from GBE...\n");
 		env_set("bootcmd", "run netboot;");

@@ -2174,7 +2174,7 @@ struct dram_cfg_param ddr_ddrphy_cfg[] = {
         { 0x1304a, 0x500 },
         { 0x2002c, 0x0 },
 };
-^M
+
 /* ddr phy trained csr */
 struct dram_cfg_param ddr_ddrphy_trained_csr[] = {
         { 0x200b2, 0x0 },
