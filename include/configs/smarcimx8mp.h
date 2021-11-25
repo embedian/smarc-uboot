@@ -243,7 +243,7 @@
 #define CONFIG_SYS_SDRAM_BASE		0x40000000
 #define PHYS_SDRAM			0x40000000
 #ifdef CONFIG_4GB_LPDDR4
-#define PHYS_SDRAM_SIZE			0x80000000	/* 2 GB */
+#define PHYS_SDRAM_SIZE			0xc0000000	/* 3 GB */
 #else
 #define PHYS_SDRAM_SIZE			0xc0000000	/* 3 GB */
 #endif
@@ -252,7 +252,7 @@
 #define PHYS_SDRAM_2_SIZE		0x40000000	/* 1 GB */
 #else
 #ifdef CONFIG_4GB_LPDDR4
-#define PHYS_SDRAM_2_SIZE		0x80000000	/* 2 GB */
+#define PHYS_SDRAM_2_SIZE		0x40000000	/* 1 GB */
 #else
 #define PHYS_SDRAM_2_SIZE		0xc0000000	/* 3 GB */
 #endif
