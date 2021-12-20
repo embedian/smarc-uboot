@@ -25,7 +25,12 @@ config 2GB_LPDDR4
 config 4GB_LPDDR4
 	bool "SMARC-iMX8M with 32Gb LPDDR4 Memory"
 	help
-	 Select this if the board is SMARC-iMX8M-D/L/Q-4G
+	 Select this if the board is SMARC-iMX8M(P)-D/L/Q-4G
+
+config 6GB_LPDDR4
+	bool "SMARC-iMX8MP with 48Gb LPDDR4 Memory"
+	help
+	  Select this if the board is SMARC-iMX8M(P)-D/Q-6G
 
 config TPL_RAM
 	bool "Enable RAM support in TPL"
