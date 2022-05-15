@@ -35,15 +35,15 @@
 #define CONFIG_FEC_XCV_TYPE             RGMII
 #define CONFIG_FEC_ENET_DEV		0
 
-#define CONFIG_PHY_ATHEROS
+#define CONFIG_PHY_REALTEK
 /* ENET1 */
 #if (CONFIG_FEC_ENET_DEV == 0)
 #define IMX_FEC_BASE			ENET_IPS_BASE_ADDR
-#define CONFIG_FEC_MXC_PHYADDR          0x6
+#define CONFIG_FEC_MXC_PHYADDR          0x1
 #define CONFIG_ETHPRIME                 "eth0"
 #elif (CONFIG_FEC_ENET_DEV == 1)
 #define IMX_FEC_BASE			ENET2_IPS_BASE_ADDR
-#define CONFIG_FEC_MXC_PHYADDR          0x7
+#define CONFIG_FEC_MXC_PHYADDR          0x2
 #define CONFIG_ETHPRIME                 "eth1"
 #endif
 
