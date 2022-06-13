@@ -26,7 +26,7 @@
 		pinctrl-0 = <&pinctrl_usb1_vbus>;
 		regulator-min-microvolt = <5000000>;
 		regulator-max-microvolt = <5000000>;
-		gpio = <&gpio1 11 GPIO_ACTIVE_HIGH>;
+		gpio = <&gpio1 12 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 		regulator-always-on;
 	};
@@ -65,9 +65,9 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 
-		ethphy1: ethernet-phy@6 {
+		ethphy1: ethernet-phy@1 {
 			compatible = "ethernet-phy-ieee802.3-c22";
-			reg = <6>;
+			reg = <1>;
 			eee-broken-1000t;
 		};
 	};
@@ -85,9 +85,9 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 
-		ethphy0: ethernet-phy@6 {
+		ethphy0: ethernet-phy@1 {
 			compatible = "ethernet-phy-ieee802.3-c22";
-			reg = <6>;
+			reg = <1>;
 			eee-broken-1000t;
 		};
 	};
@@ -655,7 +655,7 @@
 
 	pinctrl_usb1_vbus: usb1grp {
 		fsl,pins = <
-			MX8MP_IOMUXC_GPIO1_IO11__GPIO1_IO11	0x19
+			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12	0x19
 		>;
 	};
 

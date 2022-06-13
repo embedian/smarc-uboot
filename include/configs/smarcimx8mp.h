@@ -49,10 +49,10 @@
 #define CONFIG_ETHPRIME                 "eth1" /* Set eqos to primary since we use its MDIO */
 
 #define CONFIG_FEC_XCV_TYPE             RGMII
-#define CONFIG_FEC_MXC_PHYADDR          6
+#define CONFIG_FEC_MXC_PHYADDR          1
 #define FEC_QUIRK_ENET_MAC
 
-#define DWC_NET_PHYADDR			6
+#define DWC_NET_PHYADDR			1
 #ifdef CONFIG_DWC_ETH_QOS
 #define CONFIG_SYS_NONCACHED_MEMORY     (1 * SZ_1M)     /* 1M */
 #endif
@@ -239,22 +239,30 @@
 /* Size of malloc() pool */
 #define CONFIG_SYS_MALLOC_LEN		SZ_32M
 
-/* Totally 4GB/6GB DDR (2+2/4+4) */
+/* Totally 2GB/4GB/6GB DDR (2+0/3+1/3+3) */
 #define CONFIG_SYS_SDRAM_BASE		0x40000000
 #define PHYS_SDRAM			0x40000000
-#ifdef CONFIG_4GB_LPDDR4
+#ifdef CONFIG_2GB_LPDDR4
+#define PHYS_SDRAM_SIZE			0x80000000	/* 2 GB */
+#elif defined (CONFIG_4GB_LPDDR4)
+#define PHYS_SDRAM_SIZE			0xc0000000	/* 3 GB */
+#elif defined (CONFIG_6GB_LPDDR4)
 #define PHYS_SDRAM_SIZE			0xc0000000	/* 3 GB */
 #else
-#define PHYS_SDRAM_SIZE			0xc0000000	/* 3 GB */
+#error "Undefined memory device"
 #endif
 #define PHYS_SDRAM_2			0x100000000
 #ifdef CONFIG_TARGET_IMX8MP_DDR4_EVK
 #define PHYS_SDRAM_2_SIZE		0x40000000	/* 1 GB */
 #else
-#ifdef CONFIG_4GB_LPDDR4
+#ifdef CONFIG_2GB_LPDDR4
+#define PHYS_SDRAM_2_SIZE               0x00000000      /* 0 GB */
+#elif defined (CONFIG_4GB_LPDDR4)
 #define PHYS_SDRAM_2_SIZE		0x40000000	/* 1 GB */
-#else
+#elif defined (CONFIG_6GB_LPDDR4)
 #define PHYS_SDRAM_2_SIZE		0xc0000000	/* 3 GB */
+#else
+#error "Undefined memory device"
 #endif
 #endif
 

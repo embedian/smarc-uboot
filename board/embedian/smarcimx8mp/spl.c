@@ -75,6 +75,7 @@ struct i2c_pads_info i2c_pad_info1 = {
 
 #define USDHC2_CD_GPIO	IMX_GPIO_NR(2, 12)
 #define USDHC2_PWR_GPIO IMX_GPIO_NR(2, 19)
+#define USDHC3_PWR_GPIO IMX_GPIO_NR(3, 16)
 
 #define USDHC_PAD_CTRL	(PAD_CTL_DSE6 | PAD_CTL_HYS | PAD_CTL_PUE |PAD_CTL_PE | \
 			 PAD_CTL_FSEL2)
@@ -90,9 +91,11 @@ static iomux_v3_cfg_t const usdhc3_pads[] = {
 	MX8MP_PAD_NAND_DATA06__USDHC3_DATA2 | MUX_PAD_CTRL(USDHC_PAD_CTRL),
 	MX8MP_PAD_NAND_DATA07__USDHC3_DATA3 | MUX_PAD_CTRL(USDHC_PAD_CTRL),
 	MX8MP_PAD_NAND_RE_B__USDHC3_DATA4 | MUX_PAD_CTRL(USDHC_PAD_CTRL),
+	MX8MP_PAD_NAND_CE1_B__USDHC3_STROBE | MUX_PAD_CTRL(USDHC_PAD_CTRL),
 	MX8MP_PAD_NAND_CE2_B__USDHC3_DATA5 | MUX_PAD_CTRL(USDHC_PAD_CTRL),
 	MX8MP_PAD_NAND_CE3_B__USDHC3_DATA6 | MUX_PAD_CTRL(USDHC_PAD_CTRL),
 	MX8MP_PAD_NAND_CLE__USDHC3_DATA7 | MUX_PAD_CTRL(USDHC_PAD_CTRL),
+	MX8MP_PAD_NAND_READY_B__GPIO3_IO16 | MUX_PAD_CTRL(USDHC_GPIO_PAD_CTRL),
 };
 
 static iomux_v3_cfg_t const usdhc2_pads[] = {
@@ -153,6 +156,10 @@ int board_mmc_init(bd_t *bis)
 			usdhc_cfg[1].sdhc_clk = mxc_get_clock(MXC_ESDHC3_CLK);
 			imx_iomux_v3_setup_multiple_pads(
 				usdhc3_pads, ARRAY_SIZE(usdhc3_pads));
+			gpio_request(USDHC3_PWR_GPIO, "usdhc3_reset");
+			gpio_direction_output(USDHC3_PWR_GPIO, 0);
+			udelay(500);
+			gpio_direction_output(USDHC3_PWR_GPIO, 1);
 			break;
 		default:
 			printf("Warning: you configured more USDHC controllers"
