@@ -1,0 +1,14 @@
+if TARGET_PITXIMX8MP
+
+config SYS_BOARD
+	default "pitximx8mp"
+
+config SYS_VENDOR
+	default "embedian"
+
+config SYS_CONFIG_NAME
+	default "pitximx8mp"
+
+source "board/freescale/common/Kconfig"
+
+endif
