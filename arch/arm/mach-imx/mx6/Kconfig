@@ -153,6 +153,20 @@ config TARGET_MX6SABRESD_COMMON
     select ARCH_MISC_INIT
     select RNG_SELF_TEST
 
+config TARGET_SMARCFIMX6
+    bool
+    select BOARD_LATE_INIT
+    select DM
+    select DM_THERMAL
+    select IMX_THERMAL
+    select BOARD_EARLY_INIT_F
+    select NXP_BOARD_REVISION
+    imply CMD_DM
+    select FSL_CAAM
+    select FSL_BLOB
+    select ARCH_MISC_INIT
+    select RNG_SELF_TEST
+
 choice
 	prompt "MX6 board select"
 	optional
@@ -415,6 +429,21 @@ config TARGET_MX6SABRESD
 	imply CMD_DM
 	select FSL_CAAM
 	select ARCH_MISC_INIT
+
+config TARGET_SMARCFIMX6Q
+	bool "Embedian i.MX6 Dual/Quad CPU Module"
+    select TARGET_SMARCFIMX6
+    depends on MX6Q
+
+config TARGET_SMARCFIMX6DL
+	bool "Embedian i.MX6 Dual Lite CPU Module"
+    select TARGET_SMARCFIMX6
+    depends on MX6DL
+
+config TARGET_SMARCFIMX6SOLO
+	bool "Embedian i.MX6 Solo CPU Module"
+    select TARGET_SMARCFIMX6
+    depends on MX6S
 
 config TARGET_MX6QSABREAUTO
     bool "mx6qsabreauto"
@@ -845,6 +874,7 @@ source "board/bticino/mamoj/Kconfig"
 source "board/compulab/cm_fx6/Kconfig"
 source "board/dhelectronics/dh_imx6/Kconfig"
 source "board/embest/mx6boards/Kconfig"
+source "board/embedian/smarcfimx6/Kconfig"
 source "board/engicam/imx6q/Kconfig"
 source "board/engicam/imx6ul/Kconfig"
 source "board/freescale/mx6memcal/Kconfig"

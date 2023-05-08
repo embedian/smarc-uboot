@@ -434,6 +434,29 @@ void init_usb_clk(void)
 	}
 }
 
+void init_clk_ecspi(u32 index)
+{
+	switch (index) {
+	case 0:
+		clock_enable(CCGR_ECSPI1, 0);
+		clock_set_target_val(ECSPI1_CLK_ROOT, CLK_ROOT_ON | CLK_ROOT_SOURCE_SEL(0));
+		clock_enable(CCGR_ECSPI1, 1);
+		return;
+	case 1:
+		clock_enable(CCGR_ECSPI2, 0);
+		clock_set_target_val(ECSPI2_CLK_ROOT, CLK_ROOT_ON | CLK_ROOT_SOURCE_SEL(0));
+		clock_enable(CCGR_ECSPI2, 1);
+	case 2:
+		clock_enable(CCGR_ECSPI3, 0);
+		clock_set_target_val(ECSPI3_CLK_ROOT, CLK_ROOT_ON | CLK_ROOT_SOURCE_SEL(0));
+		clock_enable(CCGR_ECSPI3, 1);
+		return;
+	default:
+		printf("Invalid ecspi index\n");
+		return;
+	}
+}
+
 void init_nand_clk(void)
 {
 	clock_enable(CCGR_RAWNAND, 0);

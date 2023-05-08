@@ -399,6 +399,26 @@ config DEBUG_UART_SANDBOX
 	  start up driver model. The driver will be available until the real
 	  driver model serial is running.
 
+config CONSOLE_SER0
+	bool "SMARC modules default console serial output port"
+	help
+	  Select this to enable a debug UART port from SER0 of SMARC Modules.
+
+config CONSOLE_SER1
+	bool "SMARC modules default console serial output port"
+	help
+	  Select this to enable a debug UART port from SER1 of SMARC Modules.
+
+config CONSOLE_SER2
+	bool "SMARC modules default console serial output port"
+	help
+	  Select this to enable a debug UART port from SER2 of SMARC Modules.
+
+config CONSOLE_SER3
+	bool "SMARC modules default console serial output port"
+	help
+	  Select this to enable a debug UART port from SER3 of SMARC Modules.
+
 config DEBUG_UART_SIFIVE
 	bool "SiFive UART"
 	depends on SIFIVE_SERIAL

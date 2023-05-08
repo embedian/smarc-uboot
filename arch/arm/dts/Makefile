@@ -765,6 +765,7 @@ dtb-y += \
 	imx6dl-sabreauto-ecspi.dtb \
 	imx6dl-sabreauto-gpmi-weim.dtb \
 	imx6dl-sabresd.dtb \
+	imx6dl-smarc.dtb \
 	imx6dl-wandboard-revd1.dtb \
 
 endif
@@ -817,12 +818,14 @@ dtb-y += \
 	imx6q-sabreauto-gpmi-weim.dtb \
 	imx6q-sabrelite.dtb \
 	imx6q-sabresd.dtb \
+	imx6q-smarc.dtb \
 	imx6q-tbs2910.dtb \
 	imx6q-wandboard-revd1.dtb \
 	imx6qp-sabreauto.dtb \
 	imx6qp-sabreauto-ecspi.dtb \
 	imx6qp-sabreauto-gpmi-weim.dtb \
 	imx6qp-sabresd.dtb \
+	imx6qp-smarc.dtb \
 	imx6qp-wandboard-revd1.dtb \
 
 endif
@@ -912,6 +915,8 @@ dtb-$(CONFIG_MX7) += imx7d-sdb.dtb \
 	imx7d-meerkat96.dtb \
 	imx7d-pico-pi.dtb \
 	imx7d-pico-hobbit.dtb \
+	imx7d-smarc.dtb \
+	imx7s-smarc.dtb \
 	imx7d-smegw01.dtb \
 	imx7d-12x12-lpddr3-val.dtb \
 	imx7d-12x12-lpddr3-val-ecspi.dtb \
@@ -938,6 +943,7 @@ dtb-$(CONFIG_ARCH_IMX8) += \
 	fsl-imx8qm-mek-cockpit-a53.dtb \
 	fsl-imx8qm-mek-cockpit-a72.dtb \
 	fsl-imx8qm-mek-xen.dtb \
+	imx8qm-smarc.dtb \
 	imx8qm-cgtqmx8.dtb \
 	imx8qm-rom7720-a1.dtb \
 	fsl-imx8qxp-ai_ml.dtb \
@@ -969,6 +975,7 @@ dtb-$(CONFIG_ARCH_IMX8M) += \
 	imx8mm-ddr3l-val.dtb \
 	imx8mm-ddr4-val.dtb \
 	imx8mm-evk.dtb \
+	imx8mm-smarc.dtb \
 	imx8mm-ab2.dtb \
 	imx8mm-icore-mx8mm-ctouch2.dtb \
 	imx8mm-icore-mx8mm-edimm2.2.dtb \
@@ -994,12 +1001,14 @@ dtb-$(CONFIG_ARCH_IMX8M) += \
 	imx8mq-ddr3l-val.dtb \
 	imx8mq-ddr4-val.dtb \
 	imx8mq-evk.dtb \
+	imx8mq-smarc.dtb \
 	imx8mm-beacon-kit.dtb \
 	imx8mn-beacon-kit.dtb \
 	imx8mq-mnt-reform2.dtb \
 	imx8mq-phanbell.dtb \
 	imx8mp-ddr4-evk.dtb \
 	imx8mp-evk.dtb \
+	imx8mp-smarc.dtb \
 	imx8mp-phyboard-pollux-rdk.dtb \
 	imx8mp-verdin.dtb \
 	imx8mq-pico-pi.dtb \

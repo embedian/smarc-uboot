@@ -1,0 +1,17 @@
+if TARGET_PITXIMX8MP
+
+config SYS_BOARD
+	default "pitximx8mp"
+
+config SYS_VENDOR
+	default "embedian"
+
+config SYS_CONFIG_NAME
+	default "pitximx8mp"
+
+config IMX_CONFIG
+	default "board/freescale/imx8mp_evk/imximage-8mp-lpddr4.cfg"
+
+source "board/freescale/common/Kconfig"
+
+endif

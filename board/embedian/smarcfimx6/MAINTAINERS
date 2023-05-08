@@ -1,0 +1,6 @@
+SMARCFIMX6 BOARD
+M:	Eric Lee <eric.lee@embedian.com>
+S:	Maintained
+F:	board/embedian/smarcfimx6/
+F:	include/configs/smarcfimx6.h
+F:	configs/smarcfimx6_*_defconfig

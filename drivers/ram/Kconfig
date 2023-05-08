@@ -17,6 +17,26 @@ config SPL_RAM
 	  SPL, enable this option. It might provide a cleaner interface to
 	  setting up RAM (e.g. SDRAM / DDR) within SPL.
 
+config 2GB_LPDDR4
+	bool "SMARC-iMX8MP with 16Gb LPDDR4 Memory"
+	help
+	  Select this if the board is SMARC-iMX8M/8MM/8MP-D/Q-2G
+
+config 4GB_LPDDR4
+	bool "SMARC-iMX8MP with 32Gb LPDDR4 Memory"
+	help
+	  Select this if the board is SMARC-iMX8/8M/MM/MPP-D/Q-4G
+
+config 6GB_LPDDR4
+	bool "SMARC-iMX8MP with 48Gb LPDDR4 Memory"
+	help
+	  Select this if the board is SMARC-iMX8MP-D/Q-6G
+
+config 8GB_LPDDR4
+	bool "SMARC-iMX8 with 64Gb LPDDR4 Memory"
+	help
+	  Select this if the board is SMARC-iMX8
+
 config TPL_RAM
 	bool "Enable RAM support in TPL"
 	depends on RAM
@@ -33,6 +53,11 @@ config STM32_SDRAM
 	  STM32F7 family devices support flexible memory controller(FMC) to
 	  support external memories like sdram, psram & nand.
 	  This driver is for the sdram memory interface with the FMC.
+
+config 2GDDR3
+       	bool "SMARC Board with 2GB DDR3L Memory"
+       	help
+          Select this if the SMARC board is 2GB DDR3L
 
 config MPC83XX_SDRAM
 	bool "Enable MPC83XX SDRAM support"

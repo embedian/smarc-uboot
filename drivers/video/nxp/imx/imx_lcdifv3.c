@@ -110,8 +110,8 @@ static void lcdifv3_set_mode(struct lcdifv3_priv *priv,
 		writel(CTRL_INV_HS, (ulong)(priv->reg_base + LCDIFV3_CTRL_SET));
 
 	/* SEC MIPI DSI specific */
-	writel(CTRL_INV_PXCK, (ulong)(priv->reg_base + LCDIFV3_CTRL_CLR));
-	writel(CTRL_INV_DE, (ulong)(priv->reg_base + LCDIFV3_CTRL_CLR));
+	// writel(CTRL_INV_PXCK, (ulong)(priv->reg_base + LCDIFV3_CTRL_CLR));
+	// writel(CTRL_INV_DE, (ulong)(priv->reg_base + LCDIFV3_CTRL_CLR));
 
 }
 
@@ -350,28 +350,12 @@ static int lcdifv3_video_probe(struct udevice *dev)
 
 	lcdifv3_of_parse_thres(dev);
 
-	if (priv->disp_dev) {
-#if IS_ENABLED(CONFIG_VIDEO_BRIDGE)
-		if (device_get_uclass_id(priv->disp_dev) == UCLASS_VIDEO_BRIDGE) {
-			ret = video_bridge_attach(priv->disp_dev);
-			if (ret) {
-				dev_err(dev, "fail to attach bridge\n");
-				return ret;
-			}
+	printf("lcdifv3_video_probe000\n");
 
-			ret = video_bridge_check_timing(priv->disp_dev, &timings);
-			if (ret) {
-				dev_err(dev, "fail to check timing\n");
-				return ret;
-			}
-
-			ret = video_bridge_set_backlight(priv->disp_dev, 80);
-			if (ret) {
-				dev_err(dev, "fail to set backlight\n");
-				return ret;
-			}
-		}
-#endif
+	ret = display_enable(priv->disp_dev, NULL, NULL);
+	if (ret) {
+		debug("%s: Display enable error %d\n", __func__, ret);
+		return ret;
 	}
 
 	mode.xres = timings.hactive.typ;
@@ -434,7 +418,7 @@ static int lcdifv3_video_remove(struct udevice *dev)
 }
 
 static const struct udevice_id lcdifv3_video_ids[] = {
-	{ .compatible = "fsl,imx8mp-lcdif1" },
+	{ .compatible = "fsl,imx8mp-lcdif2" },
 	{ .compatible = "fsl,imx93-lcdif" },
 	{ /* sentinel */ }
 };
@@ -446,6 +430,6 @@ U_BOOT_DRIVER(lcdifv3_video) = {
 	.bind	= lcdifv3_video_bind,
 	.probe	= lcdifv3_video_probe,
 	.remove = lcdifv3_video_remove,
-	.flags	= DM_FLAG_PRE_RELOC | DM_FLAG_OS_PREPARE,
+	.flags	= DM_FLAG_PRE_RELOC | DM_FLAG_OS_PREPARE | DM_FLAG_IGNORE_DEFAULT_CLKS,
 	.priv_auto   = sizeof(struct lcdifv3_priv),
 };

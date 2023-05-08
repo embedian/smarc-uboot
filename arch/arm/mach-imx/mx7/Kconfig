@@ -16,6 +16,12 @@ config MX7D
 	select ROM_UNIFIED_SECTIONS
 	imply CMD_FUSE
 
+config MX7S
+	bool
+	select HAS_CAAM
+	select ROM_UNIFIED_SECTIONS
+	imply CMD_FUSE
+
 config SYS_TEXT_BASE
 	default 0x87800000
 
@@ -68,6 +74,16 @@ config TARGET_MEERKAT96
 
 config TARGET_MX7DSABRESD
 	bool "mx7dsabresd"
+	select BOARD_LATE_INIT
+	select DM
+	select DM_THERMAL
+	select MX7D
+	imply CMD_DM
+	select FSL_CAAM
+	select FSL_BLOB
+
+config TARGET_SMARCFIMX7
+	bool "smarcfimx7"
 	select BOARD_LATE_INIT
 	select DM
 	select DM_THERMAL
@@ -157,6 +173,7 @@ config SYS_SOC
 source "board/compulab/cl-som-imx7/Kconfig"
 source "board/ronetix/imx7-cm/Kconfig"
 source "board/freescale/mx7dsabresd/Kconfig"
+source "board/embedian/smarcfimx7/Kconfig"
 source "board/freescale/mx7d_12x12_lpddr3_val/Kconfig"
 source "board/freescale/mx7d_12x12_ddr3_val/Kconfig"
 source "board/freescale/mx7d_19x19_ddr3_val/Kconfig"
