@@ -60,6 +60,9 @@ static iomux_v3_cfg_t const misc_pads[] = {
 	MX8MP_PAD_SAI3_RXC__GPIO4_IO29 | MUX_PAD_CTRL(WEAK_PULLUP),	/* CAM1_VSYNC */
 	MX8MP_PAD_SAI2_RXFS__GPIO4_IO21 | MUX_PAD_CTRL(NO_PAD_CTRL),	/*ENET_INT# */
 	MX8MP_PAD_SAI1_RXD1__GPIO4_IO03 | MUX_PAD_CTRL(NO_PAD_CTRL),	/*ENET1_INT# */
+	MX8MP_PAD_SAI5_RXD0__GPIO3_IO21 | MUX_PAD_CTRL(WEAK_PULLUP),	/*LCD0_BKLT_PWM */
+	MX8MP_PAD_SAI1_TXD6__GPIO4_IO18 | MUX_PAD_CTRL(WEAK_PULLUP),	/*LCD0_BKLT Enable */
+	MX8MP_PAD_SAI1_RXC__GPIO4_IO01 | MUX_PAD_CTRL(WEAK_PULLUP),	/*LCD0_VDD_EN */
 };
 
 static void setup_iomux_misc(void)
@@ -141,6 +144,15 @@ static void setup_iomux_misc(void)
 	/* Set ENET1_INT# as Input */
 	gpio_request(IMX_GPIO_NR(4, 3), "ENET1_INT#");
 	gpio_direction_input(IMX_GPIO_NR(4, 3));
+	/* Set LCD0_BKLT_PWM Output High */
+	gpio_request(IMX_GPIO_NR(3, 21), "LCD0_BKLT_PWM");
+	gpio_direction_output(IMX_GPIO_NR(3, 21),1);
+	/* Set LCD0_BKLT_EN Output High */
+	gpio_request(IMX_GPIO_NR(4, 18), "LCD0_BKLT_EN");
+	gpio_direction_output(IMX_GPIO_NR(1, 0),1);
+	/* Set LCD0_VDD_EN Output High */
+	gpio_request(IMX_GPIO_NR(4, 1), "LCD0_VDD_EN");
+	gpio_direction_output(IMX_GPIO_NR(1, 1),1);
 }
 
 static iomux_v3_cfg_t const gpio_pads[] = {

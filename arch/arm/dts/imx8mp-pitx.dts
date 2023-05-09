@@ -434,6 +434,40 @@
 	status = "okay";
 };
 
+&lcdif2 {
+	status = "okay";
+};
+
+&ldb {
+	status = "okay";
+
+		lvds-channel@0 {
+		fsl,data-mapping = "spwg";
+		fsl,data-width = <24>;
+		status = "okay";
+
+		display-timings {
+			native-mode = <&timing0>;
+
+			timing0: timing0 {
+				clock-frequency = <33000000>;
+				hactive = <800>;
+				vactive = <480>;
+				hfront-porch = <64>;
+				hback-porch = <64>;
+				hsync-len = <128>;
+				vback-porch = <12>;
+				vfront-porch = <4>;
+				vsync-len = <12>;
+			};
+		};
+	};
+};
+
+&ldb_phy {
+	status = "okay";
+};
+
 &snvs_pwrkey {
 	status = "okay";
 };
