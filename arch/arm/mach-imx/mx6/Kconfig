@@ -430,6 +430,11 @@ config TARGET_MX6SABRESD
 	select FSL_CAAM
 	select ARCH_MISC_INIT
 
+config TARGET_SMARCFIMX6QP
+        bool "Embedian i.MX6 QuadPlus CPU Module"
+    select TARGET_SMARCFIMX6
+    depends on MX6QP
+
 config TARGET_SMARCFIMX6Q
 	bool "Embedian i.MX6 Dual/Quad CPU Module"
     select TARGET_SMARCFIMX6
