@@ -32,6 +32,9 @@
 #define	PS2KHZ(ps)	(1000000000UL / (ps))
 #define HZ2PS(hz)	(1000000000UL / ((hz) / 1000))
 
+int display_enable(struct udevice *dev, int panel_bpp,
+                   const struct display_timing *timing);
+
 struct lcdifv3_priv {
 	fdt_addr_t reg_base;
 	struct udevice *disp_dev;
@@ -352,7 +355,7 @@ static int lcdifv3_video_probe(struct udevice *dev)
 
 	printf("lcdifv3_video_probe000\n");
 
-	ret = display_enable(priv->disp_dev, NULL, NULL);
+	ret = display_enable(priv->disp_dev, 32, NULL);
 	if (ret) {
 		debug("%s: Display enable error %d\n", __func__, ret);
 		return ret;
@@ -418,6 +421,7 @@ static int lcdifv3_video_remove(struct udevice *dev)
 }
 
 static const struct udevice_id lcdifv3_video_ids[] = {
+	{ .compatible = "fsl,imx8mp-lcdif1" },
 	{ .compatible = "fsl,imx8mp-lcdif2" },
 	{ .compatible = "fsl,imx93-lcdif" },
 	{ /* sentinel */ }
