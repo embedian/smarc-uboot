@@ -149,10 +149,10 @@ static void setup_iomux_misc(void)
 	gpio_direction_output(IMX_GPIO_NR(3, 21),1);
 	/* Set LCD0_BKLT_EN Output High */
 	gpio_request(IMX_GPIO_NR(4, 18), "LCD0_BKLT_EN");
-	gpio_direction_output(IMX_GPIO_NR(1, 0),1);
+	gpio_direction_output(IMX_GPIO_NR(4, 18),1);
 	/* Set LCD0_VDD_EN Output High */
 	gpio_request(IMX_GPIO_NR(4, 1), "LCD0_VDD_EN");
-	gpio_direction_output(IMX_GPIO_NR(1, 1),1);
+	gpio_direction_output(IMX_GPIO_NR(4, 1),1);
 }
 
 static iomux_v3_cfg_t const gpio_pads[] = {
@@ -168,13 +168,13 @@ static void setup_iomux_gpio(void)
 {
 	imx_iomux_v3_setup_multiple_pads(gpio_pads, ARRAY_SIZE(gpio_pads));
 
-	/* Set EIO_GPIO1 as Output Low*/
+	/* Set EIO_GPIO1 as Input*/
 	gpio_request(IMX_GPIO_NR(1, 0), "GPIO0");
 	gpio_direction_input(IMX_GPIO_NR(1, 0));
-	/* Set EIO_GPIO2 as Output Low*/
+	/* Set EIO_GPIO2 as Input*/
 	gpio_request(IMX_GPIO_NR(1, 1), "GPIO1");
 	gpio_direction_input(IMX_GPIO_NR(1, 1));
-	/* Set EIO_GPIO3 as Output Low*/
+	/* Set EIO_GPIO3 as Input*/
 	gpio_request(IMX_GPIO_NR(1, 6), "GPIO2");
 	gpio_direction_input(IMX_GPIO_NR(1, 6));
 	/* Set EIO_GPIO4 as Output Low*/
