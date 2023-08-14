@@ -250,7 +250,7 @@
 #define PHYS_SDRAM_SIZE			0x80000000	/* 2 GB */
 #elif defined (CONFIG_4GB_LPDDR4)
 #define PHYS_SDRAM_SIZE			0xc0000000	/* 3 GB */
-#elif defined (CONFIG_6GB_LPDDR4
+#elif defined (CONFIG_6GB_LPDDR4)
 #define PHYS_SDRAM_SIZE			0xc0000000	/* 3 GB */
 #else
 #error "Undefined memory device"
