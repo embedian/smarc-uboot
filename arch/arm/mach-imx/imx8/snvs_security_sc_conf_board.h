@@ -12,6 +12,8 @@
 #include "snvs_security_sc_conf_8qxp_mek.h"
 #elif CONFIG_TARGET_IMX8DXL_EVK
 #include "snvs_security_sc_conf_8dxl_evk.h"
+#elif CONFIG_TARGET_SMARCIMX8QM
+#include "snvs_security_sc_conf_8qm_smarc.h"
 #else
 
 #include "snvs_security_sc_conf.h"

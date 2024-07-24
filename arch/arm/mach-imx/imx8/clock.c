@@ -26,8 +26,22 @@ u32 mxc_get_clock(enum mxc_clock clk)
 
 	switch (clk) {
 	case MXC_UART_CLK:
+#ifdef CONFIG_CONSOLE_SER0
 		err = sc_pm_get_clock_rate(-1,
 				SC_R_UART_0, 2, &clkrate);
+#elif CONFIG_CONSOLE_SER1
+		err = sc_pm_get_clock_rate(-1,
+				SC_R_UART_3, 2, &clkrate);
+#elif CONFIG_CONSOLE_SER2
+		err = sc_pm_get_clock_rate(-1,
+				SC_R_UART_1, 2, &clkrate);
+#elif CONFIG_CONSOLE_SER3
+		err = sc_pm_get_clock_rate(-1,
+				SC_R_UART_4, 2, &clkrate);
+#else
+		err = sc_pm_get_clock_rate(-1,
+				SC_R_UART_0, 2, &clkrate);
+#endif
 		if (err) {
 			printf("sc get UART clk failed! err=%d\n", err);
 			return 0;

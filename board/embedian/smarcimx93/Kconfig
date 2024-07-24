@@ -1,0 +1,12 @@
+if TARGET_SMARCIMX93
+
+config SYS_BOARD
+	default "smarcimx93"
+
+config SYS_VENDOR
+	default "embedian"
+
+config SYS_CONFIG_NAME
+	default "smarcimx93"
+
+endif

@@ -189,6 +189,26 @@ config VPL_DM_SERIAL
 	  implements serial_putc() etc. The uclass interface is
 	  defined in include/serial.h.
 
+config CONSOLE_SER0
+	bool "SMARC modules default console serial output port"
+	help
+	  Select this to enable a debug UART port from SER0 of SMARC Modules.
+
+config CONSOLE_SER1
+	bool "SMARC modules default console serial output port"
+	help
+	  Select this to enable a debug UART port from SER1 of SMARC Modules.
+
+config CONSOLE_SER2
+	bool "SMARC modules default console serial output port"
+	help
+	  Select this to enable a debug UART port from SER2 of SMARC Modules.
+
+config CONSOLE_SER3
+	bool "SMARC modules default console serial output port"
+	help
+	  Select this to enable a debug UART port from SER3 of SMARC Modules.
+
 config DEBUG_UART
 	bool "Enable an early debug UART for debugging"
 	help

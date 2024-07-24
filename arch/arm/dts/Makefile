@@ -828,6 +828,7 @@ dtb-y += \
 	imx6dl-sabreauto-ecspi.dtb \
 	imx6dl-sabreauto-gpmi-weim.dtb \
 	imx6dl-sabresd.dtb \
+	imx6dl-smarc.dtb \
 	imx6dl-wandboard-revd1.dtb \
 	imx6s-dhcom-drc02.dtb
 
@@ -882,12 +883,15 @@ dtb-y += \
 	imx6q-sabreauto-gpmi-weim.dtb \
 	imx6q-sabrelite.dtb \
 	imx6q-sabresd.dtb \
+	imx6q-smarc.dtb \
+	imx6qp-smarc.dtb \
 	imx6q-tbs2910.dtb \
 	imx6q-wandboard-revd1.dtb \
 	imx6qp-sabreauto.dtb \
 	imx6qp-sabreauto-ecspi.dtb \
 	imx6qp-sabreauto-gpmi-weim.dtb \
 	imx6qp-sabresd.dtb \
+	imx6qp-smarc.dtb \
 	imx6qp-wandboard-revd1.dtb \
 
 endif
@@ -968,6 +972,7 @@ dtb-$(CONFIG_EV_IMX280_NANO_X_MB) += \
 	ev-imx280-nano-x-mb.dtb
 
 dtb-$(CONFIG_MX7) += imx7d-sdb.dtb \
+	imx7d-smarc.dtb \
 	imx7d-sdb-qspi.dtb \
 	imx7d-sdb-epdc.dtb \
 	imx7d-sdb-gpmi-weim.dtb \
@@ -976,6 +981,7 @@ dtb-$(CONFIG_MX7) += imx7d-sdb.dtb \
 	imx7d-colibri-emmc-eval-v3.dtb \
 	imx7d-colibri-eval-v3.dtb \
 	imx7s-warp.dtb \
+	imx7s-smarc.dtb \
 	imx7d-meerkat96.dtb \
 	imx7d-pico-pi.dtb \
 	imx7d-pico-hobbit.dtb \
@@ -1007,6 +1013,7 @@ dtb-$(CONFIG_ARCH_IMX8) += \
 	fsl-imx8qm-mek-xen.dtb \
 	imx8qm-cgtqmx8.dtb \
 	imx8qm-rom7720-a1.dtb \
+	imx8qm-smarc.dtb \
 	fsl-imx8qxp-ai_ml.dtb \
 	fsl-imx8qxp-colibri.dtb \
 	fsl-imx8qxp-mek.dtb \
@@ -1060,6 +1067,7 @@ dtb-$(CONFIG_ARCH_IMX8M) += \
 	imx8mn-ddr4-ab2.dtb \
 	imx8mq-cm.dtb \
 	imx8mn-evk.dtb \
+	imx8mm-smarc.dtb \
 	imx8mn-ab2.dtb \
 	imx8mn-var-som-symphony.dtb \
 	imx8mn-venice.dtb \
@@ -1067,6 +1075,7 @@ dtb-$(CONFIG_ARCH_IMX8M) += \
 	imx8mq-ddr3l-val.dtb \
 	imx8mq-ddr4-val.dtb \
 	imx8mq-evk.dtb \
+	imx8mq-smarc.dtb \
 	imx8mm-beacon-kit.dtb \
 	imx8mn-beacon-kit.dtb \
 	imx8mq-mnt-reform2.dtb \
@@ -1074,6 +1083,8 @@ dtb-$(CONFIG_ARCH_IMX8M) += \
 	imx8mp-dhcom-pdk2.dtb \
 	imx8mp-ddr4-evk.dtb \
 	imx8mp-evk.dtb \
+	imx8mp-smarc.dtb \
+	imx8mp-pitx.dtb \
 	imx8mp-icore-mx8mp-edimm2.2.dtb \
 	imx8mp-msc-sm2s.dtb \
 	imx8mp-phyboard-pollux-rdk.dtb \
@@ -1092,6 +1103,7 @@ dtb-$(CONFIG_ARCH_IMX9) += \
 	imx93-14x14-evk.dtb \
 	imx93-9x9-qsb.dtb \
 	imx93-9x9-qsb-ontat-wvga-panel.dtb \
+	imx93-smarc.dtb \
 	imx91p-11x11-evk.dtb \
 	imx91p-9x9-qsb-ontat-wvga-panel.dtb \
 	imx91p-9x9-qsb-spinand.dtb

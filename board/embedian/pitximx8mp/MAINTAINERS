@@ -1,0 +1,6 @@
+SMARC-iMX8MP CPU Module
+M:	Eric Lee <eric.lee@embedian.com>
+S:	Maintained
+F:	board/embedian/pitximx8mp/
+F:	include/configs/pitximx8mp.h
+F:	configs/pitximx8mp_*_defconfig

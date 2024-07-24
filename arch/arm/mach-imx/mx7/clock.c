@@ -504,7 +504,17 @@ unsigned int mxc_get_clock(enum mxc_clock clk)
 	case MXC_I2C_CLK:
 		return 60000000;
 	case MXC_UART_CLK:
+#ifdef CONFIG_CONSOLE_SER0
+		return get_root_clk(UART6_CLK_ROOT);
+#elif defined(CONFIG_CONSOLE_SER1)
+		return get_root_clk(UART2_CLK_ROOT);
+#elif defined(CONFIG_CONSOLE_SER2)
+		return get_root_clk(UART7_CLK_ROOT);
+#elif defined(CONFIG_CONSOLE_SER3)
+		return get_root_clk(UART3_CLK_ROOT);
+#else
 		return get_root_clk(UART1_CLK_ROOT);
+#endif
 	case MXC_CSPI_CLK:
 		return get_root_clk(ECSPI1_CLK_ROOT);
 	case MXC_DDR_CLK:

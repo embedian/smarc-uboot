@@ -15,14 +15,18 @@
 #include <mapmem.h>
 #include <spi.h>
 #include <spi_flash.h>
+#include <asm/gpio.h>
 #include <asm/cache.h>
 #include <jffs2/jffs2.h>
 #include <linux/mtd/mtd.h>
+#include <asm/mach-imx/sys_proto.h>
 
 #include <asm/io.h>
 #include <dm/device-internal.h>
 
 #include "legacy-mtd-utils.h"
+
+/*#define IMX_GPIO_NR(port, index)                ((((port)-1)*32)+((index)&31))*/
 
 static struct spi_flash *flash;
 
@@ -585,8 +589,19 @@ static int do_spi_flash(struct cmd_tbl *cmdtp, int flag, int argc,
 	--argc;
 	++argv;
 
-	if (strcmp(cmd, "probe") == 0)
+	if (strcmp(cmd, "probe") == 0) {
+		if (is_mx6dqp() || is_mx6dq() || is_mx6sdl()) {
+		gpio_request(IMX_GPIO_NR(4, 20), "SPI_LOCK_PIN");
+		/*Unlock SPI Flash*/
+		gpio_direction_output(IMX_GPIO_NR(4,20), 1);
 		return do_spi_flash_probe(argc, argv);
+		/*Lock SPI Flash*/
+		gpio_direction_output(IMX_GPIO_NR(4,20), 0);
+		}
+		else {
+		return do_spi_flash_probe(argc, argv);
+		}
+	}
 
 	/* The remaining commands require a selected device */
 	if (!flash) {
@@ -595,14 +610,58 @@ static int do_spi_flash(struct cmd_tbl *cmdtp, int flag, int argc,
 	}
 
 	if (strcmp(cmd, "read") == 0 || strcmp(cmd, "write") == 0 ||
-	    strcmp(cmd, "update") == 0)
+	    strcmp(cmd, "update") == 0) {
+		if (is_mx6dqp() || is_mx6dq() || is_mx6sdl()) {
+		gpio_request(IMX_GPIO_NR(4, 20), "SPI_LOCK_PIN");
+		/*Unlock SPI Flash*/
+		gpio_direction_output(IMX_GPIO_NR(4,20), 1);
 		ret = do_spi_flash_read_write(argc, argv);
-	else if (strcmp(cmd, "erase") == 0)
+		/*Lock SPI Flash*/
+		gpio_direction_output(IMX_GPIO_NR(4,20), 0);
+		}
+		else {
+ 		ret = do_spi_flash_read_write(argc, argv);
+		}
+	}
+	else if (strcmp(cmd, "erase") == 0) {
+		if (is_mx6dqp() || is_mx6dq() || is_mx6sdl()) {
+		gpio_request(IMX_GPIO_NR(4, 20), "SPI_LOCK_PIN");
+		/*Unlock SPI Flash*/
+		gpio_direction_output(IMX_GPIO_NR(4,20), 1);
 		ret = do_spi_flash_erase(argc, argv);
-	else if (strcmp(cmd, "protect") == 0)
+		/*Lock SPI Flash*/
+		gpio_direction_output(IMX_GPIO_NR(4,20), 0);
+		}
+		else {
+ 		ret = do_spi_flash_erase(argc, argv);
+		}
+	}
+	else if (strcmp(cmd, "protect") == 0) {
+		if (is_mx6dqp() || is_mx6dq() || is_mx6sdl()) {
+		gpio_request(IMX_GPIO_NR(4, 20), "SPI_LOCK_PIN");
+		/*Unlock SPI Flash*/
+		gpio_direction_output(IMX_GPIO_NR(4,20), 1);
 		ret = do_spi_protect(argc, argv);
-	else if (IS_ENABLED(CONFIG_CMD_SF_TEST) && !strcmp(cmd, "test"))
+		/*Lock SPI Flash*/
+		gpio_direction_output(IMX_GPIO_NR(4,20), 0);
+		}
+		else {
+		ret = do_spi_protect(argc, argv);
+		}
+	}
+	else if (IS_ENABLED(CONFIG_CMD_SF_TEST) && !strcmp(cmd, "test")) {
+		if (is_mx6dqp() || is_mx6dq() || is_mx6sdl()) {
+		gpio_request(IMX_GPIO_NR(4, 20), "SPI_LOCK_PIN");
+		/*Unlock SPI Flash*/
+		gpio_direction_output(IMX_GPIO_NR(4,20), 1);
 		ret = do_spi_flash_test(argc, argv);
+		/*Lock SPI Flash*/
+		gpio_direction_output(IMX_GPIO_NR(4,20), 0);
+		}
+		else {
+		ret = do_spi_flash_test(argc, argv);
+		}
+	}
 	else
 		ret = CMD_RET_USAGE;
 
