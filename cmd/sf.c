@@ -15,7 +15,7 @@
 #include <mapmem.h>
 #include <spi.h>
 #include <spi_flash.h>
-#include <asm/gpio.h>
+#include <asm/mach-imx/gpio.h>
 #include <asm/cache.h>
 #include <jffs2/jffs2.h>
 #include <linux/mtd/mtd.h>
