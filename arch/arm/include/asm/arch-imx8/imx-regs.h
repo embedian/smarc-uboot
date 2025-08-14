@@ -10,7 +10,17 @@
 
 #define ARCH_MXC
 
-#define LPUART_BASE		0x5A060000
+#ifdef CONFIG_CONSOLE_SER0
+#define LPUART_BASE		0x5A060000	/* lpuart0 */
+#elif defined(CONFIG_CONSOLE_SER1)
+#define LPUART_BASE		0x5A090000	/* lpuart3 */
+#elif defined(CONFIG_CONSOLE_SER2)
+#define LPUART_BASE		0x5A070000	/* lpuart1 */
+#elif defined(CONFIG_CONSOLE_SER3)
+#define LPUART_BASE		0x5A0A0000	/* lpuart4 */
+#else
+#define LPUART_BASE		0x5A060000	/* lpuart0 */
+#endif
 
 #define GPT1_BASE_ADDR		0x5D140000
 #define SCU_LPUART_BASE		0x33220000

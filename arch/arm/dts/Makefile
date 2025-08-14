@@ -936,6 +936,7 @@ dtb-y += \
 	imx6dl-sabreauto-ecspi.dtb \
 	imx6dl-sabreauto-gpmi-weim.dtb \
 	imx6dl-sabresd.dtb \
+	imx6dl-smarc.dtb \
 	imx6dl-sielaff.dtb \
 	imx6dl-wandboard-revd1.dtb \
 	imx6s-dhcom-drc02.dtb
@@ -991,12 +992,14 @@ dtb-y += \
 	imx6q-sabreauto-gpmi-weim.dtb \
 	imx6q-sabrelite.dtb \
 	imx6q-sabresd.dtb \
+	imx6q-smarc.dtb \
 	imx6q-tbs2910.dtb \
 	imx6q-wandboard-revd1.dtb \
 	imx6qp-sabreauto.dtb \
 	imx6qp-sabreauto-ecspi.dtb \
 	imx6qp-sabreauto-gpmi-weim.dtb \
 	imx6qp-sabresd.dtb \
+	imx6qp-smarc.dtb \
 	imx6qp-wandboard-revd1.dtb \
 
 endif
@@ -1062,9 +1065,11 @@ dtb-$(CONFIG_MX7) += imx7d-sdb.dtb \
 	imx7d-sdb-epdc.dtb \
 	imx7d-sdb-gpmi-weim.dtb \
 	imx7d-sdb-reva.dtb \
+	imx7d-smarc.dtb \
 	imx7-cm.dtb \
 	imx7d-colibri-emmc-eval-v3.dtb \
 	imx7d-colibri-eval-v3.dtb \
+	imx7s-smarc.dtb \
 	imx7s-warp.dtb \
 	imx7d-meerkat96.dtb \
 	imx7d-pico-pi.dtb \
@@ -1106,6 +1111,7 @@ dtb-$(CONFIG_ARCH_IMX8) += \
 	fsl-imx8dxl-evk.dtb \
 	fsl-imx8dxl-evk-lcdif.dtb \
 	fsl-imx8dxl-ddr3l-evk.dtb \
+	imx8qm-smarc.dtb \
 	imx8-deneb.dtb \
 	imx8-giedi.dtb
 
@@ -1121,6 +1127,7 @@ dtb-$(CONFIG_ARCH_IMX8M) += \
 	imx8mm-ddr4-evk.dtb \
 	imx8mm-ddr4-ab2.dtb \
 	imx8mm-evk.dtb \
+	imx8mm-smarc.dtb \
 	imx8mm-ab2.dtb \
 	imx8mm-icore-mx8mm-ctouch2.dtb \
 	imx8mm-icore-mx8mm-edimm2.2.dtb \
@@ -1152,6 +1159,7 @@ dtb-$(CONFIG_ARCH_IMX8M) += \
 	imx8mn-venice.dtb \
 	imx8mn-venice-gw7902.dtb \
 	imx8mq-evk.dtb \
+	imx8mq-smarc.dtb \
 	imx8mm-beacon-kit.dtb \
 	imx8mn-beacon-kit.dtb \
 	imx8mq-mnt-reform2.dtb \
@@ -1171,6 +1179,8 @@ dtb-$(CONFIG_ARCH_IMX8M) += \
 	imx8mp-icore-mx8mp-edimm2.2.dtb \
 	imx8mp-msc-sm2s.dtb \
 	imx8mp-phyboard-pollux-rdk.dtb \
+	imx8mp-pitx.dtb \
+	imx8mp-smarc.dtb \
 	imx8mp-venice.dtb \
 	imx8mp-venice-gw71xx-2x.dtb \
 	imx8mp-venice-gw72xx-2x.dtb \

@@ -368,7 +368,17 @@ unsigned int mxc_get_clock(enum mxc_clock clk)
 	case MXC_I2C_CLK:
 		return get_root_clk(I2C1_CLK_ROOT);
 	case MXC_UART_CLK:
+#ifdef CONFIG_CONSOLE_SER0
+		return get_root_clk(UART4_CLK_ROOT);
+#elif defined(CONFIG_CONSOLE_SER1)
+		return get_root_clk(UART3_CLK_ROOT);
+#elif defined(CONFIG_CONSOLE_SER2)
+		return get_root_clk(UART2_CLK_ROOT);
+#elif defined(CONFIG_CONSOLE_SER3)
 		return get_root_clk(UART1_CLK_ROOT);
+#else
+		return get_root_clk(UART1_CLK_ROOT);
+#endif
 	case MXC_QSPI_CLK:
 		return get_root_clk(QSPI_CLK_ROOT);
 	default:
@@ -431,6 +441,29 @@ void init_usb_clk(void)
 		clock_enable(CCGR_USB_CTRL2, 1);
 		clock_enable(CCGR_USB_PHY1, 1);
 		clock_enable(CCGR_USB_PHY2, 1);
+	}
+}
+
+void init_clk_ecspi(u32 index)
+{
+	switch (index) {
+	case 0:
+		clock_enable(CCGR_ECSPI1, 0);
+		clock_set_target_val(ECSPI1_CLK_ROOT, CLK_ROOT_ON | CLK_ROOT_SOURCE_SEL(0));
+		clock_enable(CCGR_ECSPI1, 1);
+		return;
+	case 1:
+		clock_enable(CCGR_ECSPI2, 0);
+		clock_set_target_val(ECSPI2_CLK_ROOT, CLK_ROOT_ON | CLK_ROOT_SOURCE_SEL(0));
+		clock_enable(CCGR_ECSPI2, 1);
+	case 2:
+		clock_enable(CCGR_ECSPI3, 0);
+		clock_set_target_val(ECSPI3_CLK_ROOT, CLK_ROOT_ON | CLK_ROOT_SOURCE_SEL(0));
+		clock_enable(CCGR_ECSPI3, 1);
+		return;
+	default:
+		printf("Invalid ecspi index\n");
+		return;
 	}
 }
 
@@ -930,7 +963,17 @@ static int do_imx8m_showclocks(struct cmd_tbl *cmdtp, int flag, int argc,
 	freq = decode_sscg_pll(SYSTEM_PLL3_CLK);
 	printf("SYS_PLL3       %8d MHz\n", freq / 1000000);
 	freq = mxc_get_clock(MXC_UART_CLK);
+#ifdef CONFIG_CONSOLE_SER0
+	printf("UART4          %8d MHz\n", freq / 1000000);
+#elif defined(CONFIG_CONSOLE_SER1)
+	printf("UART3          %8d MHz\n", freq / 1000000);
+#elif defined(CONFIG_CONSOLE_SER2)
+	printf("UART2          %8d MHz\n", freq / 1000000);
+#elif defined(CONFIG_CONSOLE_SER3)
 	printf("UART1          %8d MHz\n", freq / 1000000);
+#else
+	printf("UART1	       %8d MHz\n", freq / 1000000);
+#endif
 	freq = mxc_get_clock(MXC_ESDHC_CLK);
 	printf("USDHC1         %8d MHz\n", freq / 1000000);
 	freq = mxc_get_clock(MXC_QSPI_CLK);

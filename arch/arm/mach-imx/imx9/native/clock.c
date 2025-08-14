@@ -551,7 +551,17 @@ unsigned int mxc_get_clock(enum mxc_clock clk)
 	case MXC_ESDHC3_CLK:
 		return ccm_clk_root_get_rate(USDHC3_CLK_ROOT);
 	case MXC_UART_CLK:
+#ifdef CONFIG_CONSOLE_SER0
+		return ccm_clk_root_get_rate(LPUART6_CLK_ROOT);
+#elif defined(CONFIG_CONSOLE_SER1)
+		return ccm_clk_root_get_rate(LPUART2_CLK_ROOT);
+#elif defined(CONFIG_CONSOLE_SER2)
+		return ccm_clk_root_get_rate(LPUART8_CLK_ROOT);
+#elif defined(CONFIG_CONSOLE_SER3)
 		return ccm_clk_root_get_rate(LPUART1_CLK_ROOT);
+#else
+		return ccm_clk_root_get_rate(LPUART1_CLK_ROOT);
+#endif
 	case MXC_FLEXSPI_CLK:
 		return ccm_clk_root_get_rate(FLEXSPI1_CLK_ROOT);
 	default:
@@ -599,6 +609,24 @@ void init_uart_clk(u32 index)
 		ccm_lpcg_on(CCGR_URT1, false);
 		ccm_clk_root_cfg(LPUART1_CLK_ROOT, OSC_24M_CLK, 1);
 		ccm_lpcg_on(CCGR_URT1, true);
+		break;
+	case LPUART2_CLK_ROOT:
+		/* 24M */
+		ccm_lpcg_on(CCGR_URT2, false);
+		ccm_clk_root_cfg(LPUART2_CLK_ROOT, OSC_24M_CLK, 1);
+		ccm_lpcg_on(CCGR_URT2, true);
+		break;
+	case LPUART6_CLK_ROOT:
+		/* 24M */
+		ccm_lpcg_on(CCGR_URT6, false);
+		ccm_clk_root_cfg(LPUART6_CLK_ROOT, OSC_24M_CLK, 1);
+		ccm_lpcg_on(CCGR_URT6, true);
+		break;
+	case LPUART8_CLK_ROOT:
+		/* 24M */
+		ccm_lpcg_on(CCGR_URT8, false);
+		ccm_clk_root_cfg(LPUART8_CLK_ROOT, OSC_24M_CLK, 1);
+		ccm_lpcg_on(CCGR_URT8, true);
 		break;
 	default:
 		break;

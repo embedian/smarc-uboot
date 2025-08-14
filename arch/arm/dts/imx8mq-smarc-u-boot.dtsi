@@ -1,0 +1,50 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+
+#include "imx8mq-u-boot.dtsi"
+
+&pinctrl_uart1 {
+	bootph-pre-ram;
+};
+
+&pinctrl_uart2 {
+	bootph-pre-ram;
+};
+
+&pinctrl_uart3 {
+	bootph-pre-ram;
+};
+
+&pinctrl_uart4 {
+	bootph-pre-ram;
+};
+
+&usdhc1 {
+	mmc-hs400-1_8v;
+};
+
+&usdhc2 {
+	sd-uhs-sdr104;
+	sd-uhs-ddr50;
+};
+
+&uart1 {
+	bootph-pre-ram;
+};
+
+&uart2 {
+	bootph-pre-ram;
+};
+
+&uart3 {
+	bootph-pre-ram;
+};
+
+&uart4 {
+	bootph-pre-ram;
+};
+
+&dcss {
+	/delete-property/ assigned-clocks;
+	/delete-property/ assigned-clock-parents;
+	/delete-property/ assigned-clock-rates;
+};

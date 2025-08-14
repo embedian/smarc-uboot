@@ -1,0 +1,6 @@
+SMARC i.MX93 SMARC BOARD
+M:	Eric Lee <eric.lee@embedian.com>
+S:	Maintained
+F:	board/embedian/smarcimx93/
+F:	include/configs/smarcimx93.h
+F:	configs/smarcimx93*_defconfig
