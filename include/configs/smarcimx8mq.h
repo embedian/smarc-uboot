@@ -95,8 +95,8 @@
 	"mmcroot=" CONFIG_MMCROOT " rootwait rw\0" \
 	"usbroot=/dev/sda2 rootwait ro\0" \
 		"mmcrootfstype=ext4 rootwait\0" \
-		"loadbootenv=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} uEnv.txt\0" \
-		"loadusbbootenv=fatload usb 0:1 ${loadaddr} uEnv.txt\0" \
+		"loadbootenv=load mmc ${mmcdev}:${mmcpart} ${loadaddr} uEnv.txt\0" \
+		"loadusbbootenv=load usb 0:1 ${loadaddr} uEnv.txt\0" \
 	"mmcautodetect=yes\0" \
 		"importbootenv=echo Importing environment from mmc (uEnv.txt)...; " \
 			"env import -t $loadaddr $filesize\0" \
@@ -106,14 +106,14 @@
 	"rootfstype=${mmcrootfstype} root=${mmcroot}\0 " \
 	"usbargs=setenv bootargs ${jh_clk} console=${console} ${optargs} " \
 	"rootfsusbtype=${usbrootfstype} root=${usbroot}\0 " \
-	"loadbootscript=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${bsp_script};\0" \
+	"loadbootscript=load mmc ${mmcdev}:${mmcpart} ${loadaddr} ${bsp_script};\0" \
 	"bootscript=echo Running bootscript from mmc ...; " \
 		"source\0" \
-	"loadimage=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}\0" \
+	"loadimage=load mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}\0" \
 	"loadm4bin=load mmc ${mmcdev}:${mmcpart} ${m4_addr_tmp} ${m4_bin}\0" \
-	"loadusbimage=fatload usb 0:1 ${loadaddr} ${image}\0" \
-	"loadfdt=fatload mmc ${mmcdev}:${mmcpart} ${fdt_addr} /dtbs/${fdt_file}\0" \
-	"loadusbfdt=fatload usb 0:1 ${fdt_addr} /dtbs/${fdt_file}\0" \
+	"loadusbimage=load usb 0:1 ${loadaddr} ${image}\0" \
+	"loadfdt=load mmc ${mmcdev}:${mmcpart} ${fdt_addr} /dtbs/${fdt_file}\0" \
+	"loadusbfdt=load usb 0:1 ${fdt_addr} /dtbs/${fdt_file}\0" \
 	"cpm4mem=cp.b ${m4_addr_tmp} ${m4_addr} 20000\0" \
 	"mmcboot=echo Booting from mmc ...; " \
 		"run mmcargs; " \
