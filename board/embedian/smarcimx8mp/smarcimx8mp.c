@@ -27,9 +27,6 @@
 #include <usb.h>
 #include <dwc3-uboot.h>
 #include <mmc.h>
-#include <dm/uclass-internal.h>
-#include <dm/pinctrl.h>
-#include <fuse.h>
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -641,38 +638,8 @@ int board_typec_get_mode(int index)
 #endif
 #endif
 
-#if IS_ENABLED(CONFIG_IMX8MP_GP5_LOCK_UPDATE)
-#define GP5_LOCK_WPOP 0x300
-
-static void lock_gp5_fuse(void)
-{
-	u32 val = 0;
-	int ret;
-
-	ret = fuse_sense(0, 1, &val);
-	if (ret) {
-		printf("Sense GP5_LOCK fuse failed\n");
-		return;
-	}
-
-	if ((val & GP5_LOCK_WPOP) != GP5_LOCK_WPOP) {
-		printf("Locking GP5 ");
-		ret = fuse_prog(0, 1, GP5_LOCK_WPOP);
-		if (!ret)
-			printf("done\n");
-		else
-			printf("failed %d\n", ret);
-
-	}
-}
-#endif
-
 int board_init(void)
 {
-#if IS_ENABLED(CONFIG_IMX8MP_GP5_LOCK_UPDATE)
-	lock_gp5_fuse();
-#endif
-
 	setup_iomux_misc();
 	setup_iomux_gpio();
 	setup_iomux_usb_en_oc();
@@ -806,18 +773,6 @@ int board_late_init(void)
 
 	return 0;
 }
-
-#ifndef CONFIG_SPL_BUILD
-void board_prep_linux(struct bootm_headers *images)
-{
-	int ret;
-	struct udevice *dwc3_usb;
-
-	ret = uclass_find_device_by_seq(UCLASS_USB, 1, &dwc3_usb);
-	if (!ret)
-		pinctrl_select_state(dwc3_usb, "gpio");
-}
-#endif
 
 #ifdef CONFIG_ANDROID_SUPPORT
 bool is_power_key_pressed(void) {
