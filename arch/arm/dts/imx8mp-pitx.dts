@@ -80,7 +80,6 @@
 		compatible = "regulator-fixed";
 		pinctrl-names = "default";
 		pinctrl-0 = <&pinctrl_reg_usdhc3_vmmc>;
-		regulator-name = "VSD2_3V3";
 		regulator-min-microvolt = <1800000>;
 		regulator-max-microvolt = <1800000>;
 		gpio = <&gpio3 16 GPIO_ACTIVE_HIGH>;
