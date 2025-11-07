@@ -39,8 +39,8 @@
 #define M4_BOOT_ENV \
 	"m4_0_image=m4_0.bin\0" \
 	"m4_1_image=m4_1.bin\0" \
-	"loadm4image_0=load mmc ${mmcdev}:${mmcpart} ${loadaddr} ${m4_0_image}\0" \
-	"loadm4image_1=load mmc ${mmcdev}:${mmcpart} ${loadaddr} ${m4_1_image}\0" \
+	"loadm4image_0=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${m4_0_image}\0" \
+	"loadm4image_1=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${m4_1_image}\0" \
 	"m4boot_0=run loadm4image_0; dcache flush; bootaux ${loadaddr} 0\0" \
 	"m4boot_1=run loadm4image_1; dcache flush; bootaux ${loadaddr} 1\0" \
 
@@ -84,8 +84,8 @@
 	"mmcroot=" CFG_MMCROOT " rootwait rw\0" \
 	"usbroot=/dev/sda2 rootwait ro\0" \
 	"mmcrootfstype=ext4 \0" \
-	"loadbootenv=load mmc ${mmcdev}:${mmcpart} ${env_addr} uEnv.txt\0" \
-	"loadusbbootenv=load usb 0:1 ${env_addr} uEnv.txt\0" \
+	"loadbootenv=fatload mmc ${mmcdev}:${mmcpart} ${env_addr} uEnv.txt\0" \
+	"loadusbbootenv=fatload usb 0:1 ${env_addr} uEnv.txt\0" \
 	"mmcautodetect=yes\0" \
 	"importbootenv=echo Importing environment from mmc (uEnv.txt)...; " \
 		"env import -t ${env_addr} $filesize\0" \
@@ -94,21 +94,21 @@
 	"mmcargs=setenv bootargs console=${console} " \
 		"${optargs} rootfstype=${mmcrootfstype} root=${mmcroot} " \
 		"cpufreq.default_governor=SCHEDUTIL\0" \
-	"loadbootscript=load mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script};\0" \
+	"loadbootscript=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${script};\0" \
 	"bootscript=echo Running bootscript from mmc ...; " \
 		"source\0" \
-	"loadimage=load mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}\0" \
-	"loadfdt=load mmc ${mmcdev}:${mmcpart} ${fdt_addr} /dtbs/${fdt_file}\0" \
-	"loadusbfdt=load usb 0:1 ${fdt_addr} /dtbs/${fdt_file}\0" \
+	"loadimage=fatload mmc ${mmcdev}:${mmcpart} ${loadaddr} ${image}\0" \
+	"loadfdt=fatload mmc ${mmcdev}:${mmcpart} ${fdt_addr} /dtbs/${fdt_file}\0" \
+	"loadusbfdt=fatload usb 0:1 ${fdt_addr} /dtbs/${fdt_file}\0" \
 	"hdp_addr=0x9c000000\0" \
 	"hdprx_addr=0x9c800000\0" \
 	"hdp_file=hdmitxfw.bin\0" \
 	"hdprx_file=hdmirxfw.bin\0" \
 	"hdprx_enable=no\0" \
-	"loadhdp=load mmc ${mmcdev}:${mmcpart} ${hdp_addr} ${hdp_file}\0" \
-	"loadhdprx=load mmc ${mmcdev}:${mmcpart} ${hdprx_addr} ${hdprx_file}\0" \
+	"loadhdp=fatload mmc ${mmcdev}:${mmcpart} ${hdp_addr} ${hdp_file}\0" \
+	"loadhdprx=fatload mmc ${mmcdev}:${mmcpart} ${hdprx_addr} ${hdprx_file}\0" \
 	"boot_os=booti ${loadaddr} - ${fdt_addr};\0" \
-	"loadcntr=load mmc ${mmcdev}:${mmcpart} ${cntr_addr} ${cntr_file}\0" \
+	"loadcntr=fatload mmc ${mmcdev}:${mmcpart} ${cntr_addr} ${cntr_file}\0" \
 	"auth_os=auth_cntr ${cntr_addr}\0" \
 	"mmcboot=echo Booting from mmc ...; " \
 		HDP_LOAD_ENV \
