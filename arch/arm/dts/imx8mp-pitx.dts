@@ -80,7 +80,6 @@
 		compatible = "regulator-fixed";
 		pinctrl-names = "default";
 		pinctrl-0 = <&pinctrl_reg_usdhc3_vmmc>;
-		regulator-name = "VSD2_3V3";
 		regulator-min-microvolt = <1800000>;
 		regulator-max-microvolt = <1800000>;
 		gpio = <&gpio3 16 GPIO_ACTIVE_HIGH>;
@@ -637,7 +636,7 @@
 	reset-gpio = <&gpio_expander_0 3 GPIO_ACTIVE_LOW>;
 	host-wake-gpio = <&gpio_expander_0 5 GPIO_ACTIVE_LOW>;
 	vpcie-supply = <&reg_pcie0>;
-	status = "okay";
+	status = "disabled";
 
 	wifi_wake_host {
 		compatible = "nxp,wifi-wake-host";

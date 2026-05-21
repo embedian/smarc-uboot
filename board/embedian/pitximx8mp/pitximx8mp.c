@@ -774,11 +774,17 @@ int board_late_init(void)
 	if ((gpio_get_value(IMX_GPIO_NR(1, 5)) == 1)) {
 		puts("BOOT_SEL Detected: SD Card, Load Image from SD Card...\n");
 		env_set_ulong("mmcdev", 1);
-		env_set("bootcmd", "i2c dev 0; i2c mw 0x25 0x0a 0x3; mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadimage; run mmcboot;");
+		if (!env_get("fastboot_dev"))
+			env_set("fastboot_dev", "mmc1");
+		if (!env_get("bootcmd"))
+			env_set("bootcmd", "i2c dev 0; i2c mw 0x25 0x0a 0x3; boota mmc1");
 	} else {
 		puts("BOOT_SEL Detected: eMMC, Load Image from eMMC Flash...\n");
 		env_set_ulong("mmcdev", 2);
-		env_set("bootcmd", "i2c dev 0; i2c mw 0x25 0x0a 0x3; mmc rescan; run loadbootenv; run importbootenv; run uenvcmd; run loadimage; run mmcboot;");
+		if (!env_get("fastboot_dev"))
+			env_set("fastboot_dev", "mmc2");
+		if (!env_get("bootcmd"))
+			env_set("bootcmd", "i2c dev 0; i2c mw 0x25 0x0a 0x3; boota mmc2");
 	}
 
 	return 0;
@@ -804,7 +810,7 @@ bool is_power_key_pressed(void) {
 
 #ifdef CONFIG_SPL_MMC
 #define UBOOT_RAW_SECTOR_OFFSET 0x40
-unsigned long spl_mmc_get_uboot_raw_sector(struct mmc *mmc)
+unsigned long spl_mmc_get_uboot_raw_sector(struct mmc *mmc, unsigned long raw_sect)
 {
 	u32 boot_dev = spl_boot_device();
 	switch (boot_dev) {
