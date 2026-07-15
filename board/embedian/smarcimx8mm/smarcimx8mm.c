@@ -286,7 +286,7 @@ static void setup_iomux_fec(void)
 	gpio_direction_input(IMX_GPIO_NR(3, 04));
 }
 
-static int setup_fec(void)
+static void setup_fec(void)
 {
 	struct iomuxc_gpr_base_regs *gpr =
 		(struct iomuxc_gpr_base_regs *)IOMUXC_GPR_BASE_ADDR;
@@ -294,9 +294,11 @@ static int setup_fec(void)
 	setup_iomux_fec();
 
 	/* Use 125M anatop REF_CLK1 for ENET1, not from external */
-	clrsetbits_le32(&gpr->gpr[1], 0x2000, 0);
+	clrsetbits_le32(&gpr->gpr[1], BIT(13) | BIT(17), 0);
 
-	return 0;
+	/* Enable RGMII TX clk output */
+	setbits_le32(&gpr->gpr[1], BIT(22));
+	set_clk_enet(ENET_125MHZ);
 }
 
 int board_phy_config(struct phy_device *phydev)
